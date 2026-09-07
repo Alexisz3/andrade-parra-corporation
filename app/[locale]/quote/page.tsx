@@ -67,7 +67,6 @@ export default async function QuotePage({ params, searchParams }: PageProps<"/[l
     ? rawService
     : undefined;
 
-  const tn = await getTranslations("Nav");
   const tq = await getTranslations("Quote");
 
   // Proveedor anidado: `Quote` y `Services` solo se envían al navegador en
@@ -82,14 +81,12 @@ export default async function QuotePage({ params, searchParams }: PageProps<"/[l
         {/* Cabecera oscura compacta: la cotización no necesita hero fotográfico
             a pantalla completa, necesita que el formulario empiece pronto. */}
         <section className="v7-quote-intro">
-          <div className="v7-container">
-            <span className="v7-eyebrow v7-eyebrow-light">{tq("eyebrow")}</span>
-            <h1>
-              {tn("quote")}
-            </h1>
-            <p>
-              {tq("subtitle")}
-            </p>
+          <div className="v7-container v7-quote-heading">
+            <div>
+              <span className="v7-eyebrow v7-eyebrow-light">{tq("eyebrow")}</span>
+              <h1>{tq("headingLead")}<br /><em>{tq("headingAccent")}</em></h1>
+            </div>
+            <p>{tq("headingBody")}</p>
           </div>
         </section>
 
@@ -100,7 +97,11 @@ export default async function QuotePage({ params, searchParams }: PageProps<"/[l
           <QuoteShell
             services={serviceOptions}
             initialServiceId={initialServiceId}
-            whatsappTargets={WHATSAPP_CONTACTS.map((c) => ({ phone: c.phone, name: c.name }))}
+            whatsappTargets={WHATSAPP_CONTACTS.map((c) => ({
+              phone: c.phone,
+              name: c.name,
+              phoneDisplay: c.phoneDisplay,
+            }))}
             businessEmail={BUSINESS_EMAIL}
           />
         </NextIntlClientProvider>

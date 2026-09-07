@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { BRAND } from "@/lib/site";
 
 /**
@@ -32,6 +33,8 @@ interface BrandLogoProps {
   /** Alto del símbolo en px. El texto escala con él. */
   size?: number;
   className?: string;
+  /** Versión cromática del archivo corporativo. */
+  tone?: "light" | "dark";
 }
 
 /**
@@ -81,6 +84,7 @@ export default function BrandLogo({
   decorative = false,
   size = 28,
   className = "",
+  tone = "light",
 }: BrandLogoProps) {
   const accessibleName = `${BRAND.name} — ${BRAND.descriptor}`;
 
@@ -119,29 +123,21 @@ export default function BrandLogo({
     );
   }
 
-  /*
-   * Horizontal. `min-w-0` en el bloque de texto es lo que impide que un nombre
-   * de 25 caracteres empuje la navegación fuera de la pantalla: sin él, el
-   * flex item usa su ancho de contenido como mínimo y desborda en móvil.
-   */
+  /* La referencia V7 usa la firma gráfica completa, no una reconstrucción
+   * tipográfica en HTML. El PNG preserva exactamente proporciones, pesos y
+   * espaciado del nuevo logotipo en cualquier navegador. */
+  const width = Math.round(size * (2048 / 312));
   return (
-    <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <Mark size={size} />
-      <span className="flex min-w-0 flex-col leading-none">
-        <span
-          className="truncate font-display font-bold tracking-tight"
-          style={{ fontSize: size * 0.46 }}
-        >
-          ANDRADE PARRA{" "}
-          <span className="font-medium">CORPORATION</span>
-        </span>
-        <span
-          className="mt-1 truncate font-display font-medium tracking-[0.2em] opacity-70"
-          style={{ fontSize: size * 0.24 }}
-        >
-          GENERAL REMODELING
-        </span>
-      </span>
+    <span className={`inline-flex items-center ${className}`}>
+      <Image
+        src={tone === "light" ? "/brand/png/logo-light-2048.png" : "/brand/png/logo-horizontal-2048.png"}
+        width={width}
+        height={size}
+        alt=""
+        aria-hidden="true"
+        className="h-auto max-w-full object-contain"
+        priority={tone === "light"}
+      />
       {decorative ? null : <span className="sr-only">{accessibleName}</span>}
     </span>
   );

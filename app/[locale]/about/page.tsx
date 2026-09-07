@@ -7,7 +7,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
 import CtaBand from "@/components/CtaBand";
-import { V7About, V7Craft } from "@/components/home/V7EditorialSections";
+import { V7About, V7Craft, V7Team } from "@/components/home/V7EditorialSections";
 import { getV7EditorialCopy } from "@/lib/v7-editorial-copy";
 import { BRAND } from "@/lib/site";
 
@@ -61,6 +61,7 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
         />
 
         <V7About copy={editorialCopy} />
+        <V7Team copy={editorialCopy} />
         <V7Craft copy={editorialCopy} />
 
         <CtaBand />

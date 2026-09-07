@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { useParams, useSearchParams } from "next/navigation";
@@ -22,9 +23,28 @@ export default function LocaleSwitcher() {
   // `usePathname()` devuelve el PATRÓN (`/projects/[slug]`), no la ruta
   // resuelta: el slug real hay que sacarlo de los params de la ruta.
   const routeParams = useParams();
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const closeOutside = (event: PointerEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("pointerdown", closeOutside);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeOutside);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [open]);
 
   const switchTo = (target: AppLocale) => {
     if (target === locale) return;
+    setOpen(false);
 
     const rawSlug = routeParams?.slug;
     const currentSlug = Array.isArray(rawSlug) ? rawSlug[0] : rawSlug;
@@ -68,41 +88,38 @@ export default function LocaleSwitcher() {
   };
 
   return (
-    <div
-      role="group"
-      aria-label={t("languageSwitcherLabel")}
-      className="flex items-center overflow-hidden rounded-full border border-bone/30 font-mono text-xs uppercase tracking-wider text-bone"
-    >
-      {routing.locales.map((l) => {
-        const isCurrent = l === locale;
-        return (
-          <button
-            key={l}
-            type="button"
-            onClick={() => switchTo(l)}
-            aria-current={isCurrent ? "true" : undefined}
-            /*
-             * El nombre accesible dice qué hace el botón, no solo el código:
-             * "EN" a secas no comunica si es el idioma actual o el destino.
-             *
-             * El nombre del idioma se resuelve como clave anidada, NO con un
-             * `select` de ICU: los selectores ICU no admiten guiones, así que
-             * `{lang, select, es-US {...}}` lanzaba INVALID_MESSAGE en todas
-             * las páginas. Como clave de objeto, `es-US` sí es válido.
-             */
-            aria-label={
-              isCurrent
-                ? t("languageCurrent", { name: t(`languageName.${l}`) })
-                : t("languageSwitchTo", { name: t(`languageName.${l}`) })
-            }
-            className={`flex min-h-[44px] min-w-[44px] items-center justify-center px-3 transition-colors ${
-              isCurrent ? "bg-bone text-carbon" : "hover:bg-bone/10"
-            }`}
-          >
-            {LOCALE_CODES[l].toUpperCase()}
-          </button>
-        );
-      })}
+    <div ref={rootRef} className={`v7-language ${open ? "is-open" : ""}`}>
+      <button
+        type="button"
+        className="v7-language-trigger"
+        aria-label={t("languageSwitcherLabel")}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={() => setOpen((value) => !value)}
+      >
+        <span aria-hidden="true" className={`v7-language-flag ${locale === "es-US" ? "is-es" : "is-en"}`} />
+        <span>{LOCALE_CODES[locale].toUpperCase()}</span>
+        <svg viewBox="0 0 14 14" aria-hidden="true">
+          <path d="M3 5.25 7 9l4-3.75" />
+        </svg>
+      </button>
+      <div role="menu" aria-label={t("languageSwitcherLabel")} className="v7-language-menu">
+        {routing.locales.map((l) => {
+          const isCurrent = l === locale;
+          return (
+            <button
+              key={l}
+              type="button"
+              role="menuitemradio"
+              aria-checked={isCurrent}
+              onClick={() => switchTo(l)}
+            >
+              <span><span aria-hidden="true" className={`v7-language-flag ${l === "es-US" ? "is-es" : "is-en"}`} />{LOCALE_CODES[l].toUpperCase()}</span>
+              <i aria-hidden="true">{isCurrent ? "✓" : ""}</i>
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
+const isDevelopment = process.env.NODE_ENV === "development";
 
 /**
  * IMPORTANTE (Hostinger): este archivo debe exportar un OBJETO, no una función.
@@ -13,6 +14,16 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
  */
 const nextConfig = {
   reactStrictMode: true,
+
+  // Conserva la URL pública original cuando Proxy realiza la reescritura
+  // regional de next-intl. En Next 16 evita que la URL interna normalizada
+  // vuelva a entrar al proxy como si fuera una navegación del visitante.
+  skipProxyUrlNormalize: true,
+
+  // Codex y las pruebas locales abren la app mediante 127.0.0.1. Next 16
+  // bloquea por defecto los chunks de desarrollo si el host no coincide con
+  // `localhost`; autorizar solo este loopback mantiene el límite local.
+  allowedDevOrigins: ["127.0.0.1"],
 
   // No anunciar el framework a escáneres automáticos.
   poweredByHeader: false,
@@ -61,7 +72,7 @@ const nextConfig = {
             value: [
               "default-src 'self'",
               // Google Analytics y Tag Manager, solo si se configura el ID.
-              "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com",
+              `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""} https://www.googletagmanager.com`,
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com data:",
               // `data:` y `blob:` los necesita next/image y la previsualización

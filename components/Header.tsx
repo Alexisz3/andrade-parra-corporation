@@ -35,7 +35,7 @@ export default function Header() {
       <header className={`v7-header ${solid ? "is-solid" : ""}`}>
         <div className="v7-container v7-header-inner">
           <Link href="/" className="v7-brand-link" aria-label={`${BRAND.name} — ${BRAND.descriptor}`}>
-            <BrandLogo variant="horizontal" size={25} decorative />
+            <BrandLogo variant="horizontal" size={38} decorative />
           </Link>
 
           <nav aria-label={t("menuTitle")} className="v7-desktop-nav">

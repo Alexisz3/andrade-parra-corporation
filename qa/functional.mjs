@@ -117,10 +117,13 @@ console.log(`--- motor: ${ENGINE} ---`);
    */
   const switchLocale = async (from, expected) => {
     await p.goto(URL + from, { waitUntil: "domcontentloaded" });
-    const toggle = p.locator('[role="group"] button', { hasText: "EN" });
-    await toggle.waitFor({ state: "visible" });
+    const trigger = p.locator(".v7-language-trigger");
+    await trigger.waitFor({ state: "visible" });
     // Enabled + un frame de margen asegura que React ya asoció el onClick.
     await p.waitForFunction(() => document.readyState === "complete");
+    await trigger.click();
+    const toggle = p.locator('[role="menuitemradio"]', { hasText: "EN" });
+    await toggle.waitFor({ state: "visible" });
     await toggle.click();
     try {
       await p.waitForURL((u) => u.pathname.endsWith(expected), { timeout: 10000 });
@@ -185,8 +188,11 @@ console.log(`--- motor: ${ENGINE} ---`);
   await ctx.close();
 }
 
-// ─── 6. Cotización: dos etapas, validación completa y reparto ───────────
-{
+// Flujo retirado: se conserva temporalmente como historial de regresiones
+// mientras la V7 reemplaza el stepper por un formulario de una sola vista.
+// No se ejecuta en CI.
+// ─── 6. Cotización: flujo anterior de dos etapas ────────────────────────
+if (process.env.QA_LEGACY_QUOTE_FLOW === "1") {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const p = await ctx.newPage();
 
@@ -293,8 +299,8 @@ console.log(`--- motor: ${ENGINE} ---`);
   await ctx.close();
 }
 
-// ─── 6b. El mensaje que le llega al contratista, y a quién le llega ─────
-{
+// ─── 6b. Flujo anterior: mensaje y reparto ──────────────────────────────
+if (process.env.QA_LEGACY_QUOTE_FLOW === "1") {
   /**
    * Recorrido completo de una solicitud, en un contexto RECIÉN CREADO.
    *
@@ -515,8 +521,8 @@ console.log(`--- motor: ${ENGINE} ---`);
   }
 }
 
-// ─── 6c. Borrador antiguo de tres etapas ────────────────────────────────
-{
+// ─── 6c. Flujo anterior: borrador de tres etapas ────────────────────────
+if (process.env.QA_LEGACY_QUOTE_FLOW === "1") {
   /*
    * Alguien con la pestaña abierta durante el despliegue trae en
    * `sessionStorage` un borrador con `step: 3`, etapa que ya no existe. Sin
@@ -547,6 +553,114 @@ console.log(`--- motor: ${ENGINE} ---`);
     !/imágenes de referencia|reference images/i.test(await p.locator("main").innerText()));
 
   await ctx.close();
+}
+
+// ─── 6d. Cotización V7: una vista, validación y reparto ─────────────────
+{
+  const fillSticky = async (page, field, value, attempts = 5) => {
+    for (let i = 0; i < attempts; i++) {
+      await field.fill(value);
+      await page.waitForTimeout(100);
+      if ((await field.inputValue()) === value) return;
+    }
+    throw new Error(`El campo no retuvo el valor: ${value}`);
+  };
+
+  const sendOne = async ({ name, phone, description, locale = "es" }) => {
+    const ctx = await browser.newContext({ viewport: { width: 375, height: 812 } });
+    const page = await ctx.newPage();
+    try {
+      await page.goto(`${URL}/${locale}/${locale === "es" ? "cotizacion" : "quote"}`, {
+        waitUntil: "domcontentloaded",
+      });
+      await page.locator("#description").waitFor({ state: "visible" });
+      await fillSticky(page, page.locator("#description"), description);
+      await fillSticky(page, page.locator("#name"), name);
+      await fillSticky(page, page.locator("#phone"), phone);
+      await page.locator("#consent").setChecked(true);
+      await page.evaluate(() => {
+        window.__opened = null;
+        window.open = (url) => { window.__opened = url; return null; };
+      });
+      await page.locator("button[type='submit']").click();
+      await page.locator('[role="status"]').waitFor({ state: "visible" });
+      return {
+        url: await page.evaluate(() => window.__opened),
+        status: await page.locator('[role="status"]').innerText(),
+      };
+    } finally {
+      await ctx.close();
+    }
+  };
+
+  const ctx = await browser.newContext({ viewport: { width: 375, height: 812 } });
+  const p = await ctx.newPage();
+  await p.goto(URL + "/es/cotizacion", { waitUntil: "networkidle" });
+  await p.locator("#description").waitFor({ state: "visible" });
+
+  check("Cotización V7: todos los campos están en una sola vista",
+    (await p.locator("#name,#phone,#email,#service,#location,#description,#consent").count()) === 7);
+  check("Cotización V7: no conserva stepper ni carga ficticia de fotos",
+    (await p.locator('[aria-current="step"]').count()) === 0 &&
+    !/arrastre sus archivos|drag your files/i.test(await p.locator("main").innerText()));
+  check("Cotización V7: ofrece contacto directo con Jose y Mario",
+    (await p.locator('.v7-quote-contact-lines a[href^="tel:"]').count()) === 2);
+
+  await p.locator(".v7-quote-form").evaluate((form) => form.requestSubmit());
+  await p.locator("#description[aria-invalid='true']").waitFor({ state: "visible" });
+  check("Cotización V7: valida y anuncia los datos faltantes",
+    (await p.locator('[role="alert"]').count()) >= 1 &&
+    (await p.locator("#description").getAttribute("aria-invalid")) === "true");
+  check("Cotización V7 móvil: no tiene desbordamiento horizontal",
+    await p.evaluate(() => document.documentElement.scrollWidth === innerWidth));
+  await ctx.close();
+
+  const request = {
+    name: "María Fernández",
+    phone: "8325550101",
+    description: "Remodelación de cocina con isla",
+  };
+  const first = await sendOne(request);
+  const message = decodeURIComponent((first.url ?? "").split("?text=")[1] ?? "");
+  check("Cotización V7: prepara un mensaje completo y bien codificado",
+    /Proyecto: Remodelación de cocina con isla/.test(message) &&
+    /Nombre: María Fernández/.test(message) &&
+    /Teléfono: 8325550101/.test(message) && !/Ã/.test(message));
+  check("Cotización V7: explica con honestidad que aún debe pulsar Enviar",
+    /no se ha enviado nada/i.test(first.status));
+
+  const targets = new Set();
+  for (const item of [
+    request,
+    { name: "John Smith", phone: "7135550102", description: "Bathroom remodel" },
+    { name: "Luis Peña", phone: "2815550103", description: "Ampliación de cochera" },
+    { name: "Sarah Johnson", phone: "8325550104", description: "Kitchen remodel" },
+    { name: "Ramón Ortiz", phone: "8325550105", description: "Techo y estructura de patio" },
+    { name: "Emily Davis", phone: "9365550106", description: "Full interior repaint and floors" },
+  ]) {
+    const result = item === request ? first : await sendOne(item);
+    targets.add((result.url ?? "").match(/wa\.me\/(\d+)/)?.[1]);
+  }
+  check("Cotización V7: distribuye solicitudes entre ambos contactos", targets.size === 2,
+    [...targets].join(" y "));
+
+  const repeat = await sendOne(request);
+  check("Cotización V7: una misma solicitud conserva su contacto",
+    repeat.url?.match(/wa\.me\/(\d+)/)?.[1] === first.url?.match(/wa\.me\/(\d+)/)?.[1]);
+
+  const legacy = await browser.newContext({ viewport: { width: 375, height: 812 } });
+  const legacyPage = await legacy.newPage();
+  await legacyPage.goto(URL + "/es/cotizacion", { waitUntil: "networkidle" });
+  await legacyPage.evaluate(() => sessionStorage.setItem("apc-quote-draft", JSON.stringify({
+    location: "Houston, TX 77002", description: "Baño completo", photoCount: 4,
+    name: "Ana", phone: "8325550001", channel: "whatsapp", consent: true, step: 3,
+  })));
+  await legacyPage.reload({ waitUntil: "networkidle" });
+  await legacyPage.locator("#name").waitFor({ state: "visible" });
+  check("Cotización V7: recupera un borrador anterior sin dejar huecos",
+    (await legacyPage.locator("#name").inputValue()) === "Ana" &&
+    (await legacyPage.locator("#description").inputValue()) === "Baño completo");
+  await legacy.close();
 }
 
 // ─── 7. Movimiento reducido ─────────────────────────────────────────────
@@ -681,10 +795,15 @@ console.log(`--- motor: ${ENGINE} ---`);
     await p.goto(URL + from, { waitUntil: "domcontentloaded" });
     // `URL` está sombreado por la constante de arriba: se usa el global.
     const startPath = new globalThis.URL(URL + from).pathname;
-    const btn = p.locator('[role="group"] button', { hasText: to });
-    await btn.waitFor({ state: "visible" });
+    const trigger = p.locator(".v7-language-trigger");
+    await trigger.waitFor({ state: "visible" });
 
     for (let i = 0; i < attempts; i++) {
+      if ((await trigger.getAttribute("aria-expanded")) !== "true") {
+        await trigger.click().catch(() => {});
+      }
+      const btn = p.locator('[role="menuitemradio"]', { hasText: to });
+      await btn.waitFor({ state: "visible" });
       await btn.click().catch(() => {});
       try {
         await p.waitForURL((u) => u.pathname !== startPath, { timeout: 1500 });
@@ -728,7 +847,7 @@ console.log(`--- motor: ${ENGINE} ---`);
     const html = await r.text();
     check(
       `404: ${path} → 404 con marca en ${expect.lang}`,
-      r.status() === 404 && html.includes("ANDRADE PARRA") && expect.needle.test(html),
+      r.status() === 404 && /Andrade Parra Corporation/i.test(html) && expect.needle.test(html),
       `${r.status()} · ${html.length} bytes`
     );
   };

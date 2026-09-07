@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
 import V7ProjectLibrary from "@/components/home/V7ProjectLibrary";
 import CtaBand from "@/components/CtaBand";
+import V7BeforeAfterSection from "@/components/home/V7BeforeAfterSection";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -83,6 +84,19 @@ export default async function ProjectsPage({ params }: PageProps<"/[locale]/proj
             pause: tv7("pause"),
             resume: tv7("resume"),
             regionLabel: tv7("carouselRegion"),
+          }}
+        />
+
+        <V7BeforeAfterSection
+          copy={{
+            eyebrow: tv7("beforeAfterEyebrow"),
+            title: tv7("beforeAfterTitle"),
+            body: tv7("beforeAfterBody"),
+            pending: tv7("beforeAfterPending"),
+            pendingBody: tv7("beforeAfterPendingBody"),
+            before: tv7("beforeLabel"),
+            after: tv7("afterLabel"),
+            slider: t("compareLabel"),
           }}
         />
 

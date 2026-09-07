@@ -42,7 +42,7 @@ export default async function Footer() {
         <div className="grid gap-10 border-b border-line pb-8 sm:grid-cols-2 lg:grid-cols-4 lg:pb-12">
           {/* ── Marca ── */}
           <div>
-            <BrandLogo variant="horizontal" size={26} className="text-ink" />
+            <BrandLogo variant="horizontal" size={34} tone="dark" className="text-ink" />
             <p className="mt-3 max-w-xs text-pretty text-sm leading-relaxed text-muted">
               {t("tagline")}
             </p>

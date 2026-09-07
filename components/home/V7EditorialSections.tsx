@@ -12,8 +12,20 @@ export interface V7EditorialCopy {
   aboutTitle: string;
   aboutBody: string;
   aboutPrinciples: string[];
+  teamEyebrow: string;
+  teamTitle: string;
+  teamBody: string;
+  teamContact: string;
+  teamPhotoPending: string;
+  teamGalleryTitle: string;
+  teamGalleryBody: string;
+  teamCall: string;
+  teamWhatsapp: string;
   faqEyebrow: string;
   faqTitle: string;
+  faqPrompt: string;
+  faqStillQuestion: string;
+  faqAsk: string;
   faq: { question: string; answer: string }[];
   contactEyebrow: string;
   contactTitle: string;
@@ -85,6 +97,71 @@ export function V7About({ copy }: { copy: V7EditorialCopy }) {
   );
 }
 
+export function V7Team({ copy }: { copy: V7EditorialCopy }) {
+  return (
+    <section className="v7-section v7-team" aria-labelledby="team-title">
+      <div className="v7-container">
+        <div className="v7-team-head">
+          <div>
+            <p className="v7-eyebrow">{copy.teamEyebrow}</p>
+            <h2 id="team-title" className="v7-section-title">{copy.teamTitle}</h2>
+          </div>
+          <p>{copy.teamBody}</p>
+        </div>
+
+        <div className="v7-team-grid">
+          {WHATSAPP_CONTACTS.map((contact, index) => {
+            const initials = contact.name.split(" ").map((part) => part[0]).join("");
+            return (
+              <article className="v7-person-card" key={contact.id}>
+                <div className="v7-person-photo" aria-label={`${copy.teamPhotoPending}: ${contact.name}`}>
+                  <span aria-hidden="true">{initials}</span>
+                  <small>{copy.teamPhotoPending}</small>
+                  <i aria-hidden="true">0{index + 1}</i>
+                </div>
+                <div className="v7-person-info">
+                  <p className="v7-meta">{copy.teamContact}</p>
+                  <h3>{contact.name}</h3>
+                  <strong>{contact.phoneDisplay}</strong>
+                  <div>
+                    <TrackedContactLink
+                      href={`tel:+${contact.phone}`}
+                      event="phone_clicked"
+                      params={{ contact: contact.id, source: "about_team" }}
+                    >
+                      {copy.teamCall}<span aria-hidden="true">↗</span>
+                    </TrackedContactLink>
+                    <TrackedContactLink
+                      href={`https://wa.me/${contact.phone}`}
+                      event="whatsapp_clicked"
+                      params={{ contact: contact.id, source: "about_team" }}
+                      external
+                    >
+                      {copy.teamWhatsapp}<span aria-hidden="true">↗</span>
+                    </TrackedContactLink>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+          <aside className="v7-team-gallery">
+            <div className="v7-team-gallery-title">
+              <div><p className="v7-meta">{copy.teamGalleryTitle}</p><h3>{copy.teamGalleryBody}</h3></div>
+            </div>
+            <div className="v7-team-gallery-slots">
+              {[1, 2, 3].map((slot) => (
+                <div className="v7-team-gallery-slot" key={slot}>
+                  <span>{copy.teamPhotoPending}</span>
+                </div>
+              ))}
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function V7Faq({ copy }: { copy: V7EditorialCopy }) {
   return (
     <section id="faq" className="v7-section v7-faq" aria-labelledby="faq-title">
@@ -92,6 +169,7 @@ export function V7Faq({ copy }: { copy: V7EditorialCopy }) {
         <div>
           <p className="v7-eyebrow">{copy.faqEyebrow}</p>
           <h2 id="faq-title" className="v7-section-title">{copy.faqTitle}</h2>
+          <p className="v7-faq-prompt">{copy.faqPrompt}</p>
         </div>
         <div className="v7-faq-list">
           {copy.faq.map((item, index) => (
@@ -100,6 +178,10 @@ export function V7Faq({ copy }: { copy: V7EditorialCopy }) {
               <p>{item.answer}</p>
             </details>
           ))}
+          <div className="v7-faq-contact">
+            <span>{copy.faqStillQuestion}</span>
+            <Link href="/contact">{copy.faqAsk}<i aria-hidden="true">→</i></Link>
+          </div>
         </div>
       </div>
     </section>
