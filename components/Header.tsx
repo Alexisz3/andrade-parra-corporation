@@ -1,9 +1,9 @@
 "use client";
 
 import { Suspense, useEffect, useRef, useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
-import { LOCALE_PREFIXES, type AppLocale, type StaticPathname } from "@/i18n/routing";
+import { type StaticPathname } from "@/i18n/routing";
 import { BRAND, WHATSAPP_CONTACTS } from "@/lib/site";
 import BrandLogo from "./BrandLogo";
 import LocaleSwitcher from "./LocaleSwitcher";
@@ -18,7 +18,6 @@ const NAV_LINKS: { href: StaticPathname; key: "projects" | "services" | "about" 
 
 export default function Header() {
   const t = useTranslations("Nav");
-  const locale = useLocale() as AppLocale;
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [solid, setSolid] = useState(false);
@@ -46,7 +45,6 @@ export default function Header() {
                 {t(link.key)}
               </Link>
             ))}
-            <a href={`${LOCALE_PREFIXES[locale]}#faq`}>{t("faq")}</a>
             <Link href="/contact" aria-current={pathname === "/contact" ? "page" : undefined}>{t("contact")}</Link>
           </nav>
 

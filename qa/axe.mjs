@@ -19,6 +19,9 @@ const TARGETS = [
   { name: "cotizacion es", path: "/es/cotizacion" },
   { name: "cotizacion en", path: "/en/quote" },
   { name: "servicios es", path: "/es/servicios" },
+  { name: "detalle servicio", path: "/es/servicios/cocinas-y-banos" },
+  { name: "nosotros es", path: "/es/nosotros" },
+  { name: "contacto es", path: "/es/contacto" },
   { name: "proceso es", path: "/es/proceso" },
 ];
 

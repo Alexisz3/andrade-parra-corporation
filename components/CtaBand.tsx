@@ -66,7 +66,10 @@ export default async function CtaBand() {
               <div className="flex flex-wrap gap-x-2">
                 <dt className="text-bone/55">{tc("emailLabel")}:</dt>
                 <dd>
-                  <a href={`mailto:${BUSINESS_EMAIL}`} className="hover:text-accent-ink">
+                  <a
+                    href={`mailto:${BUSINESS_EMAIL}`}
+                    className="inline-flex min-h-[44px] items-center hover:text-accent-ink"
+                  >
                     {BUSINESS_EMAIL}
                   </a>
                 </dd>

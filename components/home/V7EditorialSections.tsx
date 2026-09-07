@@ -106,9 +106,10 @@ export function V7Faq({ copy }: { copy: V7EditorialCopy }) {
   );
 }
 
-export function V7Contact({ copy }: { copy: V7EditorialCopy }) {
+export function V7Contact({ copy, page = false }: { copy: V7EditorialCopy; page?: boolean }) {
+  const TitleTag = page ? "h1" : "h2";
   return (
-    <section id="contacto" className="v7-contact" aria-labelledby="contact-title">
+    <section id="contacto" className={`v7-contact ${page ? "v7-contact-page" : ""}`} aria-labelledby="contact-title">
       <div className="v7-contact-media" aria-hidden="true">
         <Image src="/images/proyectos/exterior-lujo-01.jpeg" alt="" fill sizes="100vw" className="object-cover" />
       </div>
@@ -116,7 +117,7 @@ export function V7Contact({ copy }: { copy: V7EditorialCopy }) {
       <div className="v7-container v7-contact-inner">
         <div>
           <p className="v7-eyebrow v7-eyebrow-light">{copy.contactEyebrow}</p>
-          <h2 id="contact-title" className="v7-section-title v7-section-title-light">{copy.contactTitle}</h2>
+          <TitleTag id="contact-title" className="v7-section-title v7-section-title-light">{copy.contactTitle}</TitleTag>
           <p>{copy.contactBody}</p>
           <Link href="/quote" className="v7-button v7-button-amber">{copy.quote}<span aria-hidden="true">→</span></Link>
         </div>
@@ -127,13 +128,13 @@ export function V7Contact({ copy }: { copy: V7EditorialCopy }) {
               key={contact.id}
               href={`tel:+${contact.phone}`}
               event="phone_clicked"
-              params={{ contact: contact.id, source: "home_contact" }}
+                params={{ contact: contact.id, source: page ? "contact_page" : "home_contact" }}
             >
               <span>{contact.name}</span><strong>{contact.phoneDisplay}</strong>
             </TrackedContactLink>
           ))}
           {BUSINESS_EMAIL ? (
-            <TrackedContactLink href={`mailto:${BUSINESS_EMAIL}`} event="email_clicked" params={{ source: "home_contact" }}>
+            <TrackedContactLink href={`mailto:${BUSINESS_EMAIL}`} event="email_clicked" params={{ source: page ? "contact_page" : "home_contact" }}>
               <span>Email</span><strong>{BUSINESS_EMAIL}</strong>
             </TrackedContactLink>
           ) : null}

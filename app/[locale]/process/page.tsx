@@ -56,8 +56,8 @@ export default async function ProcessPage({ params }: PageProps<"/[locale]/proce
           imageAlt={th("processHeading")}
         />
 
-        <section className="bg-paper py-16 lg:py-24">
-          <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
+        <section className="v7-process-section">
+          <div className="v7-container">
             <ProcessTimeline />
           </div>
         </section>

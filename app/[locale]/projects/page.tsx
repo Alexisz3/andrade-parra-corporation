@@ -7,15 +7,12 @@ import { PROJECTS, type ProjectCategory } from "@/content/projects";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
-import ProjectCard from "@/components/ProjectCard";
-import ProjectFilters, { type FilterValue } from "@/components/ProjectFilters";
+import V7ProjectLibrary from "@/components/home/V7ProjectLibrary";
 import CtaBand from "@/components/CtaBand";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
-
-const VALID: FilterValue[] = ["all", "exteriors", "structures", "kitchens", "bathrooms", "interiors"];
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/projects">): Promise<Metadata> {
   const { locale } = await params;
@@ -39,19 +36,22 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/projects
   };
 }
 
-export default async function ProjectsPage({ params, searchParams }: PageProps<"/[locale]/projects">) {
+export default async function ProjectsPage({ params }: PageProps<"/[locale]/projects">) {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
 
-  const sp = await searchParams;
-  const raw = typeof sp.categoria === "string" ? sp.categoria : "all";
-  const active: FilterValue = VALID.includes(raw as FilterValue) ? (raw as FilterValue) : "all";
-
-  const visible =
-    active === "all" ? PROJECTS : PROJECTS.filter((p) => p.category === (active as ProjectCategory));
-
-  const t = await getTranslations("Projects");
+  const [t, tv7] = await Promise.all([
+    getTranslations("Projects"),
+    getTranslations("HomeV7"),
+  ]);
+  const category: Record<ProjectCategory, string> = {
+    kitchens: t("filterKitchens"),
+    bathrooms: t("filterBathrooms"),
+    exteriors: t("filterExteriors"),
+    structures: t("filterStructures"),
+    interiors: t("filterInteriors"),
+  };
 
   return (
     <>
@@ -66,29 +66,25 @@ export default async function ProjectsPage({ params, searchParams }: PageProps<"
           compact
         />
 
-        <section className="bg-paper py-10 lg:py-16">
-          <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-            <ProjectFilters active={active} />
-
-            <div className="mt-8 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-              {visible.map((project, i) => (
-                <ProjectCard
-                  key={project.id}
-                  project={project}
-                  eager={i < 2}
-                  compact
-                  // Aquí las tarjetas cuelgan del H1 de la página, sin sección
-                  // intermedia: con h3 se producía un salto H1→H3.
-                  headingLevel="h2"
-                />
-              ))}
-            </div>
-
-            <p className="mt-10 text-center font-mono text-xs text-muted" aria-live="polite">
-              {t("counter", { n: visible.length, total: PROJECTS.length })}
-            </p>
-          </div>
-        </section>
+        <V7ProjectLibrary
+          projects={PROJECTS}
+          copy={{
+            eyebrow: tv7("projectsEyebrow"),
+            titleLead: tv7("projectsTitleLead"),
+            titleAccent: tv7("projectsTitleAccent"),
+            intro: tv7("projectsIntro"),
+            all: tv7("allProjects"),
+            category,
+            completed: tv7("statusCompleted"),
+            inProgress: tv7("statusInProgress"),
+            viewProject: tv7("viewProject"),
+            previous: tv7("previous"),
+            next: tv7("next"),
+            pause: tv7("pause"),
+            resume: tv7("resume"),
+            regionLabel: tv7("carouselRegion"),
+          }}
+        />
 
         <CtaBand />
       </main>

@@ -116,21 +116,21 @@ export default async function ProjectDetail({ params }: PageProps<"/[locale]/pro
       <Header />
       <main id="contenido" tabIndex={-1}>
         {/* ── Encabezado ── */}
-        <section className="bg-carbon pb-10 pt-28 lg:pb-14 lg:pt-36">
-          <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
+        <section className="v7-detail-hero">
+          <div className="v7-container">
             <span className="eyebrow text-accent-ink">{statusLabel}</span>
-            <h1 className="mt-5 max-w-3xl text-balance font-display font-bold leading-[0.95] text-bone [font-size:clamp(2rem,5vw,3.5rem)]">
+            <h1>
               {project.title[loc]}
             </h1>
-            <p className="mt-4 font-mono text-sm text-bone/55">
+            <p>
               {categoryLabel} · {project.location}
             </p>
           </div>
         </section>
 
         {/* ── Fotografía principal: es el LCP, va con preload ── */}
-        <section className="bg-carbon">
-          <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
+        <section className="v7-project-cover">
+          <div className="v7-container">
             {/* Ampliable: es la foto por la que se juzga la obra. El recorte
                 del encuadre se conserva aquí; el visor muestra la foto
                 completa, sin recortar. */}
@@ -150,8 +150,8 @@ export default async function ProjectDetail({ params }: PageProps<"/[locale]/pro
           </div>
         </section>
 
-        <section className="bg-paper py-12 lg:py-20">
-          <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
+        <section className="v7-detail-body">
+          <div className="v7-container">
             <Breadcrumb
               items={[
                 { label: tn("projects"), href: "/projects" },
@@ -204,7 +204,7 @@ export default async function ProjectDetail({ params }: PageProps<"/[locale]/pro
               </div>
 
               {/* ── Ficha: solo campos con dato real ── */}
-              <aside className="h-fit border border-line bg-surface p-6 lg:sticky lg:top-24">
+              <aside className="v7-detail-aside h-fit border border-line bg-surface p-6 lg:sticky lg:top-24">
                 <h2 className="font-mono text-xs uppercase tracking-[0.14em] text-accent">
                   {t("detailsHeading")}
                 </h2>
@@ -311,8 +311,8 @@ export default async function ProjectDetail({ params }: PageProps<"/[locale]/pro
         ) : null}
 
         {/* ── CTA contextual ── */}
-        <section className="bg-surface py-12 lg:py-16">
-          <div className="mx-auto flex max-w-[1400px] flex-col gap-5 px-6 sm:flex-row sm:items-center sm:justify-between lg:px-10">
+        <section className="v7-context-cta">
+          <div className="v7-container flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="text-balance font-display text-2xl font-semibold text-ink">
                 {t("similarHeading")}

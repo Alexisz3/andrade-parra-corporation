@@ -1,9 +1,9 @@
 "use client";
 
 import { Suspense, useCallback, useEffect, useRef } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { LOCALE_PREFIXES, type AppLocale, type StaticPathname } from "@/i18n/routing";
+import { type StaticPathname } from "@/i18n/routing";
 import { WHATSAPP_CONTACTS } from "@/lib/site";
 import BrandLogo from "./BrandLogo";
 import LocaleSwitcher from "./LocaleSwitcher";
@@ -22,7 +22,6 @@ const FOCUSABLE =
 
 export default function MobileMenu({ open, onClose, links, triggerRef }: MobileMenuProps) {
   const t = useTranslations("Nav");
-  const locale = useLocale() as AppLocale;
   const tc = useTranslations("Contact");
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -152,15 +151,6 @@ export default function MobileMenu({ open, onClose, links, triggerRef }: MobileM
                 </Link>
               </li>
             ))}
-            <li>
-              <a
-                href={`${LOCALE_PREFIXES[locale]}#faq`}
-                onClick={onClose}
-                className="flex min-h-[56px] items-center font-display text-xl"
-              >
-                {t("faq")}
-              </a>
-            </li>
           </ul>
         </nav>
 

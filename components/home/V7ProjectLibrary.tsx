@@ -6,6 +6,7 @@ import { useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import type { Project, ProjectCategory } from "@/content/projects";
+import ZoomButton from "@/components/ZoomButton";
 
 const AUTOPLAY_MS = 9000;
 const CATEGORY_ORDER: ProjectCategory[] = [
@@ -283,35 +284,43 @@ export default function V7ProjectLibrary({
                 aria-roledescription="slide"
                 className={index === 0 && filter === "all" ? "v7-project-slide v7-project-slide-featured" : "v7-project-slide"}
               >
-                <Link
-                  href={{ pathname: "/projects/[slug]", params: { slug: project.slugs[locale] } }}
-                  className="v7-project-card"
-                >
-                  <div className="v7-project-media">
-                    <Image
-                      src={`/images/proyectos/${project.coverPhoto.file}`}
-                      alt={project.title[locale]}
-                      fill
-                      loading={index < 2 ? "eager" : "lazy"}
-                      sizes="(min-width: 1100px) 46vw, (min-width: 700px) 60vw, 86vw"
-                      className="object-cover"
-                    />
-                    <span className="v7-project-index">APC · {String(projects.indexOf(project) + 1).padStart(2, "0")}</span>
-                  </div>
-                  <div className="v7-project-info">
-                    <div>
-                      <span className="v7-meta">
-                        {copy.category[project.category]} · {project.location} · {project.status === "completed" ? copy.completed : copy.inProgress}
-                      </span>
-                      <h3>{project.title[locale]}</h3>
-                      <p>{project.excerpt[locale]}</p>
+                <article className="v7-project-article">
+                  <Link
+                    href={{ pathname: "/projects/[slug]", params: { slug: project.slugs[locale] } }}
+                    className="v7-project-card"
+                  >
+                    <div className="v7-project-media">
+                      <Image
+                        src={`/images/proyectos/${project.coverPhoto.file}`}
+                        alt={project.title[locale]}
+                        fill
+                        loading={index < 2 ? "eager" : "lazy"}
+                        sizes="(min-width: 1100px) 46vw, (min-width: 700px) 60vw, 86vw"
+                        className="object-cover"
+                      />
+                      <span className="v7-project-index">APC · {String(projects.indexOf(project) + 1).padStart(2, "0")}</span>
                     </div>
-                    <span className="v7-project-link">
-                      {copy.viewProject}
-                      <span aria-hidden="true">↗</span>
-                    </span>
-                  </div>
-                </Link>
+                    <div className="v7-project-info">
+                      <div>
+                        <span className="v7-meta">
+                          {copy.category[project.category]} · {project.location} · {project.status === "completed" ? copy.completed : copy.inProgress}
+                        </span>
+                        <h3>{project.title[locale]}</h3>
+                        <p>{project.excerpt[locale]}</p>
+                      </div>
+                      <span className="v7-project-link">
+                        {copy.viewProject}
+                        <span aria-hidden="true">↗</span>
+                      </span>
+                    </div>
+                  </Link>
+                  <ZoomButton
+                    src={`/images/proyectos/${project.coverPhoto.file}`}
+                    alt={project.title[locale]}
+                    orientation={project.coverPhoto.orientation}
+                    className="absolute right-3 top-3 z-10"
+                  />
+                </article>
               </li>
             ))}
           </ul>

@@ -563,6 +563,31 @@ console.log(`--- motor: ${ENGINE} ---`);
   await ctx.close();
 }
 
+// ─── 7b. Arquitectura V7 multipágina ────────────────────────────────────
+{
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const p = await ctx.newPage();
+  await p.goto(URL + "/es", { waitUntil: "domcontentloaded" });
+  await p.waitForTimeout(1000);
+  check("Arquitectura: Inicio usa previews, no páginas completas",
+    (await p.locator(".v7-featured-preview,.v7-services-preview,.v7-about-preview,.v7-home-cta").count()) === 4 &&
+    (await p.locator(".v7-projects,.v7-services,.v7-about,.v7-faq,.v7-contact").count()) === 0);
+
+  for (const [path, selector] of [
+    ["/es/proyectos", ".v7-projects"],
+    ["/es/servicios", ".v7-services"],
+    ["/es/nosotros", ".v7-about"],
+    ["/es/contacto", ".v7-contact-page"],
+    ["/es/proceso", ".v7-process-timeline"],
+  ]) {
+    await p.goto(URL + path, { waitUntil: "domcontentloaded" });
+    check(`Arquitectura: ${path} contiene su experiencia V7`, (await p.locator(selector).count()) === 1);
+  }
+  await p.goto(URL + "/es/contacto", { waitUntil: "domcontentloaded" });
+  check("Arquitectura: FAQ completo vive en Contacto", (await p.locator(".v7-faq").count()) === 1);
+  await ctx.close();
+}
+
 // ─── 8. Servicios: enlaces únicos y detalles ────────────────────────────
 {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
@@ -570,11 +595,20 @@ console.log(`--- motor: ${ENGINE} ---`);
   await p.goto(URL + "/es", { waitUntil: "domcontentloaded" });
   await p.waitForTimeout(1200);
 
-  const hrefs = await p.locator("section a[href*='/servicios/']").evaluateAll((els) =>
+  const previewHrefs = await p.locator(".v7-services-preview a[href*='/servicios/']").evaluateAll((els) =>
+    els.map((e) => e.getAttribute("href"))
+  );
+  check("Inicio: muestra una selección breve de 4 servicios",
+    previewHrefs.length === 4 && new Set(previewHrefs).size === 4,
+    `${previewHrefs.length} enlaces, ${new Set(previewHrefs).size} únicos`);
+
+  await p.goto(URL + "/es/servicios", { waitUntil: "domcontentloaded" });
+  await p.waitForTimeout(1200);
+  const hrefs = await p.locator(".v7-services a[href*='/servicios/']").evaluateAll((els) =>
     els.map((e) => e.getAttribute("href"))
   );
   const unique = new Set(hrefs);
-  check("Servicios: los 5 servicios tienen href distintos", hrefs.length >= 5 && unique.size === 5,
+  check("Servicios: la página dedicada conserva los 5 servicios", hrefs.length >= 5 && unique.size === 5,
     `${hrefs.length} enlaces, ${unique.size} únicos`);
 
   const SERVICE_PATHS = [

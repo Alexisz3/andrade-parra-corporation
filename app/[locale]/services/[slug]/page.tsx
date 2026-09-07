@@ -119,8 +119,8 @@ export default async function ServiceDetail({ params }: PageProps<"/[locale]/ser
           plainTitle
         />
 
-        <section className="bg-paper py-10 lg:py-16">
-          <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
+        <section className="v7-detail-body">
+          <div className="v7-container">
             <Breadcrumb
               items={[
                 { label: tn("services"), href: "/services" },
@@ -167,7 +167,7 @@ export default async function ServiceDetail({ params }: PageProps<"/[locale]/ser
 
               {/* CTA con el servicio preseleccionado: el ID viaja en la URL,
                   la etiqueta visible se traduce. */}
-              <aside className="h-fit bg-carbon p-6 text-bone lg:sticky lg:top-24">
+              <aside className="v7-service-detail-cta h-fit bg-carbon p-6 text-bone lg:sticky lg:top-24">
                 <h2 className="font-display text-lg font-semibold">{th("serviceCtaHeading")}</h2>
                 <p className="mt-2 text-sm leading-relaxed text-bone/75">{th("serviceCtaBody")}</p>
                 <Link

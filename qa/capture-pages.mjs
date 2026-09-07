@@ -17,6 +17,8 @@ const PAGES = [
   { name: "proyectos", es: "/es/proyectos", en: "/en/projects" },
   { name: "cotizacion", es: "/es/cotizacion", en: "/en/quote" },
   { name: "servicios", es: "/es/servicios", en: "/en/services" },
+  { name: "nosotros", es: "/es/nosotros", en: "/en/about" },
+  { name: "contacto", es: "/es/contacto", en: "/en/contact" },
   { name: "proceso", es: "/es/proceso", en: "/en/process" },
   {
     name: "detalle-proyecto",

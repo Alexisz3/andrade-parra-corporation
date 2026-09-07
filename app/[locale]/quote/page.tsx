@@ -81,12 +81,13 @@ export default async function QuotePage({ params, searchParams }: PageProps<"/[l
       <main id="contenido" tabIndex={-1}>
         {/* Cabecera oscura compacta: la cotización no necesita hero fotográfico
             a pantalla completa, necesita que el formulario empiece pronto. */}
-        <section className="bg-carbon pb-12 pt-32 lg:pb-16 lg:pt-40">
-          <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-            <h1 className="font-display font-bold uppercase leading-[0.9] tracking-[-0.02em] text-bone [font-size:clamp(2rem,6vw,4.5rem)]">
+        <section className="v7-quote-intro">
+          <div className="v7-container">
+            <span className="v7-eyebrow v7-eyebrow-light">{tq("eyebrow")}</span>
+            <h1>
               {tn("quote")}
             </h1>
-            <p className="mt-3 text-bone/75 [font-size:clamp(1rem,1.6vw,1.25rem)]">
+            <p>
               {tq("subtitle")}
             </p>
           </div>
