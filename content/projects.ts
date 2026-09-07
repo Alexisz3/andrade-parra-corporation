@@ -159,6 +159,69 @@ export const PROJECTS: Project[] = [
     featuredOnHome: true,
   },
   {
+    id: "blue-bath-renovation",
+    slugs: {
+      "es-US": "renovacion-bano-azul",
+      "en-US": "blue-bathroom-renovation",
+    },
+    category: "bathrooms",
+    status: "in_progress",
+    title: {
+      "es-US": "Renovación de baño en tonos azules",
+      "en-US": "Blue bathroom renovation",
+    },
+    excerpt: {
+      "es-US":
+        "Remodelación en proceso con mobiliario azul, superficies claras y ducha revestida.",
+      "en-US":
+        "Remodel in progress with blue cabinetry, light surfaces, and a tiled shower.",
+    },
+    location: "Houston, TX",
+    coverPhoto: { file: "bano-azul-02-banera.jpeg", orientation: "vertical" },
+    gallery: [
+      { file: "bano-azul-02-banera.jpeg", orientation: "vertical" },
+      { file: "bano-azul-01-lavabo.jpeg", orientation: "horizontal" },
+      { file: "bano-azul-03-ducha.jpeg", orientation: "vertical" },
+      { file: "bano-azul-04-doble-lavabo.jpeg", orientation: "horizontal" },
+    ],
+    featuredOnHome: false,
+  },
+  {
+    id: "full-bath-rebuild",
+    slugs: {
+      "es-US": "renovacion-integral-bano",
+      "en-US": "full-bathroom-rebuild",
+    },
+    category: "bathrooms",
+    status: "in_progress",
+    title: {
+      "es-US": "Renovación integral de baño",
+      "en-US": "Full bathroom rebuild",
+    },
+    excerpt: {
+      "es-US":
+        "Secuencia real de obra: instalaciones, muros, impermeabilización y revestimiento en proceso.",
+      "en-US":
+        "A real job sequence: systems, walls, waterproofing, and tile work in progress.",
+    },
+    location: "Houston, TX",
+    coverPhoto: {
+      file: "bano-integral-07-ducha-en-proceso.jpeg",
+      orientation: "horizontal",
+    },
+    gallery: [
+      { file: "bano-integral-07-ducha-en-proceso.jpeg", orientation: "horizontal" },
+      { file: "bano-integral-01-instalaciones.jpeg", orientation: "vertical" },
+      { file: "bano-integral-02-desague.jpeg", orientation: "vertical" },
+      { file: "bano-integral-03-plomeria.jpeg", orientation: "vertical" },
+      { file: "bano-integral-04-muros.jpeg", orientation: "vertical" },
+      { file: "bano-integral-05-piso.jpeg", orientation: "horizontal" },
+      { file: "bano-integral-06-piso-detalle.jpeg", orientation: "horizontal" },
+      { file: "bano-integral-08-ducha-revestida.jpeg", orientation: "vertical" },
+    ],
+    featuredOnHome: false,
+  },
+  {
     id: "exterior-repairs",
     slugs: { "es-US": "reparaciones-exteriores", "en-US": "exterior-repairs" },
     category: "exteriors",

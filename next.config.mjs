@@ -21,9 +21,10 @@ const nextConfig = {
     // AVIF primero: comprime mejor y degrada con menos artefactos que WebP
     // sobre un JPEG que ya venía recomprimido, que es el caso de estas fotos.
     formats: ["image/avif", "image/webp"],
-    // Las fuentes topan en 960px y Next no amplía: pedir tamaños mayores solo
-    // generaría variantes de caché que nunca se usan.
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    // El lote nuevo del cliente llega hasta 2048 px. Incluir 1600 y 2048
+    // evita que los heroes de escritorio sirvan una variante innecesariamente
+    // pequeña, sin generar escalas superiores a la fuente real.
+    deviceSizes: [640, 750, 828, 1080, 1200, 1600, 1920, 2048],
     imageSizes: [256, 384, 512, 640],
   },
 
