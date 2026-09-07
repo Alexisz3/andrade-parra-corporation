@@ -1,59 +1,121 @@
-import { setRequestLocale, getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
-import { routing } from "@/i18n/routing";
+import { routing, type AppLocale } from "@/i18n/routing";
+import { PROJECTS, getFeaturedProjects, type ProjectCategory } from "@/content/projects";
+import { getPublishedServices } from "@/content/services";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import HomeHero from "@/components/home/HomeHero";
-import TrustBar from "@/components/home/TrustBar";
-import ServiceCards from "@/components/home/ServiceCards";
-import FeaturedProjects from "@/components/home/FeaturedProjects";
-import ValueProps from "@/components/home/ValueProps";
-import Testimonials from "@/components/Testimonials";
-import ProcessTimeline from "@/components/ProcessTimeline";
-import CtaBand from "@/components/CtaBand";
 import StructuredData from "@/components/StructuredData";
+import TrustBar from "@/components/home/TrustBar";
+import V7Hero from "@/components/home/V7Hero";
+import V7ProjectLibrary from "@/components/home/V7ProjectLibrary";
+import V7Services from "@/components/home/V7Services";
+import { V7About, V7Contact, V7Craft, V7Faq } from "@/components/home/V7EditorialSections";
 
 export default async function HomePage({ params }: PageProps<"/[locale]">) {
-  const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) notFound();
+  const { locale: rawLocale } = await params;
+  if (!hasLocale(routing.locales, rawLocale)) notFound();
+  const locale = rawLocale as AppLocale;
   setRequestLocale(locale);
 
-  const t = await getTranslations("Home");
+  const [t, tn, tp] = await Promise.all([
+    getTranslations("HomeV7"),
+    getTranslations("Nav"),
+    getTranslations("Projects"),
+  ]);
+
+  const category: Record<ProjectCategory, string> = {
+    kitchens: tp("filterKitchens"),
+    bathrooms: tp("filterBathrooms"),
+    exteriors: tp("filterExteriors"),
+    structures: tp("filterStructures"),
+    interiors: tp("filterInteriors"),
+  };
+
+  const editorialCopy = {
+    craftEyebrow: t("craftEyebrow"),
+    craftTitle: t("craftTitle"),
+    craftBody: t("craftBody"),
+    craftCallouts: [t("craftCallout1"), t("craftCallout2"), t("craftCallout3")],
+    aboutEyebrow: t("aboutEyebrow"),
+    aboutTitle: t("aboutTitle"),
+    aboutBody: t("aboutBody"),
+    aboutPrinciples: [t("aboutPrinciple1"), t("aboutPrinciple2"), t("aboutPrinciple3")],
+    faqEyebrow: t("faqEyebrow"),
+    faqTitle: t("faqTitle"),
+    faq: [1, 2, 3, 4].map((number) => ({
+      question: t(`faqQ${number}`),
+      answer: t(`faqA${number}`),
+    })),
+    contactEyebrow: t("contactEyebrow"),
+    contactTitle: t("contactTitle"),
+    contactBody: t("contactBody"),
+    contactArea: t("contactArea"),
+    quote: tn("quote"),
+    call: tn("callShort"),
+  };
 
   return (
     <>
       <StructuredData />
       <Header />
       <main id="contenido" tabIndex={-1}>
-        <HomeHero />
-        {/* La franja de confianza va inmediatamente bajo el hero: responde
-            "¿trabajan donde vivo?" antes de que el visitante siga bajando. */}
+        <V7Hero
+          projects={getFeaturedProjects()}
+          copy={{
+            eyebrow: t("heroEyebrow"),
+            titleLead: t("heroTitleLead"),
+            titleAccent: t("heroTitleAccent"),
+            body: t("heroBody"),
+            quote: tn("quote"),
+            projects: tn("projects"),
+            currentProject: t("currentProject"),
+            viewProject: t("viewProject"),
+            similar: t("similar"),
+            directContact: t("directContact"),
+            previous: t("previous"),
+            next: t("next"),
+            pause: t("pause"),
+            resume: t("resume"),
+            category,
+          }}
+        />
         <TrustBar />
-        <ServiceCards />
-        <FeaturedProjects />
-        <ValueProps />
-        {/* Devuelve null mientras no haya reseñas reales. */}
-        <Testimonials />
-
-        <section className="bg-paper pb-16 lg:pb-28">
-          {/* El carril de proceso sangra al borde en móvil (sin px-6 en el
-              contenedor) para que la última tarjeta asome; el texto sí
-              conserva el margen. */}
-          <div className="mx-auto max-w-[1400px] lg:px-10">
-            <div className="px-6 lg:px-0">
-              <span className="eyebrow text-accent">{t("processEyebrow")}</span>
-              <h2 className="mt-4 max-w-2xl text-balance font-display font-semibold leading-tight text-ink [font-size:clamp(1.625rem,3.4vw,2.75rem)]">
-                {t("processHeading")}
-              </h2>
-            </div>
-            <div className="mt-8 pl-6 lg:mt-12 lg:pl-0">
-              <ProcessTimeline />
-            </div>
-          </div>
-        </section>
-
-        <CtaBand />
+        <V7ProjectLibrary
+          projects={PROJECTS}
+          copy={{
+            eyebrow: t("projectsEyebrow"),
+            titleLead: t("projectsTitleLead"),
+            titleAccent: t("projectsTitleAccent"),
+            intro: t("projectsIntro"),
+            all: t("allProjects"),
+            category,
+            completed: t("statusCompleted"),
+            inProgress: t("statusInProgress"),
+            viewProject: t("viewProject"),
+            previous: t("previous"),
+            next: t("next"),
+            pause: t("pause"),
+            resume: t("resume"),
+            regionLabel: t("carouselRegion"),
+          }}
+        />
+        <V7Services
+          services={getPublishedServices()}
+          copy={{
+            eyebrow: t("servicesEyebrow"),
+            titleLead: t("servicesTitleLead"),
+            titleAccent: t("servicesTitleAccent"),
+            intro: t("servicesIntro"),
+            detail: t("serviceDetail"),
+            quote: tn("quote"),
+          }}
+        />
+        <V7Craft copy={editorialCopy} />
+        <V7About copy={editorialCopy} />
+        <V7Faq copy={editorialCopy} />
+        <V7Contact copy={editorialCopy} />
       </main>
       <Footer />
     </>

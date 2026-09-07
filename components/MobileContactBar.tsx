@@ -88,6 +88,20 @@ export default function MobileContactBar() {
 
   return (
     <>
+      <a
+        href={`https://wa.me/${contact.phone}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => track("whatsapp_clicked", { contact: contact.id, source: "desktop_fab" })}
+        className="fixed bottom-7 right-7 z-40 hidden min-h-[52px] items-center gap-3 rounded-full bg-whatsapp px-5 font-semibold text-carbon shadow-xl transition-transform hover:-translate-y-1 lg:flex"
+        aria-label={`WhatsApp — ${contact.name}, ${contact.phoneDisplay}`}
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true" className="h-6 w-6" fill="currentColor">
+          <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.5 14.1c-.2.6-1.2 1.2-1.7 1.2-.5.1-1 .1-3.2-.8-2.7-1.1-4.4-3.9-4.5-4-.1-.2-1-1.4-1-2.6 0-1.2.6-1.8.9-2 .2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.4.5-.3.3c-.1.1-.2.3 0 .5.2.3.7 1.2 1.6 2 1.1.9 1.5 1 1.7 1.1.2.1.4.1.5-.1l.7-.9c.2-.2.3-.2.5-.1l2 .9c.2.1.4.2.4.3.1.1.1.6-.1 1.2Z" />
+        </svg>
+        WhatsApp
+      </a>
+
       {/*
         Hueco del mismo alto que la barra. Sin él, la barra tapa el final del
         pie —los enlaces legales y los teléfonos— en todas las páginas.
@@ -117,7 +131,7 @@ export default function MobileContactBar() {
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => track("whatsapp_clicked", { contact: contact.id, source: "mobile_bar" })}
-          className={`${ITEM} border-x border-bone/15`}
+          className={`${ITEM} border-x border-bone/15 bg-whatsapp text-carbon`}
         >
           <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="currentColor">
             <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.5 14.1c-.2.6-1.2 1.2-1.7 1.2-.5.1-1 .1-3.2-.8-2.7-1.1-4.4-3.9-4.5-4-.1-.2-1-1.4-1-2.6 0-1.2.6-1.8.9-2 .2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.4.5-.3.3c-.1.1-.2.3 0 .5.2.3.7 1.2 1.6 2 1.1.9 1.5 1 1.7 1.1.2.1.4.1.5-.1l.7-.9c.2-.2.3-.2.5-.1l2 .9c.2.1.4.2.4.3.1.1.1.6-.1 1.2Z" />
@@ -128,7 +142,7 @@ export default function MobileContactBar() {
         {/* Sin evento propio: el embudo ya registra `quote_started` al montar
             el formulario, y `lib/analytics.ts` mantiene a propósito una lista
             cerrada de eventos. Uno más aquí solo duplicaría la misma etapa. */}
-        <Link href="/quote" className={`${ITEM} bg-accent`}>
+        <Link href="/quote" className={`${ITEM} bg-action text-carbon`}>
           <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.7">
             <path d="M8 4h8l3 3v13H5V4h3Z" strokeLinejoin="round" />
             <path d="M9 11h6M9 15h4" strokeLinecap="round" />

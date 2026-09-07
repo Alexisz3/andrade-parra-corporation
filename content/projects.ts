@@ -160,10 +160,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "blue-bath-renovation",
-    slugs: {
-      "es-US": "renovacion-bano-azul",
-      "en-US": "blue-bathroom-renovation",
-    },
+    slugs: { "es-US": "renovacion-bano-azul", "en-US": "blue-bathroom-renovation" },
     category: "bathrooms",
     status: "in_progress",
     title: {
@@ -188,10 +185,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "full-bath-rebuild",
-    slugs: {
-      "es-US": "renovacion-integral-bano",
-      "en-US": "full-bathroom-rebuild",
-    },
+    slugs: { "es-US": "renovacion-integral-bano", "en-US": "full-bathroom-rebuild" },
     category: "bathrooms",
     status: "in_progress",
     title: {

@@ -99,7 +99,7 @@ export const SERVICES: Service[] = [
         "We build new homes in Houston and nearby areas, from planning through handover. We review the lot and the project before defining scope.",
     },
     relatedProjectCategories: ["structures", "exteriors"],
-    heroImage: "estructura-04.jpeg",
+    heroImage: "estructura-02.jpeg",
     published: true,
   },
 

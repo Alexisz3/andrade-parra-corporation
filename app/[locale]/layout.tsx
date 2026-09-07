@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { hasLocale, type Locale } from "next-intl";
 import { NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale, getMessages } from "next-intl/server";
-import { Space_Grotesk, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
+import { Barlow_Condensed, Newsreader, Source_Sans_3 } from "next/font/google";
 import { routing, LOCALE_PREFIXES, type AppLocale } from "@/i18n/routing";
 import { SITE_URL, INDEXABLE, BRAND, OG_IMAGE } from "@/lib/site";
 import SkipLink from "@/components/SkipLink";
@@ -11,24 +11,24 @@ import Analytics from "@/components/Analytics";
 import MobileContactBar from "@/components/MobileContactBar";
 import "../globals.css";
 
-const spaceGrotesk = Space_Grotesk({
+const sourceSans = Source_Sans_3({
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  variable: "--font-space-grotesk",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-source-sans",
   display: "swap",
 });
 
-const plexSans = IBM_Plex_Sans({
+const newsreader = Newsreader({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
-  variable: "--font-plex-sans",
+  variable: "--font-newsreader",
   display: "swap",
 });
 
-const plexMono = IBM_Plex_Mono({
+const barlowCondensed = Barlow_Condensed({
   subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-plex-mono",
+  weight: ["500", "600", "700"],
+  variable: "--font-barlow-condensed",
   display: "swap",
 });
 
@@ -130,7 +130,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     <html
       lang={locale}
       data-scroll-behavior="smooth"
-      className={`${spaceGrotesk.variable} ${plexSans.variable} ${plexMono.variable}`}
+      className={`${sourceSans.variable} ${newsreader.variable} ${barlowCondensed.variable}`}
     >
       <body>
         <NextIntlClientProvider messages={clientMessages}>

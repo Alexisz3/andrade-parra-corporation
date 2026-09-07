@@ -1,11 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
-import { useTranslations } from "next-intl";
+import { Suspense, useCallback, useEffect, useRef } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import type { StaticPathname } from "@/i18n/routing";
+import { LOCALE_PREFIXES, type AppLocale, type StaticPathname } from "@/i18n/routing";
 import { WHATSAPP_CONTACTS } from "@/lib/site";
 import BrandLogo from "./BrandLogo";
+import LocaleSwitcher from "./LocaleSwitcher";
 
 type NavKey = "services" | "projects" | "process" | "about" | "contact";
 
@@ -21,6 +22,7 @@ const FOCUSABLE =
 
 export default function MobileMenu({ open, onClose, links, triggerRef }: MobileMenuProps) {
   const t = useTranslations("Nav");
+  const locale = useLocale() as AppLocale;
   const tc = useTranslations("Contact");
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -134,6 +136,11 @@ export default function MobileMenu({ open, onClose, links, triggerRef }: MobileM
 
         <nav aria-label={t("menuTitle")} className="mt-8">
           <ul className="divide-y divide-bone/15 border-y border-bone/15">
+            <li>
+              <Link href="/" onClick={onClose} className="flex min-h-[56px] items-center font-display text-xl">
+                {t("home")}
+              </Link>
+            </li>
             {links.map((link) => (
               <li key={link.href}>
                 <Link
@@ -145,6 +152,15 @@ export default function MobileMenu({ open, onClose, links, triggerRef }: MobileM
                 </Link>
               </li>
             ))}
+            <li>
+              <a
+                href={`${LOCALE_PREFIXES[locale]}#faq`}
+                onClick={onClose}
+                className="flex min-h-[56px] items-center font-display text-xl"
+              >
+                {t("faq")}
+              </a>
+            </li>
           </ul>
         </nav>
 
@@ -155,6 +171,13 @@ export default function MobileMenu({ open, onClose, links, triggerRef }: MobileM
         >
           {t("quote")}
         </Link>
+
+        <div className="mt-5 flex items-center justify-between border-y border-bone/15 py-3">
+          <span className="font-mono text-xs uppercase tracking-wider text-bone/55">{t("languageSwitcherLabel")}</span>
+          <Suspense fallback={<div aria-hidden="true" className="h-11 w-[6.5rem] rounded-full border border-bone/30" />}>
+            <LocaleSwitcher />
+          </Suspense>
+        </div>
 
         <ul className="mt-6 space-y-1">
           {WHATSAPP_CONTACTS.map((contact) => (
