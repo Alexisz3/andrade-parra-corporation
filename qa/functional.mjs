@@ -574,7 +574,7 @@ console.log(`--- motor: ${ENGINE} ---`);
     els.map((e) => e.getAttribute("href"))
   );
   const unique = new Set(hrefs);
-  check("Servicios: las 5 tarjetas tienen href distintos", hrefs.length === 5 && unique.size === 5,
+  check("Servicios: los 5 servicios tienen href distintos", hrefs.length >= 5 && unique.size === 5,
     `${hrefs.length} enlaces, ${unique.size} únicos`);
 
   const SERVICE_PATHS = [

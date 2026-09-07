@@ -122,7 +122,9 @@ async function main() {
             offenders,
             smallTargets,
             h1Count: document.querySelectorAll("h1").length,
-            imagesWithoutAlt: [...document.querySelectorAll("img")].filter((i) => !i.getAttribute("alt")).length,
+            // alt="" is the correct accessible treatment for decorative
+            // imagery; only an actually missing attribute is a failure.
+            imagesWithoutAlt: [...document.querySelectorAll("img")].filter((i) => !i.hasAttribute("alt")).length,
             documentHeight: doc.scrollHeight,
           };
         });
