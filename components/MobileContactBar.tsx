@@ -142,7 +142,7 @@ export default function MobileContactBar() {
         {/* Sin evento propio: el embudo ya registra `quote_started` al montar
             el formulario, y `lib/analytics.ts` mantiene a propósito una lista
             cerrada de eventos. Uno más aquí solo duplicaría la misma etapa. */}
-        <Link href="/quote" className={`${ITEM} bg-action text-carbon`}>
+        <Link href="/quote" className={`${ITEM} bg-action text-bone transition-colors hover:bg-action-hover active:bg-action-active`}>
           <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.7">
             <path d="M8 4h8l3 3v13H5V4h3Z" strokeLinejoin="round" />
             <path d="M9 11h6M9 15h4" strokeLinecap="round" />
