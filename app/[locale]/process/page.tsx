@@ -7,7 +7,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
 import ProcessTimeline from "@/components/ProcessTimeline";
-import CtaBand from "@/components/CtaBand";
+import GlobalCta from "@/components/GlobalCta";
 import { BRAND } from "@/lib/site";
 
 export function generateStaticParams() {
@@ -62,7 +62,7 @@ export default async function ProcessPage({ params }: PageProps<"/[locale]/proce
           </div>
         </section>
 
-        <CtaBand />
+        <GlobalCta />
       </main>
       <Footer />
     </>

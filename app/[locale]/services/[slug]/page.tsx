@@ -11,7 +11,7 @@ import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
 import Breadcrumb from "@/components/Breadcrumb";
 import ProjectCard from "@/components/ProjectCard";
-import CtaBand from "@/components/CtaBand";
+import GlobalCta from "@/components/GlobalCta";
 import { Link } from "@/i18n/navigation";
 import ArrowRight from "@/components/icons/ArrowRight";
 
@@ -199,7 +199,7 @@ export default async function ServiceDetail({ params }: PageProps<"/[locale]/ser
           </div>
         </section>
 
-        <CtaBand />
+        <GlobalCta />
       </main>
       <Footer />
     </>

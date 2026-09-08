@@ -7,7 +7,7 @@ import { BRAND } from "@/lib/site";
 import ServiceArea from "@/components/ServiceArea";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { V7Contact, V7Faq } from "@/components/home/V7EditorialSections";
+import { V7Contact } from "@/components/home/V7EditorialSections";
 import { getV7EditorialCopy } from "@/lib/v7-editorial-copy";
 
 export function generateStaticParams() {
@@ -50,7 +50,6 @@ export default async function ContactPage({ params }: PageProps<"/[locale]/conta
       <main id="contenido" tabIndex={-1}>
         <V7Contact copy={editorialCopy} page />
         <ServiceArea />
-        <V7Faq copy={editorialCopy} />
       </main>
       <Footer />
     </>

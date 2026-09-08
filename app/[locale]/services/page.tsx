@@ -7,7 +7,7 @@ import { getPublishedServices } from "@/content/services";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
-import CtaBand from "@/components/CtaBand";
+import GlobalCta from "@/components/GlobalCta";
 import V7Services from "@/components/home/V7Services";
 
 export function generateStaticParams() {
@@ -69,7 +69,7 @@ export default async function ServicesPage({ params }: PageProps<"/[locale]/serv
           }}
         />
 
-        <CtaBand />
+        <GlobalCta />
       </main>
       <Footer />
     </>

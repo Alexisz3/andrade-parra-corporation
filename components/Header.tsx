@@ -19,7 +19,7 @@ const NAV_LINKS: HeaderNavItem[] = [
   { href: "/projects", key: "projects" },
   { href: "/services", key: "services" },
   { href: "/about", key: "about" },
-  { href: "/contact", key: "faq", hash: "faq" },
+  { href: "/faq", key: "faq" },
   { href: "/contact", key: "contact" },
 ];
 

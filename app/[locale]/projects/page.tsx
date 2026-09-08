@@ -8,7 +8,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
 import V7ProjectLibrary from "@/components/home/V7ProjectLibrary";
-import CtaBand from "@/components/CtaBand";
+import GlobalCta from "@/components/GlobalCta";
 import V7BeforeAfterSection from "@/components/home/V7BeforeAfterSection";
 
 export function generateStaticParams() {
@@ -100,7 +100,7 @@ export default async function ProjectsPage({ params }: PageProps<"/[locale]/proj
           }}
         />
 
-        <CtaBand />
+        <GlobalCta />
       </main>
       <Footer />
     </>

@@ -12,9 +12,9 @@ import V7Hero from "@/components/home/V7Hero";
 import {
   V7AboutPreview,
   V7FeaturedProjects,
-  V7HomeCta,
   V7ServicesPreview,
 } from "@/components/home/V7HomePreviews";
+import GlobalCta from "@/components/GlobalCta";
 
 export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const { locale: rawLocale } = await params;
@@ -91,15 +91,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             action: t("aboutPreviewAction"),
           }}
         />
-        <V7HomeCta
-          copy={{
-            eyebrow: t("homeCtaEyebrow"),
-            title: t("homeCtaTitle"),
-            body: t("homeCtaBody"),
-            action: t("homeCtaAction"),
-          }}
-          secondary={t("homeCtaSecondary")}
-        />
+        <GlobalCta />
       </main>
       <Footer />
     </>

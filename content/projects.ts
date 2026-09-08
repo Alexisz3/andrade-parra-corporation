@@ -83,7 +83,10 @@ export const PROJECTS: Project[] = [
     },
     location: "Houston, TX",
     coverPhoto: { file: "exterior-lujo-01.jpeg", orientation: "horizontal" },
-    gallery: [{ file: "exterior-lujo-01.jpeg", orientation: "horizontal" }],
+    gallery: [
+      { file: "exterior-lujo-01.jpeg", orientation: "horizontal" },
+      { file: "exterior-lujo-02.jpeg", orientation: "horizontal" }
+    ],
     featuredOnHome: true,
   },
   {
@@ -228,6 +231,21 @@ export const PROJECTS: Project[] = [
     location: "Houston, TX",
     coverPhoto: { file: "exterior-jardin-01.jpeg", orientation: "vertical" },
     gallery: [{ file: "exterior-jardin-01.jpeg", orientation: "vertical" }],
+    featuredOnHome: false,
+  },
+  {
+    id: "window-installation",
+    slugs: { "es-US": "instalacion-de-ventanas", "en-US": "window-installation" },
+    category: "exteriors",
+    status: "in_progress",
+    title: { "es-US": "Instalación de ventanas", "en-US": "Window installation" },
+    excerpt: {
+      "es-US": "Reemplazo e instalación de ventanas de alta eficiencia con sellado térmico.",
+      "en-US": "Replacement and installation of high-efficiency windows with thermal sealing.",
+    },
+    location: "Houston, TX",
+    coverPhoto: { file: "instalacion-ventanas-01.jpeg", orientation: "horizontal" },
+    gallery: [{ file: "instalacion-ventanas-01.jpeg", orientation: "horizontal" }],
     featuredOnHome: false,
   },
   {

@@ -8,11 +8,12 @@ import BrandLogo from "./BrandLogo";
 
 const COMPANY_LINKS: {
   href: StaticPathname;
-  key: "about" | "projects" | "process" | "contact";
+  key: "about" | "projects" | "process" | "faq" | "contact";
 }[] = [
   { href: "/about", key: "about" },
   { href: "/projects", key: "projects" },
   { href: "/process", key: "process" },
+  { href: "/faq", key: "faq" },
   { href: "/contact", key: "contact" },
 ];
 

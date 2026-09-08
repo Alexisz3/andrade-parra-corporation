@@ -12,7 +12,7 @@ import Footer from "@/components/Footer";
 import Breadcrumb from "@/components/Breadcrumb";
 import BeforeAfter from "@/components/BeforeAfter";
 import ZoomableImage from "@/components/ZoomableImage";
-import CtaBand from "@/components/CtaBand";
+import GlobalCta from "@/components/GlobalCta";
 import { Link } from "@/i18n/navigation";
 import ArrowRight from "@/components/icons/ArrowRight";
 
@@ -331,7 +331,7 @@ export default async function ProjectDetail({ params }: PageProps<"/[locale]/pro
           </div>
         </section>
 
-        <CtaBand />
+        <GlobalCta />
       </main>
       <Footer />
     </>

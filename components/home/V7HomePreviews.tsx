@@ -120,20 +120,4 @@ export function V7AboutPreview({ copy }: { copy: PreviewCopy }) {
   );
 }
 
-export function V7HomeCta({ copy, secondary }: { copy: PreviewCopy; secondary: string }) {
-  return (
-    <section className="v7-home-cta" aria-labelledby="home-cta-title">
-      <Image src="/images/proyectos/exterior-lujo-01.jpeg" alt="" fill sizes="100vw" className="object-cover" />
-      <div className="v7-home-cta-overlay" aria-hidden="true" />
-      <div className="v7-container v7-home-cta-inner">
-        <p className="v7-eyebrow v7-eyebrow-light">{copy.eyebrow}</p>
-        <h2 id="home-cta-title">{copy.title}</h2>
-        <p>{copy.body}</p>
-        <div>
-          <Link href="/quote" className="v7-button v7-button-amber">{copy.action}<span aria-hidden="true">→</span></Link>
-          <Link href="/contact" className="v7-button v7-button-ghost-light">{secondary}<span aria-hidden="true">→</span></Link>
-        </div>
-      </div>
-    </section>
-  );
-}
+

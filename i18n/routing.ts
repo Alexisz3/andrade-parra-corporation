@@ -59,6 +59,7 @@ export const pathnames = {
   "/quote": { "es-US": "/cotizacion", "en-US": "/quote" },
   "/contact": { "es-US": "/contacto", "en-US": "/contact" },
   "/privacy": { "es-US": "/privacidad", "en-US": "/privacy" },
+  "/faq": { "es-US": "/preguntas", "en-US": "/faq" },
   "/terms": { "es-US": "/terminos", "en-US": "/terms" },
 } satisfies Record<string, string | Record<AppLocale, string>>;
 
