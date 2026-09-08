@@ -25,6 +25,9 @@
 }
 
 :root {
+  --apc-red: #cd2c3b;
+  --apc-red-hover: #b62434;
+  --apc-red-dark: #9c1f2d;
   --v7-shadow: 0 24px 70px rgb(32 28 24 / 14%);
   --v7-radius: 12px;
 }
@@ -89,12 +92,13 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 .v7-mobile-menu-logo { width:12.5rem; }
 .v7-desktop-nav { display: flex; align-items: center; justify-content:center; gap:clamp(1.875rem,2.2vw,2.625rem); }
 .v7-desktop-nav a { position: relative; min-height:44px; display: flex; align-items: center; justify-content:center; color: inherit; font-size: .9rem; font-weight: 600; letter-spacing:.01em; text-decoration: none; white-space:nowrap; }
-.v7-desktop-nav a::after { content: ""; position: absolute; inset: auto 0 5px; height: 2px; background: var(--color-action); transform: scaleX(0); transform-origin: left; transition: transform .2s; }
+.v7-desktop-nav a::after { content: ""; position: absolute; inset: auto 0 5px; height: 2px; background: var(--apc-red); transform: scaleX(0); transform-origin: left; transition: transform .2s; }
 .v7-desktop-nav a:hover::after,
 .v7-desktop-nav a[aria-current="page"]::after { transform: scaleX(1); }
 .v7-header-actions { display: flex; align-items: center; justify-content:flex-end; gap: .65rem; }
-.v7-header-quote { width:clamp(13rem,16vw,14.5rem); min-height: 3.75rem; display: flex; align-items: center; justify-content:center; gap: 1.1rem; border-radius:10px; background: var(--color-action); padding: 0 1.15rem; color: var(--color-carbon); font-size:.9rem; font-weight: 700; text-decoration: none; transition:min-height .28s ease,background .2s ease,transform .2s ease; }
-.v7-header-quote:hover { background:#ff9b3f; transform:translateY(-1px); }
+.v7-header-quote { width:clamp(13rem,16vw,14.5rem); min-height: 3.75rem; display: flex; align-items: center; justify-content:center; gap: 1.1rem; border-radius:10px; background: var(--apc-red); padding: 0 1.15rem; color: #fff; font-size:.9rem; font-weight: 700; text-decoration: none; transition:min-height .28s ease,background .2s ease,transform .2s ease; }
+.v7-header-quote:hover { background:var(--apc-red-hover); transform:translateY(-1px); }
+.v7-header-quote:active { background:var(--apc-red-dark); }
 .v7-header.is-solid .v7-header-quote { min-height:3.25rem; }
 .v7-menu-trigger { display: none; width: 44px; height: 44px; align-items: center; justify-content: center; background: none; border: 0; color: inherit; }
 .v7-menu-trigger svg { width: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; }
@@ -109,7 +113,8 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 .v7-language.is-open .v7-language-menu { opacity:1; visibility:visible; transform:none; }
 .v7-language-menu button { width:100%; min-height:44px; display:flex; align-items:center; justify-content:space-between; border:0; border-radius:8px; padding:.5rem .6rem; background:transparent; color:inherit; cursor:pointer; font:700 .75rem/1 var(--font-mono); }
 .v7-language-menu button:hover,.v7-language-menu button[aria-checked="true"] { background:rgb(252 250 246 / 8%); }
-.v7-language-menu button > span { display:flex; align-items:center; gap:.5rem; }.v7-language-menu i { color:var(--color-action); font-style:normal; }
+.v7-language-menu button > span { display:flex; align-items:center; gap:.5rem; }.v7-language-menu i { color:var(--apc-red); font-style:normal; }
+.v7-header :focus-visible { outline-color:var(--apc-red); }
 
 /* Hero */
 .v7-hero { position: relative; min-height: min(58rem, 100svh); overflow: hidden; background: var(--color-carbon); color: var(--color-bone); isolation: isolate; }
@@ -121,10 +126,17 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 .v7-hero-inner { position: relative; z-index: 3; min-height: inherit; display: flex; align-items: end; padding-block: 8.5rem 4rem; }
 .v7-hero-grid { width: 100%; display: grid; grid-template-columns: minmax(0,1fr) minmax(17.8125rem,20rem); gap: clamp(3rem,6vw,7rem); align-items: end; }
 .v7-hero-copy { padding-bottom: 1rem; }
+.v7-hero .v7-eyebrow-light { color:rgb(255 255 255 / 70%); }
+.v7-hero .v7-eyebrow-light::before { background:var(--apc-red); }
 .v7-hero-title { max-width: 16ch; margin: 1.15rem 0 1.5rem; font-size: clamp(3.25rem,6.2vw,6.8rem); line-height: .82; letter-spacing: -.055em; font-weight: 700; text-wrap: balance; }
-.v7-hero-title em { color: #f5871f; font-family: var(--font-newsreader),serif; font-weight: 500; }
+.v7-hero-title em { color: #f7f5f1; font-family: var(--font-newsreader),serif; font-weight: 500; }
 .v7-hero-lead { max-width: 39rem; color: rgb(252 250 246 / 78%); font-size: clamp(1rem,1.5vw,1.3rem); line-height: 1.55; }
 .v7-hero-ctas { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2rem; }
+.v7-hero .v7-button-amber { background:var(--apc-red); color:#fff; }
+.v7-hero .v7-button-amber:hover { background:var(--apc-red-hover); }
+.v7-hero .v7-button-amber:active { background:var(--apc-red-dark); }
+.v7-hero .v7-button-ghost-light:hover { border-color:var(--apc-red); background:rgb(255 255 255 / 8%); color:var(--color-bone); }
+.v7-hero :focus-visible { outline-color:var(--apc-red); }
 .v7-hero-project { width:clamp(17.8125rem,22vw,20rem); justify-self:end; margin-bottom:2rem; overflow: hidden; border: 1px solid rgb(255 255 255 / 8%); border-radius:12px; background: rgb(18 16 14 / 58%); box-shadow: 0 12px 30px rgb(0 0 0 / 13%); backdrop-filter: blur(6px); }
 .v7-hero-project-media { position: relative; height:6.75rem; overflow: hidden; border-bottom:1px solid rgb(252 250 246 / 8%); }
 .v7-hero-project-media img { transition: transform .7s cubic-bezier(.2,.7,.2,1); }
@@ -148,6 +160,7 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 .v7-library-controls svg { width:18px; }
 .v7-progress { height: 2px; margin-top:.5rem; background: rgb(252 250 246 / 14%); overflow: hidden; }
 .v7-progress-fill,.v7-library-progress span { display: block; height: 100%; background: var(--color-action); transform-origin: left; animation: v7-progress linear forwards; }
+.v7-hero-project .v7-progress-fill { background:var(--apc-red); }
 .v7-reveal-in { animation: v7-rise .7s ease both; }
 
 /* Projects */
