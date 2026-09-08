@@ -357,3 +357,11 @@ Declarado explícitamente para que nadie lo dé por bueno:
 - Fotos de ventana/ladrillo (66–67) y exterior residencial (59) continúan bloqueadas.
 - No se crearon proyectos nuevos.
 - ZIP original de imágenes sigue sin versionarse.
+
+### Saneamiento post-agente (8 de septiembre de 2026)
+
+- Retirados `window-installation`, su imagen recortada de la foto 66 y las afirmaciones técnicas sin respaldo. El catálogo vuelve a 9 proyectos.
+- Retirado `exterior-lujo-02.jpeg`, recorte de la foto 59 bloqueada, de la galería y de `public`.
+- Retirados los 18 archivos WhatsApp sin uso añadidos en `20fe094`; las fuentes 59, 66 y 72 muestran personas. No se salvan fuentes bloqueadas mediante recorte.
+- Se mantiene la foto 79 sanitizada en `full-bath-rebuild` y la retirada de `bano-03.jpeg`. Las fotos 59 y 66–67 siguen bloqueadas; el ZIP original permanece intacto.
+- El gitlink accidental de `.claude/worktrees/full-site` deja de versionarse; el worktree local se conserva. El trabajo visual anterior queda preservado en la rama local `safety/pre-astro-v7`, sin push.

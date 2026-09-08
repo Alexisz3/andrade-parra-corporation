@@ -55,6 +55,7 @@ playwright-report/
 
 # Herramientas/skills locales de los agentes; no son dependencias de runtime.
 .claude/skills/
+.claude/worktrees/
 skills-lock.json
 
 # Residuos de ejecuciones de QA (Lighthouse, pruebas del formulario).
