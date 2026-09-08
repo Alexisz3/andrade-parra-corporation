@@ -4,15 +4,22 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { type StaticPathname } from "@/i18n/routing";
-import { BRAND, WHATSAPP_CONTACTS } from "@/lib/site";
+import { BRAND } from "@/lib/site";
 import BrandLogo from "./BrandLogo";
 import LocaleSwitcher from "./LocaleSwitcher";
 import MobileMenu from "./MobileMenu";
 
-const NAV_LINKS: { href: StaticPathname; key: "projects" | "services" | "about" | "contact" }[] = [
+export type HeaderNavItem = {
+  href: StaticPathname;
+  key: "projects" | "services" | "about" | "faq" | "contact";
+  hash?: string;
+};
+
+const NAV_LINKS: HeaderNavItem[] = [
   { href: "/projects", key: "projects" },
   { href: "/services", key: "services" },
   { href: "/about", key: "about" },
+  { href: "/contact", key: "faq", hash: "faq" },
   { href: "/contact", key: "contact" },
 ];
 
@@ -34,26 +41,24 @@ export default function Header() {
     <>
       <header className={`v7-header ${solid ? "is-solid" : ""}`}>
         <div className="v7-container v7-header-inner">
-          <Link href="/" className="v7-brand-link" aria-label={`${BRAND.name} — ${BRAND.descriptor}`}>
-            <BrandLogo variant="horizontal" size={38} decorative />
+          <Link href="/" className="v7-brand-link" aria-label={`${BRAND.name} — ${t("home")}`}>
+            <BrandLogo variant="approved" decorative className="v7-header-logo" />
           </Link>
 
           <nav aria-label={t("menuTitle")} className="v7-desktop-nav">
-            <Link href="/" aria-current={pathname === "/" ? "page" : undefined}>{t("home")}</Link>
-            {NAV_LINKS.slice(0, 3).map((link) => (
-              <Link key={link.href} href={link.href} aria-current={pathname === link.href ? "page" : undefined}>
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={`${link.href}-${link.hash ?? "page"}`}
+                href={link.hash ? { pathname: link.href, hash: link.hash } : link.href}
+                aria-current={!link.hash && pathname === link.href ? "page" : undefined}
+              >
                 {t(link.key)}
               </Link>
             ))}
-            <Link href="/contact" aria-current={pathname === "/contact" ? "page" : undefined}>{t("contact")}</Link>
           </nav>
 
           <div className="v7-header-actions">
-            <a href={`tel:+${WHATSAPP_CONTACTS[0].phone}`} className="v7-phone-pill">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h3l2 5-2.5 1.5a11 11 0 0 0 5 5L14 13l5 2v3a2 2 0 0 1-2.2 2A16 16 0 0 1 3 6.2 2 2 0 0 1 5 4Z" /></svg>
-              {WHATSAPP_CONTACTS[0].phoneDisplay}
-            </a>
-            <Suspense fallback={<div aria-hidden="true" className="h-11 w-[6.5rem] rounded-full border border-bone/30" />}>
+            <Suspense fallback={<div aria-hidden="true" className="v7-language-trigger" />}>
               <LocaleSwitcher />
             </Suspense>
             <Link href="/quote" className="v7-header-quote">{t("quote")}<span aria-hidden="true">→</span></Link>

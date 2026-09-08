@@ -3,17 +3,15 @@
 import { Suspense, useCallback, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { type StaticPathname } from "@/i18n/routing";
 import { WHATSAPP_CONTACTS } from "@/lib/site";
 import BrandLogo from "./BrandLogo";
 import LocaleSwitcher from "./LocaleSwitcher";
-
-type NavKey = "services" | "projects" | "process" | "about" | "contact";
+import type { HeaderNavItem } from "./Header";
 
 interface MobileMenuProps {
   open: boolean;
   onClose: () => void;
-  links: { href: StaticPathname; key: NavKey }[];
+  links: HeaderNavItem[];
   triggerRef: React.RefObject<HTMLButtonElement | null>;
 }
 
@@ -116,11 +114,9 @@ export default function MobileMenu({ open, onClose, links, triggerRef }: MobileM
         className="absolute inset-x-0 top-0 max-h-full overflow-y-auto bg-carbon px-6 pb-8 pt-4 text-bone"
       >
         <div className="flex items-center justify-between">
-          {/* Variante compacta: en la cabecera del panel el espacio es
-              estrecho y compite con el botón de cierre. Sin `decorative`, el
-              propio componente aporta el nombre accesible — no hace falta un
-              sr-only adicional, que lo anunciaría dos veces. */}
-          <BrandLogo variant="compact" size={24} />
+          {/* La misma firma V7 del topbar, reducida sin alterar su proporción.
+              Sin `decorative`, el componente aporta el nombre accesible. */}
+          <BrandLogo variant="approved" className="v7-mobile-menu-logo" />
           <button
             type="button"
             onClick={onClose}
@@ -135,15 +131,10 @@ export default function MobileMenu({ open, onClose, links, triggerRef }: MobileM
 
         <nav aria-label={t("menuTitle")} className="mt-8">
           <ul className="divide-y divide-bone/15 border-y border-bone/15">
-            <li>
-              <Link href="/" onClick={onClose} className="flex min-h-[56px] items-center font-display text-xl">
-                {t("home")}
-              </Link>
-            </li>
             {links.map((link) => (
-              <li key={link.href}>
+              <li key={`${link.href}-${link.hash ?? "page"}`}>
                 <Link
-                  href={link.href}
+                  href={link.hash ? { pathname: link.href, hash: link.hash } : link.href}
                   onClick={onClose}
                   className="flex min-h-[56px] items-center font-display text-xl"
                 >

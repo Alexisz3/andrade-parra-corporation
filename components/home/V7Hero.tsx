@@ -6,7 +6,6 @@ import { useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import type { Project, ProjectCategory } from "@/content/projects";
-import { WHATSAPP_CONTACTS } from "@/lib/site";
 
 const ROTATION_MS = 8000;
 
@@ -186,7 +185,7 @@ export default function V7Hero({ projects, copy }: { projects: Project[]; copy: 
                 src={`/images/proyectos/${current.coverPhoto.file}`}
                 alt={current.title[locale]}
                 fill
-                sizes="(min-width: 900px) 320px, 42vw"
+                sizes="(max-width: 560px) calc(100vw - 32px), 320px"
                 className="object-cover"
               />
             </div>
@@ -237,17 +236,6 @@ export default function V7Hero({ projects, copy }: { projects: Project[]; copy: 
                     animationPlayState: running ? "running" : "paused",
                   }}
                 />
-              </div>
-            </div>
-            <div className="v7-hero-direct">
-              <span>{copy.directContact}</span>
-              <div>
-                {WHATSAPP_CONTACTS.map((contact) => (
-                  <a href={`tel:+${contact.phone}`} key={contact.id}>
-                    <small>{contact.name}</small>
-                    <b>{contact.phoneDisplay}</b>
-                  </a>
-                ))}
               </div>
             </div>
           </article>

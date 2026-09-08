@@ -98,7 +98,6 @@ export default function LocaleSwitcher() {
         onClick={() => setOpen((value) => !value)}
       >
         <span aria-hidden="true" className={`v7-language-flag ${locale === "es-US" ? "is-es" : "is-en"}`} />
-        <span>{LOCALE_CODES[locale].toUpperCase()}</span>
         <svg viewBox="0 0 14 14" aria-hidden="true">
           <path d="M3 5.25 7 9l4-3.75" />
         </svg>

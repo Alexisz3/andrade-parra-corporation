@@ -2,10 +2,12 @@ import Image from "next/image";
 import { BRAND } from "@/lib/site";
 
 /**
- * Logotipo de Andrade Parra Corporation.
+ * Logotipos de Andrade Parra Corporation.
  *
- * El SÍMBOLO va como SVG en línea y el NOMBRE como texto HTML, no como un
- * `<img>` del SVG completo. Tres razones concretas:
+ * Las variantes heredadas mantienen el símbolo como SVG en línea y el nombre
+ * como texto HTML. `approved` es la excepción deliberada: usa el PNG
+ * transparente exacto embebido en el HTML V7 aprobado para no reconstruir ni
+ * reinterpretar la nueva firma gráfica.
  *
  *  · El texto real se lee, se selecciona, se traduce y lo anuncia un lector de
  *    pantalla; un nombre convertido en trazado es una imagen muda.
@@ -19,10 +21,10 @@ import { BRAND } from "@/lib/site";
  * archivo completo y autónomo.
  */
 
-type Variant = "horizontal" | "compact" | "stacked";
+type Variant = "horizontal" | "compact" | "stacked" | "approved";
 
 interface BrandLogoProps {
-  /** `horizontal`: símbolo + nombre. `compact`: solo símbolo. `stacked`: apilado. */
+  /** `approved`: firma V7 oficial. Las demás variantes se conservan para piezas existentes. */
   variant?: Variant;
   /**
    * `true` cuando el logotipo es el único enlace al inicio y necesita nombre
@@ -87,6 +89,24 @@ export default function BrandLogo({
   tone = "light",
 }: BrandLogoProps) {
   const accessibleName = `${BRAND.name} — ${BRAND.descriptor}`;
+
+  if (variant === "approved") {
+    return (
+      <span className={`inline-flex items-center ${className}`}>
+        <Image
+          src="/brand/logo-v7-approved.png"
+          width={429}
+          height={60}
+          sizes="(max-width: 560px) 174px, (max-width: 1180px) 250px, 345px"
+          alt=""
+          aria-hidden="true"
+          className="h-auto w-full object-contain"
+          preload={tone === "light"}
+        />
+        {decorative ? null : <span className="sr-only">{BRAND.name}</span>}
+      </span>
+    );
+  }
 
   if (variant === "compact") {
     return (
