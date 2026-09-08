@@ -78,7 +78,7 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 
 /* Header */
 .v7-header { position: fixed; inset: 0 0 auto; z-index: 50; color: var(--color-bone); transition: background .28s ease, box-shadow .28s ease, backdrop-filter .28s ease; }
-.v7-header::after { content: ""; position: absolute; inset: 0 0 -3.5rem; z-index: -1; pointer-events: none; background: linear-gradient(to bottom, rgb(8 18 26 / 48%), transparent); transition: opacity .28s ease; }
+.v7-header::after { content: ""; position: absolute; inset: 0 0 -3.5rem; z-index: -1; pointer-events: none; background: linear-gradient(to bottom, rgba(23,21,18,.58), rgba(23,21,18,.18) 58%, transparent); transition: opacity .28s ease; }
 .v7-header.is-solid { background: rgb(23 21 18 / 94%); box-shadow: 0 8px 28px rgb(0 0 0 / 16%); backdrop-filter: blur(10px); }
 .v7-header.is-solid::after { opacity:0; }
 .v7-header-inner { min-height: 6.75rem; display:grid; grid-template-columns:clamp(18.75rem,22vw,21.5625rem) minmax(0,1fr) clamp(18.75rem,22vw,21.5625rem); align-items:center; gap:clamp(1.35rem,2vw,2rem); border-bottom:1px solid rgb(252 250 246 / 10%); transition:min-height .28s ease; }
@@ -116,7 +116,7 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 .v7-hero-media,.v7-hero-overlay,.v7-hero-plan { position: absolute; inset: 0; }
 .v7-hero-image { object-fit: cover; }
 .v7-hero-image-current { animation: v7-crossfade .8s ease both; }
-.v7-hero-overlay { z-index: 1; background: linear-gradient(90deg, rgb(8 18 26 / 93%) 0%, rgb(10 20 28 / 72%) 38%, rgb(10 17 20 / 18%) 72%), linear-gradient(0deg, rgb(13 18 19 / 65%), transparent 52%); }
+.v7-hero-overlay { z-index: 1; background: linear-gradient(90deg, rgba(12,11,10,.91) 0%, rgba(12,11,10,.75) 39%, rgba(12,11,10,.28) 66%, rgba(12,11,10,.56) 100%), linear-gradient(0deg, rgba(12,11,10,.77) 0%, rgba(12,11,10,.15) 52%, rgba(12,11,10,.14) 100%); }
 .v7-hero-plan { z-index: 2; opacity: .17; background-image: linear-gradient(rgb(255 255 255 / 7%) 1px, transparent 1px), linear-gradient(90deg, rgb(255 255 255 / 7%) 1px, transparent 1px); background-size: 80px 80px; mask-image: linear-gradient(90deg,#000,transparent 35%); }
 .v7-hero-inner { position: relative; z-index: 3; min-height: inherit; display: flex; align-items: end; padding-block: 8.5rem 4rem; }
 .v7-hero-grid { width: 100%; display: grid; grid-template-columns: minmax(0,1fr) minmax(17.8125rem,20rem); gap: clamp(3rem,6vw,7rem); align-items: end; }
