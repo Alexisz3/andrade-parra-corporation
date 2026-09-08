@@ -153,7 +153,6 @@ export const PROJECTS: Project[] = [
     coverPhoto: { file: "bano-01.jpeg", orientation: "vertical" },
     gallery: [
       { file: "bano-01.jpeg", orientation: "vertical" },
-      { file: "bano-03.jpeg", orientation: "horizontal" },
       { file: "plomeria-01.jpeg", orientation: "horizontal" },
     ],
     featuredOnHome: true,
@@ -211,6 +210,7 @@ export const PROJECTS: Project[] = [
       { file: "bano-integral-04-muros.jpeg", orientation: "vertical" },
       { file: "bano-integral-05-piso.jpeg", orientation: "horizontal" },
       { file: "bano-integral-06-piso-detalle.jpeg", orientation: "horizontal" },
+      { file: "bano-integral-09-impermeabilizacion-ducha.jpeg", orientation: "vertical" },
       { file: "bano-integral-08-ducha-revestida.jpeg", orientation: "vertical" },
     ],
     featuredOnHome: false,

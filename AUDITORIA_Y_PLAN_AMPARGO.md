@@ -347,3 +347,13 @@ Declarado explícitamente para que nadie lo dé por bueno:
 3. Con la decisión de idioma, cerrar `DEFAULT_LOCALE`.
 4. Con dominio y credenciales, conectar el sistema de cotización sobre el diseño ya
    definido.
+
+---
+
+## 16. Actualización de Privacidad y Catálogo (8 de Septiembre 2026)
+
+- Foto 79 del ZIP original verificada y añadida a `full-bath-rebuild` como `bano-integral-09-impermeabilizacion-ducha.jpeg`.
+- `bano-03.jpeg` retirada temporalmente por trabajador parcialmente visible.
+- Fotos de ventana/ladrillo (66–67) y exterior residencial (59) continúan bloqueadas.
+- No se crearon proyectos nuevos.
+- ZIP original de imágenes sigue sin versionarse.
