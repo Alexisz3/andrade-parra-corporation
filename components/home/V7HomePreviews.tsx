@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
@@ -15,52 +18,131 @@ export function V7FeaturedProjects({
   projects,
   locale,
   category,
-  copy,
 }: {
   projects: Project[];
   locale: AppLocale;
   category: Record<ProjectCategory, string>;
   copy: PreviewCopy;
 }) {
-  return (
-    <section className="v7-home-preview v7-featured-preview" aria-labelledby="featured-preview-title">
-      <div className="v7-container">
-        <header className="v7-preview-heading">
-          <div>
-            <p className="v7-eyebrow">{copy.eyebrow}</p>
-            <h2 id="featured-preview-title" className="v7-preview-title">{copy.title}</h2>
-          </div>
-          <div>
-            <p>{copy.body}</p>
-            <Link href="/projects" className="v7-text-link">{copy.action}<span aria-hidden="true">→</span></Link>
-          </div>
-        </header>
+  const [activeIndex, setActiveIndex] = useState(0);
+  const featured = projects.slice(0, 3);
+  const activeProject = featured[activeIndex];
 
-        <ul className="v8-featured-rail">
-          {projects.map((project) => (
-            <li key={project.id}>
-              <Link
-                href={{ pathname: "/projects/[slug]", params: { slug: project.slugs[locale] } }}
-                className="v7-featured-card"
+  const nextProject = () => setActiveIndex((prev) => (prev + 1) % featured.length);
+  const prevProject = () => setActiveIndex((prev) => (prev - 1 + featured.length) % featured.length);
+
+  if (!activeProject) return null;
+
+  return (
+    <section className="v8-editorial-featured" aria-labelledby="featured-preview-title">
+      <div className="v8-editorial-container">
+        <div className="v8-editorial-left">
+          <div className="v8-editorial-image-wrapper">
+            {featured.map((project, idx) => (
+              <div 
+                key={project.id} 
+                className={`v8-editorial-image ${idx === activeIndex ? 'is-active' : ''}`}
+                aria-hidden={idx !== activeIndex}
               >
-                <div className="v7-featured-media">
-                  <Image
-                    src={`/images/proyectos/${project.coverPhoto.file}`}
-                    alt={project.title[locale]}
-                    fill
-                    loading="lazy"
-                    sizes="(min-width: 900px) 33vw, 100vw"
-                    className="object-cover"
-                  />
+                <Image
+                  src={`/images/proyectos/${project.coverPhoto.file}`}
+                  alt={project.title[locale]}
+                  fill
+                  priority={idx === 0}
+                  loading={idx === 0 ? "eager" : "lazy"}
+                  sizes="(min-width: 1024px) 60vw, 100vw"
+                  className="object-cover"
+                />
+              </div>
+            ))}
+            <div className="v8-editorial-overlay">
+              <div className="v8-editorial-overlay-content">
+                <p className="v8-editorial-meta">
+                  {category[activeProject.category]} · {activeProject.location}
+                </p>
+                <h3 className="v8-editorial-overlay-title">{activeProject.title[locale]}</h3>
+                <Link 
+                  href={{ pathname: "/projects/[slug]", params: { slug: activeProject.slugs[locale] } }}
+                  className="v8-editorial-link-white"
+                >
+                  Ver proyecto <span aria-hidden="true">→</span>
+                </Link>
+                <div className="v8-editorial-controls-row">
+                  <span className="v8-editorial-counter">
+                    {String(activeIndex + 1).padStart(2, '0')} / {String(featured.length).padStart(2, '0')}
+                  </span>
+                  <div className="v8-editorial-progress">
+                    <div className="v8-editorial-progress-bar" style={{ width: `${((activeIndex + 1) / featured.length) * 100}%` }}></div>
+                  </div>
+                  <div className="v8-editorial-nav">
+                    <button onClick={prevProject} aria-label="Anterior proyecto">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    </button>
+                    <button onClick={nextProject} aria-label="Siguiente proyecto">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+                  </div>
                 </div>
-                <div className="v7-featured-copy">
-                  <h3>{project.title[locale]}</h3>
-                  <p>{category[project.category]} · {project.location}</p>
-                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="v8-editorial-right">
+          <header className="v8-editorial-header">
+            <div className="v8-editorial-header-top">
+              <p className="v8-editorial-eyebrow">
+                PROYECTOS DESTACADOS
+              </p>
+              <Link href="/projects" className="v8-editorial-view-all">
+                Ver todos los proyectos <span aria-hidden="true">→</span>
               </Link>
-            </li>
-          ))}
-        </ul>
+            </div>
+            <h2 id="featured-preview-title" className="v8-editorial-title">Proyectos<br/>seleccionados.</h2>
+            <p className="v8-editorial-desc">
+              Construcción, remodelación y mejoras que transforman espacios en hogares extraordinarios.
+            </p>
+          </header>
+
+          <ol className="v8-editorial-list">
+            {featured.map((project, idx) => {
+              const isActive = idx === activeIndex;
+              return (
+                <li 
+                  key={project.id} 
+                  className={`v8-editorial-item ${isActive ? 'is-active' : ''}`}
+                  onClick={() => setActiveIndex(idx)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setActiveIndex(idx);
+                    }
+                  }}
+                  aria-pressed={isActive}
+                >
+                  <span className="v8-editorial-num">{String(idx + 1).padStart(2, '0')}</span>
+                  <div className="v8-editorial-item-content">
+                    <p className="v8-editorial-item-cat">{category[project.category]}</p>
+                    <h4 className="v8-editorial-item-title">{project.title[locale]}</h4>
+                    <p className="v8-editorial-item-loc">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                      {project.location}
+                    </p>
+                  </div>
+                  <div className="v8-editorial-item-arrow">
+                    <span aria-hidden="true">→</span>
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+
+          <footer className="v8-editorial-footer">
+            <p>Espacios mejores. Vidas más plenas.</p>
+          </footer>
+        </div>
       </div>
     </section>
   );
