@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
@@ -19,66 +19,7 @@ export interface V7ServicesCopy {
 export default function V7Services({ services, copy }: { services: Service[]; copy: V7ServicesCopy }) {
   const locale = useLocale() as AppLocale;
   const [active, setActive] = useState(0);
-  const list = useRef<HTMLOListElement>(null);
   const current = services[active];
-
-  useEffect(() => {
-    const element = list.current;
-    if (!element) return;
-    const mobile = matchMedia("(max-width: 820px)");
-    let stop = () => {};
-    const connect = () => {
-      stop();
-      if (!mobile.matches) return;
-      const items = Array.from(element.children);
-      const visible = new Set<Element>();
-      let timer: ReturnType<typeof setTimeout>;
-      const settle = () => {
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-          const bounds = element.getBoundingClientRect();
-          const center = bounds.left + bounds.width / 2;
-          let closest = -1;
-          let distance = Infinity;
-          items.forEach((item, index) => {
-            if (!visible.has(item)) return;
-            const rect = item.getBoundingClientRect();
-            const nextDistance = Math.abs(rect.left + rect.width / 2 - center);
-            if (nextDistance < distance) { distance = nextDistance; closest = index; }
-          });
-          if (closest !== -1) setActive(closest);
-        }, 140);
-      };
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => entry.isIntersecting ? visible.add(entry.target) : visible.delete(entry.target));
-        settle();
-      }, { root: element, threshold: [0, .25, .5, .75, 1] });
-      items.forEach((item) => observer.observe(item));
-      element.addEventListener("scroll", settle, { passive: true });
-      window.addEventListener("resize", settle);
-      stop = () => {
-        clearTimeout(timer);
-        observer.disconnect();
-        element.removeEventListener("scroll", settle);
-        window.removeEventListener("resize", settle);
-      };
-    };
-    connect();
-    mobile.addEventListener("change", connect);
-    return () => { stop(); mobile.removeEventListener("change", connect); };
-  }, [services.length]);
-
-  const select = (index: number) => {
-    setActive(index);
-    const element = list.current;
-    if (!element || !matchMedia("(max-width: 820px)").matches) return;
-    const item = element.children[index].getBoundingClientRect();
-    const bounds = element.getBoundingClientRect();
-    element.scrollTo({
-      left: element.scrollLeft + item.left - bounds.left - (bounds.width - item.width) / 2,
-      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
-    });
-  };
 
   if (!current) return null;
 
@@ -96,26 +37,24 @@ export default function V7Services({ services, copy }: { services: Service[]; co
         </div>
 
         <div className="v7-services-grid">
-          <ol className="v7-service-list" ref={list}>
+          <ol className="v7-service-list">
             {services.map((service, index) => (
               <li key={service.id}>
-                <button
-                  type="button"
-                  aria-pressed={active === index}
-                  aria-controls="service-feature"
-                  onMouseEnter={() => { if (matchMedia("(hover: hover) and (min-width: 821px)").matches) setActive(index); }}
-                  onClick={() => select(index)}
-                  onFocus={() => select(index)}
+                <Link
+                  href={{ pathname: "/services/[slug]", params: { slug: service.slugs[locale] } }}
+                  aria-current={active === index ? "true" : undefined}
+                  onMouseEnter={() => setActive(index)}
+                  onFocus={() => setActive(index)}
                 >
                   <span>{String(index + 1).padStart(2, "0")}</span>
                   <strong>{service.title[locale]}</strong>
                   <i aria-hidden="true">↗</i>
-                </button>
+                </Link>
               </li>
             ))}
           </ol>
 
-          <article id="service-feature" className="v7-service-feature" aria-live="polite">
+          <article className="v7-service-feature" aria-live="polite">
             <div className="v7-service-image">
               <Image
                 key={current.id}

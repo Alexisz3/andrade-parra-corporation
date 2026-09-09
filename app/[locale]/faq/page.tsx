@@ -46,9 +46,9 @@ export default async function FaqPage({ params }: PageProps<"/[locale]/faq">) {
 
   return (
     <>
-      <Header initialSolid />
-      <main id="contenido" tabIndex={-1} className="v7-faq-page">
-        <V7Faq copy={editorialCopy} headingLevel="h1" />
+      <Header />
+      <main id="contenido" tabIndex={-1}>
+        <V7Faq copy={editorialCopy} />
         <GlobalCta />
       </main>
       <Footer />

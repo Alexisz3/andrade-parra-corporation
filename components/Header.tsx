@@ -23,7 +23,7 @@ const NAV_LINKS: HeaderNavItem[] = [
   { href: "/contact", key: "contact" },
 ];
 
-export default function Header({ initialSolid = false }: { initialSolid?: boolean }) {
+export default function Header() {
   const t = useTranslations("Nav");
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -39,7 +39,7 @@ export default function Header({ initialSolid = false }: { initialSolid?: boolea
 
   return (
     <>
-      <header className={`v7-header ${initialSolid || solid ? "is-solid" : ""}`}>
+      <header className={`v7-header ${solid ? "is-solid" : ""}`}>
         <div className="v7-container v7-header-inner">
           <Link href="/" className="v7-brand-link" aria-label={`${BRAND.name} — ${t("home")}`}>
             <BrandLogo variant="approved" decorative className="v7-header-logo" />
