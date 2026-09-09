@@ -146,9 +146,10 @@
     "contactBody": "Envíenos los datos básicos del espacio y le ayudamos a ordenar el siguiente paso.",
     "contactArea": "Houston y alrededores, TX",
     "featuredPreviewEyebrow": "PROYECTOS DESTACADOS",
-    "featuredPreviewTitle": "Obras que hablan por sí solas.",
+    "featuredPreviewTitle": "Obras que hablan\npor sí solas.",
     "featuredPreviewBody": "Una selección breve de trabajos terminados y en proceso, fotografiados en obra.",
     "featuredPreviewAction": "Explorar todos los proyectos",
+    "featuredPreviewFooter": "Espacios mejores. Vidas más plenas.",
     "servicesPreviewEyebrow": "SERVICIOS",
     "servicesPreviewTitle": "Soluciones para cada etapa del espacio.",
     "servicesPreviewBody": "Construcción, remodelación y mejoras definidas a partir de las condiciones reales de cada proyecto.",
@@ -160,6 +161,7 @@
     "homeCtaEyebrow": "SU PROYECTO PUEDE EMPEZAR AQUÍ",
     "homeCtaTitle": "Conversemos sobre su proyecto.",
     "homeCtaBody": "Comparta los datos básicos y le ayudamos a ordenar el siguiente paso sin complicaciones.",
+    "homeCtaHomeBody": "Cuéntenos su idea y hagámosla realidad juntos.",
     "homeCtaAction": "Solicitar cotización",
     "homeCtaSecondary": "Ver contacto",
     "trustServiceAreaDetail": "Servicio en toda el área",
@@ -315,7 +317,11 @@
     "terms": "Términos de servicio",
     "servicesHeading": "Servicios",
     "companyHeading": "Empresa",
-    "contactHeading": "Contacto"
+    "contactHeading": "Contacto",
+    "statementLine1": "ESPACIOS QUE INSPIRAN",
+    "statementLine2": "MEJORES HISTORIAS.",
+    "slogan": "CONSTRUYENDO UN MEJOR MAÑANA",
+    "socialsPending": "Redes sociales — próximamente"
   },
   "NotFound": {
     "heading": "Página no encontrada",

@@ -62,6 +62,10 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             title: t("featuredPreviewTitle"),
             body: t("featuredPreviewBody"),
             action: t("featuredPreviewAction"),
+            viewProject: t("viewProject"),
+            previous: t("previous"),
+            next: t("next"),
+            footer: t("featuredPreviewFooter"),
           }}
         />
         <V7ServicesPreview

@@ -14,15 +14,23 @@ interface PreviewCopy {
   action: string;
 }
 
+interface FeaturedCopy extends PreviewCopy {
+  viewProject: string;
+  previous: string;
+  next: string;
+  footer: string;
+}
+
 export function V7FeaturedProjects({
   projects,
   locale,
   category,
+  copy,
 }: {
   projects: Project[];
   locale: AppLocale;
   category: Record<ProjectCategory, string>;
-  copy: PreviewCopy;
+  copy: FeaturedCopy;
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const featured = projects.slice(0, 3);
@@ -61,11 +69,11 @@ export function V7FeaturedProjects({
                   {category[activeProject.category]} · {activeProject.location}
                 </p>
                 <h3 className="v8-editorial-overlay-title">{activeProject.title[locale]}</h3>
-                <Link 
+                <Link
                   href={{ pathname: "/projects/[slug]", params: { slug: activeProject.slugs[locale] } }}
                   className="v8-editorial-link-white"
                 >
-                  Ver proyecto <span aria-hidden="true">→</span>
+                  {copy.viewProject} <span aria-hidden="true">→</span>
                 </Link>
                 <div className="v8-editorial-controls-row">
                   <span className="v8-editorial-counter">
@@ -75,10 +83,10 @@ export function V7FeaturedProjects({
                     <div className="v8-editorial-progress-bar" style={{ width: `${((activeIndex + 1) / featured.length) * 100}%` }}></div>
                   </div>
                   <div className="v8-editorial-nav">
-                    <button onClick={prevProject} aria-label="Anterior proyecto">
+                    <button onClick={prevProject} aria-label={copy.previous}>
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                     </button>
-                    <button onClick={nextProject} aria-label="Siguiente proyecto">
+                    <button onClick={nextProject} aria-label={copy.next}>
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </button>
                   </div>
@@ -92,15 +100,19 @@ export function V7FeaturedProjects({
           <header className="v8-editorial-header">
             <div className="v8-editorial-header-top">
               <p className="v8-editorial-eyebrow">
-                PROYECTOS DESTACADOS
+                {copy.eyebrow}
               </p>
               <Link href="/projects" className="v8-editorial-view-all">
-                Ver todos los proyectos <span aria-hidden="true">→</span>
+                {copy.action} <span aria-hidden="true">→</span>
               </Link>
             </div>
-            <h2 id="featured-preview-title" className="v8-editorial-title">Proyectos<br/>seleccionados.</h2>
+            <h2 id="featured-preview-title" className="v8-editorial-title">
+              {copy.title.split("\n").flatMap((line, index) =>
+                index === 0 ? line : [<br key={index} />, line]
+              )}
+            </h2>
             <p className="v8-editorial-desc">
-              Construcción, remodelación y mejoras que transforman espacios en hogares extraordinarios.
+              {copy.body}
             </p>
           </header>
 
@@ -136,7 +148,7 @@ export function V7FeaturedProjects({
           </ol>
 
           <footer className="v8-editorial-featured-footer">
-            <p>Espacios mejores. Vidas más plenas.</p>
+            <p>{copy.footer}</p>
           </footer>
         </div>
       </div>

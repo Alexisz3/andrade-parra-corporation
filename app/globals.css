@@ -880,7 +880,7 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 .v8-editorial-footer-bottom { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:1.5rem; padding-block:2rem; border-top:1px solid rgb(255 255 255 / 8%); }
 .v8-editorial-footer-bottom-left p { margin:0; color:rgb(252 250 246 / 50%); font-size:.85rem; }
 .v8-editorial-footer-bottom-right { display:flex; align-items:center; gap:2rem; }
-.v8-editorial-footer-slogan { margin:0; color:rgb(252 250 246 / 40%); font-family:var(--font-mono); font-size:.7rem; font-weight:700; letter-spacing:.12em; }
+.v8-editorial-footer-slogan { margin:0; color:rgb(252 250 246 / 60%); font-family:var(--font-mono); font-size:.7rem; font-weight:700; letter-spacing:.12em; }
 .v8-editorial-footer-socials { display:flex; gap:1rem; }
 .v8-editorial-footer-social-icon { color:rgb(252 250 246 / 50%); }
 

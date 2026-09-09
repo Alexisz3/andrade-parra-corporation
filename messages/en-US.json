@@ -146,9 +146,10 @@
     "contactBody": "Send us the basics about your space and we'll help organize the next step.",
     "contactArea": "Houston and surrounding areas, TX",
     "featuredPreviewEyebrow": "FEATURED PROJECTS",
-    "featuredPreviewTitle": "Work that speaks for itself.",
+    "featuredPreviewTitle": "Work that speaks\nfor itself.",
     "featuredPreviewBody": "A concise selection of completed work and projects in progress, photographed on site.",
     "featuredPreviewAction": "Explore every project",
+    "featuredPreviewFooter": "Better spaces. Fuller lives.",
     "servicesPreviewEyebrow": "SERVICES",
     "servicesPreviewTitle": "Solutions for every stage of your space.",
     "servicesPreviewBody": "Construction, remodeling, and improvements shaped around the real conditions of each project.",
@@ -160,6 +161,7 @@
     "homeCtaEyebrow": "YOUR PROJECT CAN START HERE",
     "homeCtaTitle": "Let's talk about your project.",
     "homeCtaBody": "Share the essentials and we'll help you organize the next step without unnecessary complexity.",
+    "homeCtaHomeBody": "Tell us your idea and let's make it happen together.",
     "homeCtaAction": "Request an estimate",
     "homeCtaSecondary": "Contact us",
     "trustServiceAreaDetail": "Service throughout the area",
@@ -315,7 +317,11 @@
     "terms": "Terms of service",
     "servicesHeading": "Services",
     "companyHeading": "Company",
-    "contactHeading": "Contact"
+    "contactHeading": "Contact",
+    "statementLine1": "SPACES THAT INSPIRE",
+    "statementLine2": "BETTER STORIES.",
+    "slogan": "BUILDING A BETTER TOMORROW",
+    "socialsPending": "Social media — coming soon"
   },
   "NotFound": {
     "heading": "Page not found",

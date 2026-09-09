@@ -31,7 +31,8 @@ const COMPANY_LINKS: {
 export default async function Footer() {
   const t = await getTranslations("Footer");
   const tn = await getTranslations("Nav");
-  
+  const tc = await getTranslations("Contact");
+
   const locale = (await getLocale()) as AppLocale;
   const year = new Date().getFullYear();
 
@@ -45,17 +46,17 @@ export default async function Footer() {
           <div className="v8-editorial-footer-brand">
             <BrandLogo variant="approved" tone="light" className="v8-editorial-footer-logo" />
             <p className="v8-editorial-footer-tagline">
-              Construcción y remodelación en Houston, TX.
+              {t("tagline")}
             </p>
             <div className="v8-editorial-footer-accent"></div>
             <p className="v8-editorial-footer-statement">
-              ESPACIOS QUE INSPIRAN<br/>MEJORES HISTORIAS.
+              {t("statementLine1")}<br/>{t("statementLine2")}
             </p>
           </div>
 
           {/* ── Servicios ── */}
           <nav className="v8-editorial-footer-column" aria-label={t("servicesHeading")}>
-            <h2>SERVICIOS</h2>
+            <h2>{t("servicesHeading")}</h2>
             <ul>
               {services.map((s) => (
                 <li key={s.id}>
@@ -72,7 +73,7 @@ export default async function Footer() {
 
           {/* ── Empresa ── */}
           <nav className="v8-editorial-footer-column" aria-label={t("companyHeading")}>
-            <h2>EMPRESA</h2>
+            <h2>{t("companyHeading")}</h2>
             <ul>
               {COMPANY_LINKS.map((l) => (
                 <li key={l.href}>
@@ -89,7 +90,7 @@ export default async function Footer() {
 
           {/* ── Contacto ── */}
           <div className="v8-editorial-footer-column v8-editorial-footer-contact">
-            <h2>CONTACTO</h2>
+            <h2>{t("contactHeading")}</h2>
             <ul>
               <li>
                 <a href="tel:+18327940720" className="v8-editorial-footer-link">
@@ -120,7 +121,7 @@ export default async function Footer() {
                   <span className="v8-editorial-footer-icon" aria-hidden="true">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                   </span>
-                  Houston y alrededores, TX
+                  {tc("address")}
                 </span>
               </li>
             </ul>
@@ -130,12 +131,12 @@ export default async function Footer() {
         <div className="v8-editorial-footer-bottom">
           <div className="v8-editorial-footer-bottom-left">
             <p>
-              &copy; {year} {BRAND.name}. Todos los derechos reservados.
+              &copy; {year} {BRAND.name}. {t("rights")}
             </p>
           </div>
           <div className="v8-editorial-footer-bottom-right">
-            <p className="v8-editorial-footer-slogan">CONSTRUYENDO UN MEJOR MAÑANA</p>
-            <div className="v8-editorial-footer-socials" role="group" aria-label="Redes sociales — próximamente">
+            <p className="v8-editorial-footer-slogan">{t("slogan")}</p>
+            <div className="v8-editorial-footer-socials" role="group" aria-label={t("socialsPending")}>
               <span className="v8-editorial-footer-social-icon">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
               </span>

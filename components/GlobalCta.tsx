@@ -20,18 +20,18 @@ export default async function GlobalCta({
         <div className="v7-container v8-editorial-cta-inner">
           <div className="v8-editorial-cta-left">
             <p className="v8-editorial-cta-eyebrow">
-              SU PROYECTO PUEDE EMPEZAR AQUÍ
+              {t("homeCtaEyebrow")}
             </p>
             <h2 id="global-cta-title" className="v8-editorial-cta-title">
-              Conversemos sobre su proyecto.
+              {t("homeCtaTitle")}
             </h2>
             <p className="v8-editorial-cta-body">
-              Cuéntenos su idea y hagámosla realidad juntos.
+              {t("homeCtaHomeBody")}
             </p>
           </div>
           <div className="v8-editorial-cta-right">
             <Link href="/quote" className="v8-editorial-cta-button">
-              Solicitar cotización
+              {t("homeCtaAction")}
             </Link>
           </div>
         </div>

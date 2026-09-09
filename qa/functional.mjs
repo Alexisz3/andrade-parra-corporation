@@ -683,8 +683,8 @@ if (process.env.QA_LEGACY_QUOTE_FLOW === "1") {
   const p = await ctx.newPage();
   await p.goto(URL + "/es", { waitUntil: "domcontentloaded" });
   await p.waitForTimeout(1000);
-  check("Arquitectura: Inicio usa previews, no páginas completas",
-    (await p.locator(".v7-featured-preview,.v7-services-preview,.v7-about-preview,.v7-home-cta").count()) === 4 &&
+  check("Arquitectura: Inicio usa previews V8, no páginas completas",
+    (await p.locator(".v8-editorial-featured,.v8-editorial-services,.v8-about-preview,.v8-editorial-cta").count()) === 4 &&
     (await p.locator(".v7-projects,.v7-services,.v7-about,.v7-faq,.v7-contact").count()) === 0);
 
   for (const [path, selector] of [
@@ -693,12 +693,14 @@ if (process.env.QA_LEGACY_QUOTE_FLOW === "1") {
     ["/es/nosotros", ".v7-about"],
     ["/es/contacto", ".v7-contact-page"],
     ["/es/proceso", ".v7-process-timeline"],
+    ["/es/preguntas", ".v7-faq"],
   ]) {
     await p.goto(URL + path, { waitUntil: "domcontentloaded" });
     check(`Arquitectura: ${path} contiene su experiencia V7`, (await p.locator(selector).count()) === 1);
   }
   await p.goto(URL + "/es/contacto", { waitUntil: "domcontentloaded" });
-  check("Arquitectura: FAQ completo vive en Contacto", (await p.locator(".v7-faq").count()) === 1);
+  check("Arquitectura: el FAQ completo tiene ruta propia y no se incrusta en Contacto",
+    (await p.locator(".v7-faq").count()) === 0);
   await ctx.close();
 }
 
@@ -709,12 +711,13 @@ if (process.env.QA_LEGACY_QUOTE_FLOW === "1") {
   await p.goto(URL + "/es", { waitUntil: "domcontentloaded" });
   await p.waitForTimeout(1200);
 
-  const previewHrefs = await p.locator(".v7-services-preview a[href*='/servicios/']").evaluateAll((els) =>
-    els.map((e) => e.getAttribute("href"))
-  );
-  check("Inicio: muestra una selección breve de 4 servicios",
-    previewHrefs.length === 4 && new Set(previewHrefs).size === 4,
-    `${previewHrefs.length} enlaces, ${new Set(previewHrefs).size} únicos`);
+  const accordionItems = await p.locator(".v8-editorial-services .v8-editorial-accordion-item").count();
+  const servicesCtaHref = await p
+    .locator(".v8-editorial-services .v8-editorial-services-cta")
+    .getAttribute("href");
+  check("Inicio: la previa de servicios muestra 5 servicios en acordeón con un CTA general",
+    accordionItems === 5 && /\/servicios$/.test(servicesCtaHref ?? ""),
+    `${accordionItems} items · CTA ${servicesCtaHref}`);
 
   await p.goto(URL + "/es/servicios", { waitUntil: "domcontentloaded" });
   await p.waitForTimeout(1200);
