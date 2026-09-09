@@ -42,14 +42,6 @@ function Chevron({ direction = "right" }: { direction?: "left" | "right" }) {
   );
 }
 
-function PauseIcon({ paused }: { paused: boolean }) {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8">
-      {paused ? <path d="m9 7 8 5-8 5V7Z" /> : <path d="M9 6v12M15 6v12" />}
-    </svg>
-  );
-}
-
 export default function V7Hero({ projects, copy }: { projects: Project[]; copy: V7HeroCopy }) {
   const locale = useLocale() as AppLocale;
   const sectionRef = useRef<HTMLElement>(null);
@@ -58,7 +50,6 @@ export default function V7Hero({ projects, copy }: { projects: Project[]; copy: 
   const [previous, setPrevious] = useState(0);
   const [inView, setInView] = useState(false);
   const [documentVisible, setDocumentVisible] = useState(true);
-  const [userPaused, setUserPaused] = useState(false);
   const [interacting, setInteracting] = useState(false);
   const [motionAllowed, setMotionAllowed] = useState(false);
 
@@ -70,7 +61,6 @@ export default function V7Hero({ projects, copy }: { projects: Project[]; copy: 
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
     const sync = () => {
       setMotionAllowed(!query.matches);
-      if (query.matches) setUserPaused(true);
     };
     sync();
     query.addEventListener("change", sync);
@@ -113,7 +103,7 @@ export default function V7Hero({ projects, copy }: { projects: Project[]; copy: 
   );
 
   const running =
-    total > 1 && motionAllowed && inView && documentVisible && !userPaused && !interacting;
+    total > 1 && motionAllowed && inView && documentVisible && !interacting;
 
   useEffect(() => {
     if (!running) return;
@@ -185,57 +175,33 @@ export default function V7Hero({ projects, copy }: { projects: Project[]; copy: 
                 src={`/images/proyectos/${current.coverPhoto.file}`}
                 alt={current.title[locale]}
                 fill
-                sizes="(max-width: 560px) calc(100vw - 32px), 320px"
+                sizes="(max-width: 700px) 5rem, 150px"
                 className="object-cover"
               />
             </div>
-            <div className="v7-hero-project-body">
-              <div className="v7-hero-project-top">
-                <span>
-                  {copy.currentProject} · {copy.category[current.category]}
-                </span>
-                <b>
-                  {String(active + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
-                </b>
-              </div>
+            <div key={`project-copy-${current.id}`} className="v7-hero-project-details">
+              <p className="v7-hero-project-top">
+                {copy.currentProject} · {copy.category[current.category]}
+              </p>
               <h2>{current.title[locale]}</h2>
-              <div className="v7-hero-project-actions">
-                <div className="v7-hero-project-links">
-                  <Link
-                    href={{ pathname: "/projects/[slug]", params: { slug: current.slugs[locale] } }}
-                  >
-                    {copy.viewProject} <span aria-hidden="true">↗</span>
-                  </Link>
-                  <Link href="/quote" className="v7-secondary-link">
-                    {copy.similar} <span aria-hidden="true">→</span>
-                  </Link>
-                </div>
-                <div className="v7-carousel-controls">
-                  <button type="button" onClick={() => goTo(active - 1)} aria-label={copy.previous}>
-                    <Chevron direction="left" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setUserPaused((value) => !value)}
-                    aria-label={userPaused ? copy.resume : copy.pause}
-                    aria-pressed={userPaused}
-                  >
-                    <PauseIcon paused={userPaused} />
-                  </button>
-                  <button type="button" onClick={() => goTo(active + 1)} aria-label={copy.next}>
-                    <Chevron />
-                  </button>
-                </div>
-              </div>
-              <div className="v7-progress" aria-hidden="true">
-                <span
-                  key={`hero-progress-${active}`}
-                  className="v7-progress-fill"
-                  style={{
-                    animationDuration: `${ROTATION_MS}ms`,
-                    animationPlayState: running ? "running" : "paused",
-                  }}
-                />
+              <Link
+                href={{ pathname: "/projects/[slug]", params: { slug: current.slugs[locale] } }}
+                className="v7-hero-project-link"
+              >
+                {copy.viewProject} <span aria-hidden="true">↗</span>
+              </Link>
+            </div>
+            <div key={`project-navigation-${current.id}`} className="v7-hero-project-navigation">
+              <b>
+                {String(active + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+              </b>
+              <div className="v7-carousel-controls">
+                <button type="button" onClick={() => goTo(active - 1)} aria-label={copy.previous}>
+                  <Chevron direction="left" />
+                </button>
+                <button type="button" onClick={() => goTo(active + 1)} aria-label={copy.next}>
+                  <Chevron />
+                </button>
               </div>
             </div>
           </article>

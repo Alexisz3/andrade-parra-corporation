@@ -113,7 +113,7 @@ export function V7ServicesPreview({
 export function V7AboutPreview({ copy }: { copy: PreviewCopy }) {
   return (
     <section className="v8-about-preview" aria-labelledby="about-preview-title">
-      <Image src="/images/proyectos/bano-integral-07-ducha-en-proceso.jpeg" alt="" fill sizes="100vw" className="object-cover" />
+      <Image src="/images/heroes/andrade-parra-hardhat-workbench.png" alt="" fill sizes="100vw" className="object-cover" />
       <div className="v8-about-overlay" aria-hidden="true" />
       <div className="v7-container v8-about-preview-grid">
         <div>
