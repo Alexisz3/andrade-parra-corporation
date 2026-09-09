@@ -574,6 +574,9 @@ if (process.env.QA_LEGACY_QUOTE_FLOW === "1") {
         waitUntil: "domcontentloaded",
       });
       await page.locator("#description").waitFor({ state: "visible" });
+      // The draft effect is a public, observable hydration signal. Avoid
+      // filling SSR controls before React has attached their change handlers.
+      await page.waitForFunction(() => sessionStorage.getItem("apc-quote-draft") !== null);
       await fillSticky(page, page.locator("#description"), description);
       await fillSticky(page, page.locator("#name"), name);
       await fillSticky(page, page.locator("#phone"), phone);
@@ -698,7 +701,15 @@ if (process.env.QA_LEGACY_QUOTE_FLOW === "1") {
     check(`Arquitectura: ${path} contiene su experiencia V7`, (await p.locator(selector).count()) === 1);
   }
   await p.goto(URL + "/es/contacto", { waitUntil: "domcontentloaded" });
-  check("Arquitectura: FAQ completo vive en Contacto", (await p.locator(".v7-faq").count()) === 1);
+  check("Arquitectura: Contacto no duplica FAQ", (await p.locator(".v7-faq").count()) === 0);
+  for (const path of ["/es/preguntas", "/en/faq"]) {
+    await p.goto(URL + path, { waitUntil: "domcontentloaded" });
+    check(`Arquitectura: ${path} conserva FAQ independiente y header sólido`,
+      (await p.locator(".v7-faq").count()) === 1 &&
+      (await p.locator(".v7-faq details").count()) === 8 &&
+      (await p.locator("header.is-solid").count()) === 1 &&
+      (await p.locator("h1").count()) === 1);
+  }
   await ctx.close();
 }
 
@@ -718,9 +729,13 @@ if (process.env.QA_LEGACY_QUOTE_FLOW === "1") {
 
   await p.goto(URL + "/es/servicios", { waitUntil: "domcontentloaded" });
   await p.waitForTimeout(1200);
-  const hrefs = await p.locator(".v7-services a[href*='/servicios/']").evaluateAll((els) =>
-    els.map((e) => e.getAttribute("href"))
-  );
+  const hrefs = [];
+  const choices = p.locator(".v7-service-list button");
+  for (let index = 0; index < await choices.count(); index++) {
+    await choices.nth(index).click();
+    hrefs.push(await p.locator(".v7-service-copy a[href*='/servicios/']").getAttribute("href"));
+    check(`Servicios: selector ${index + 1} activa la ficha accesible`, await choices.nth(index).getAttribute("aria-pressed") === "true");
+  }
   const unique = new Set(hrefs);
   check("Servicios: la página dedicada conserva los 5 servicios", hrefs.length >= 5 && unique.size === 5,
     `${hrefs.length} enlaces, ${unique.size} únicos`);
@@ -803,9 +818,9 @@ if (process.env.QA_LEGACY_QUOTE_FLOW === "1") {
         await trigger.click().catch(() => {});
       }
       const btn = p.locator('[role="menuitemradio"]', { hasText: to });
-      await btn.waitFor({ state: "visible" });
-      await btn.click().catch(() => {});
       try {
+        await btn.waitFor({ state: "visible", timeout: 1500 });
+        await btn.click();
         await p.waitForURL((u) => u.pathname !== startPath, { timeout: 1500 });
         break;
       } catch {

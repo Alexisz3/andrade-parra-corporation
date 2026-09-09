@@ -23,6 +23,8 @@ const TARGETS = [
   { name: "nosotros es", path: "/es/nosotros" },
   { name: "contacto es", path: "/es/contacto" },
   { name: "proceso es", path: "/es/proceso" },
+  { name: "preguntas es", path: "/es/preguntas" },
+  { name: "faq en", path: "/en/faq" },
 ];
 
 const VIEWPORTS = [
