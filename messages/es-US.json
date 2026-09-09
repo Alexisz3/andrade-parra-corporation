@@ -257,6 +257,7 @@
     "next": "Proyecto siguiente",
     "filterInteriors": "Interiores",
     "counter": "Proyecto {n} de {total}",
+    "railPosition": "{current} / {total}",
     "theProject": "El proyecto",
     "detailsHeading": "Ficha del proyecto",
     "detailService": "Servicio",

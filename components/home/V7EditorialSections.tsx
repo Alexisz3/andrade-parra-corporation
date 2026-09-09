@@ -162,13 +162,13 @@ export function V7Team({ copy }: { copy: V7EditorialCopy }) {
   );
 }
 
-export function V7Faq({ copy }: { copy: V7EditorialCopy }) {
+export function V7Faq({ copy, headingLevel: Heading = "h2" }: { copy: V7EditorialCopy; headingLevel?: "h1" | "h2" }) {
   return (
     <section id="faq" className="v7-section v7-faq" aria-labelledby="faq-title">
       <div className="v7-container v7-faq-grid">
         <div>
           <p className="v7-eyebrow">{copy.faqEyebrow}</p>
-          <h2 id="faq-title" className="v7-section-title">{copy.faqTitle}</h2>
+          <Heading id="faq-title" className="v7-section-title">{copy.faqTitle}</Heading>
           <p className="v7-faq-prompt">{copy.faqPrompt}</p>
         </div>
         <div className="v7-faq-list">

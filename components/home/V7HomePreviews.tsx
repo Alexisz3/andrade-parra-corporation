@@ -1,4 +1,4 @@
-import Image from "next/image";
+import V7FeaturedRail from "./V7FeaturedRail";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import type { Project, ProjectCategory } from "@/content/projects";
@@ -36,33 +36,7 @@ export function V7FeaturedProjects({
           </div>
         </header>
 
-        <ul className="v7-featured-grid">
-          {projects.slice(0, 3).map((project, index) => (
-            <li key={project.id}>
-              <Link
-                href={{ pathname: "/projects/[slug]", params: { slug: project.slugs[locale] } }}
-                className="v7-featured-card"
-              >
-                <div className="v7-featured-media">
-                  <Image
-                    src={`/images/proyectos/${project.coverPhoto.file}`}
-                    alt={project.title[locale]}
-                    fill
-                    loading="lazy"
-                    sizes="(min-width: 900px) 33vw, 100vw"
-                    className="object-cover"
-                  />
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-                </div>
-                <div className="v7-featured-copy">
-                  <p className="v7-meta">{category[project.category]} · {project.location}</p>
-                  <h3>{project.title[locale]}</h3>
-                  <i aria-hidden="true">→</i>
-                </div>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <V7FeaturedRail projects={projects.slice(0, 6)} locale={locale} category={category} />
       </div>
     </section>
   );

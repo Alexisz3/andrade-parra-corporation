@@ -33,8 +33,7 @@ export default function PageHero({
 }: PageHeroProps) {
   return (
     <section className={`v7-page-hero ${compact ? "v7-page-hero-compact" : ""}`}>
-      {/* Es el elemento LCP de esta página. `priority` quedó obsoleto en
-          Next 16 y dejó de emitir el preload; ver HomeHero. */}
+      {/* Una sola fotografía editorial precargada; dimensiones reservadas en CSS. */}
       <Image
         src={imageSrc}
         alt={imageAlt}
@@ -48,27 +47,25 @@ export default function PageHero({
       <div className="v7-page-hero-overlay" aria-hidden="true" />
       <div className="v7-page-hero-plan" aria-hidden="true" />
 
-      <div
-        className={`v7-page-hero-inner v7-container ${
-          compact ? "pb-10 pt-28 lg:pb-14 lg:pt-36" : "pb-14 pt-32 lg:pb-20 lg:pt-44"
-        }`}
-      >
-        <h1
-          className={
-            plainTitle
-              ? "v7-page-hero-title v7-page-hero-title-plain"
-              : "v7-page-hero-title"
-          }
-        >
-          {title}
-          {plainTitle ? null : <span className="text-accent">.</span>}
-        </h1>
-        {tagline ? (
-          <p className="v7-page-hero-tagline">{tagline}</p>
-        ) : null}
-        {intro ? (
-          <p className="v7-page-hero-intro">{intro}</p>
-        ) : null}
+      <div className="v7-page-hero-inner v7-container">
+        <div className="v7-page-hero-panel">
+          <h1
+            className={
+              plainTitle
+                ? "v7-page-hero-title v7-page-hero-title-plain"
+                : "v7-page-hero-title"
+            }
+          >
+            {title}
+            {plainTitle ? null : <span className="text-accent">.</span>}
+          </h1>
+          {tagline ? (
+            <p className="v7-page-hero-tagline">{tagline}</p>
+          ) : null}
+          {intro ? (
+            <p className="v7-page-hero-intro">{intro}</p>
+          ) : null}
+        </div>
       </div>
     </section>
   );
