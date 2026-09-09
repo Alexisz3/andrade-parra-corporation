@@ -91,7 +91,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             action: t("aboutPreviewAction"),
           }}
         />
-        <GlobalCta />
+        <GlobalCta variant="home" />
       </main>
       <Footer />
     </>

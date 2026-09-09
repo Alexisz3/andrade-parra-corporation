@@ -38,28 +38,28 @@ export default async function Footer() {
   const services = SERVICES.filter((s) => s.published);
 
   return (
-    <footer className="bg-carbon-raised text-bone">
-      <div className="mx-auto max-w-[1400px] px-6 py-10 lg:px-10 lg:py-14">
-        <div className="grid gap-10 border-b border-bone/15 pb-8 sm:grid-cols-2 lg:grid-cols-4 lg:pb-12">
+    <footer className="v8-footer">
+      <div className="v7-container v8-footer-inner">
+        <div className="v8-footer-grid">
           {/* ── Marca ── */}
-          <div>
-            <BrandLogo variant="horizontal" size={34} tone="light" className="text-bone" />
-            <p className="mt-3 max-w-xs text-pretty text-sm leading-relaxed text-bone/60">
+          <div className="v8-footer-brand">
+            <BrandLogo variant="approved" tone="light" className="v8-footer-logo" />
+            <p>
               {t("tagline")}
             </p>
           </div>
 
           {/* ── Servicios ── */}
-          <nav aria-label={t("servicesHeading")}>
-            <h2 className="font-mono text-xs uppercase tracking-wider text-bone/50">
+          <nav className="v8-footer-column" aria-label={t("servicesHeading")}>
+            <h2>
               {t("servicesHeading")}
             </h2>
-            <ul className="mt-3">
+            <ul>
               {services.map((s) => (
                 <li key={s.id}>
                   <Link
                     href={{ pathname: "/services/[slug]", params: { slug: s.slugs[locale] } }}
-                    className="flex min-h-[44px] items-center text-sm text-bone/85 decoration-brand underline-offset-4 transition-colors hover:text-bone hover:underline"
+                    className="v8-footer-link"
                   >
                     {s.title[locale]}
                   </Link>
@@ -69,16 +69,16 @@ export default async function Footer() {
           </nav>
 
           {/* ── Empresa ── */}
-          <nav aria-label={t("companyHeading")}>
-            <h2 className="font-mono text-xs uppercase tracking-wider text-bone/50">
+          <nav className="v8-footer-column" aria-label={t("companyHeading")}>
+            <h2>
               {t("companyHeading")}
             </h2>
-            <ul className="mt-3">
+            <ul>
               {COMPANY_LINKS.map((l) => (
                 <li key={l.href}>
                   <Link
                     href={l.href}
-                    className="flex min-h-[44px] items-center text-sm text-bone/85 decoration-brand underline-offset-4 transition-colors hover:text-bone hover:underline"
+                    className="v8-footer-link"
                   >
                     {tn(l.key)}
                   </Link>
@@ -88,16 +88,16 @@ export default async function Footer() {
           </nav>
 
           {/* ── Contacto ── */}
-          <div>
-            <h2 className="font-mono text-xs uppercase tracking-wider text-bone/50">
+          <div className="v8-footer-column v8-footer-contact">
+            <h2>
               {t("contactHeading")}
             </h2>
-            <ul className="mt-3">
+            <ul>
               {WHATSAPP_CONTACTS.map((c) => (
                 <li key={c.phone}>
                   <a
                     href={`tel:+${c.phone}`}
-                    className="flex min-h-[44px] items-center font-mono text-sm text-bone/85 decoration-brand underline-offset-4 transition-colors hover:text-bone hover:underline"
+                    className="v8-footer-link"
                   >
                     {c.phoneDisplay}
                   </a>
@@ -107,7 +107,7 @@ export default async function Footer() {
                 <li>
                   <a
                     href={`mailto:${BUSINESS_EMAIL}`}
-                    className="flex min-h-[44px] items-center text-sm text-bone/85 decoration-brand underline-offset-4 transition-colors hover:text-bone hover:underline"
+                    className="v8-footer-link"
                   >
                     {BUSINESS_EMAIL}
                   </a>
@@ -118,19 +118,19 @@ export default async function Footer() {
                 factor fuerte de SEO local y un dato que el visitante busca en
                 el pie. Sin local visitable se afirma solo la zona. */}
             {SERVICE_AREA.hasPublicOffice ? (
-              <address className="mt-2 not-italic text-sm leading-relaxed text-bone/60">
+              <address>
                 {BUSINESS.streetAddress}
                 <br />
                 {BUSINESS.city}, {BUSINESS.region} {BUSINESS.postalCode}
               </address>
             ) : (
-              <p className="mt-2 text-sm text-bone/60">{tc("address")}</p>
+              <p>{tc("address")}</p>
             )}
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-4 pt-6">
-          <p className="font-mono text-xs text-bone/50">
+        <div className="v8-footer-bottom">
+          <p>
             &copy; {year} {BRAND.name}. {t("rights")}
           </p>
           {/*

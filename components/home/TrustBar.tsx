@@ -1,6 +1,13 @@
 import { getTranslations } from "next-intl/server";
 import { TRUST_SIGNALS } from "@/content/company";
 
+const ICONS = {
+  serviceArea: <path d="M12 21s6-5.4 6-11a6 6 0 1 0-12 0c0 5.6 6 11 6 11Zm0-8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />,
+  residentialCommercial: <><path d="M4 21V8l8-5 8 5v13M9 21v-5h6v5M8 11h.01M16 11h.01" /></>,
+  freeEstimates: <><path d="M7 3h8l3 3v15H7z" /><path d="M15 3v4h4M10 12h5M10 16h5" /></>,
+  bilingual: <><path d="M4 5h10a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4H9l-4 3v-4a4 4 0 0 1-3-3V9a4 4 0 0 1 2-4Z" /><path d="M7 10h.01M11 10h.01M15 10h.01" /></>,
+} as const;
+
 /**
  * Franja de confianza bajo el hero.
  *
@@ -17,8 +24,8 @@ import { TRUST_SIGNALS } from "@/content/company";
  * exactamente las cifras que un propietario podría verificar y que, si no
  * cuadran, destruyen la confianza que esta franja pretende construir.
  *
- * Sin iconos: cuatro pictogramas genéricos delatan plantilla. El filete
- * vertical basta para separar y mantiene el tono sobrio.
+ * Los iconos son trazos propios, mínimos y semánticos: acompañan a la
+ * información sin convertir la franja en una colección de tarjetas.
  */
 export default async function TrustBar() {
   const t = await getTranslations("Home");
@@ -29,26 +36,27 @@ export default async function TrustBar() {
     freeEstimates: t("trustFreeEstimates"),
     bilingual: t("trustBilingual"),
   };
+  const DETAILS: Record<(typeof TRUST_SIGNALS)[number], string> = {
+    serviceArea: t("trustServiceAreaDetail"),
+    residentialCommercial: t("trustResidentialCommercialDetail"),
+    freeEstimates: t("trustFreeEstimatesDetail"),
+    bilingual: t("trustBilingualDetail"),
+  };
 
   return (
-    <section className="border-y border-line bg-surface" aria-label={t("trustServiceArea")}>
-      <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-        {/*
-          Móvil: cuadrícula 2×2 — cuatro elementos en fila obligan a un tamaño
-          de letra ilegible a 320px. Escritorio: fila única con separadores.
-        */}
-        <ul className="grid grid-cols-2 lg:grid-cols-4">
+    <section className="v8-trust-bar" aria-label={t("trustServiceArea")}>
+      <div className="v7-container">
+        <ul className="v8-trust-list">
           {TRUST_SIGNALS.map((signal, i) => (
             <li
               key={signal}
-              className={`flex min-h-[64px] items-center justify-center px-3 py-4 text-center font-mono text-[0.7rem] uppercase tracking-[0.12em] text-muted lg:min-h-[72px] lg:text-xs ${
-                // El filete separa, no encierra: solo entre elementos.
-                i % 2 === 1 ? "border-l border-line" : ""
-              } ${i >= 2 ? "border-t border-line" : ""} lg:border-t-0 ${
-                i > 0 ? "lg:border-l lg:border-line" : "lg:border-l-0"
-              }`}
+              className={i > 0 ? "has-divider" : undefined}
             >
-              <span className="text-balance">{LABELS[signal]}</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">{ICONS[signal]}</svg>
+              <div>
+                <strong>{LABELS[signal]}</strong>
+                <span>{DETAILS[signal]}</span>
+              </div>
             </li>
           ))}
         </ul>
