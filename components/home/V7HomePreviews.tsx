@@ -135,7 +135,7 @@ export function V7FeaturedProjects({
             })}
           </ol>
 
-          <footer className="v8-editorial-footer">
+          <footer className="v8-editorial-featured-footer">
             <p>Espacios mejores. Vidas más plenas.</p>
           </footer>
         </div>

@@ -50,15 +50,6 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             body: t("heroBody"),
             quote: tn("quote"),
             projects: tn("projects"),
-            currentProject: t("currentProject"),
-            viewProject: t("viewProject"),
-            similar: t("similar"),
-            directContact: t("directContact"),
-            previous: t("previous"),
-            next: t("next"),
-            pause: t("pause"),
-            resume: t("resume"),
-            category,
           }}
         />
         <TrustBar />

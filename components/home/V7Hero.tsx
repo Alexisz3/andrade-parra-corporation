@@ -2,10 +2,8 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import type { AppLocale } from "@/i18n/routing";
-import type { Project, ProjectCategory } from "@/content/projects";
+import type { Project } from "@/content/projects";
 
 const ROTATION_MS = 8000;
 
@@ -16,41 +14,14 @@ export interface V7HeroCopy {
   body: string;
   quote: string;
   projects: string;
-  currentProject: string;
-  viewProject: string;
-  similar: string;
-  directContact: string;
-  previous: string;
-  next: string;
-  pause: string;
-  resume: string;
-  category: Record<ProjectCategory, string>;
-}
-
-function Chevron({ direction = "right" }: { direction?: "left" | "right" }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className={direction === "left" ? "rotate-180" : ""}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-    >
-      <path d="m9 18 6-6-6-6" />
-    </svg>
-  );
 }
 
 export default function V7Hero({ projects, copy }: { projects: Project[]; copy: V7HeroCopy }) {
-  const locale = useLocale() as AppLocale;
   const sectionRef = useRef<HTMLElement>(null);
-  const cardRef = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
   const [previous, setPrevious] = useState(0);
   const [inView, setInView] = useState(false);
   const [documentVisible, setDocumentVisible] = useState(true);
-  const [interacting, setInteracting] = useState(false);
   const [motionAllowed, setMotionAllowed] = useState(false);
 
   const total = projects.length;
@@ -103,7 +74,7 @@ export default function V7Hero({ projects, copy }: { projects: Project[]; copy: 
   );
 
   const running =
-    total > 1 && motionAllowed && inView && documentVisible && !interacting;
+    total > 1 && motionAllowed && inView && documentVisible;
 
   useEffect(() => {
     if (!running) return;
@@ -158,59 +129,8 @@ export default function V7Hero({ projects, copy }: { projects: Project[]; copy: 
               </Link>
             </div>
           </div>
-
-          <article
-            ref={cardRef}
-            className="v7-hero-project"
-            onMouseEnter={() => setInteracting(true)}
-            onMouseLeave={() => setInteracting(false)}
-            onFocusCapture={() => setInteracting(true)}
-            onBlurCapture={(event) => {
-              if (!cardRef.current?.contains(event.relatedTarget as Node | null)) setInteracting(false);
-            }}
-          >
-            <div className="v7-hero-project-media">
-              <Image
-                key={`thumb-${current.id}`}
-                src={`/images/proyectos/${current.coverPhoto.file}`}
-                alt={current.title[locale]}
-                fill
-                sizes="(max-width: 700px) 5rem, 150px"
-                className="object-cover"
-              />
-            </div>
-            <div key={`project-copy-${current.id}`} className="v7-hero-project-details">
-              <p className="v7-hero-project-top">
-                {copy.currentProject} · {copy.category[current.category]}
-              </p>
-              <h2>{current.title[locale]}</h2>
-              <Link
-                href={{ pathname: "/projects/[slug]", params: { slug: current.slugs[locale] } }}
-                className="v7-hero-project-link"
-              >
-                {copy.viewProject} <span aria-hidden="true">↗</span>
-              </Link>
-            </div>
-            <div key={`project-navigation-${current.id}`} className="v7-hero-project-navigation">
-              <b>
-                {String(active + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
-              </b>
-              <div className="v7-carousel-controls">
-                <button type="button" onClick={() => goTo(active - 1)} aria-label={copy.previous}>
-                  <Chevron direction="left" />
-                </button>
-                <button type="button" onClick={() => goTo(active + 1)} aria-label={copy.next}>
-                  <Chevron />
-                </button>
-              </div>
-            </div>
-          </article>
         </div>
       </div>
-
-      <p className="sr-only" aria-live="polite">
-        {current.title[locale]}, {active + 1} / {total}
-      </p>
     </section>
   );
 }
