@@ -2,8 +2,8 @@ import { getTranslations, getLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { StaticPathname, AppLocale } from "@/i18n/routing";
 import { SERVICES } from "@/content/services";
-import { SERVICE_AREA } from "@/content/company";
-import { WHATSAPP_CONTACTS, BUSINESS_EMAIL, BUSINESS, BRAND } from "@/lib/site";
+
+import { BRAND } from "@/lib/site";
 import BrandLogo from "./BrandLogo";
 
 const COMPANY_LINKS: {
@@ -31,7 +31,7 @@ const COMPANY_LINKS: {
 export default async function Footer() {
   const t = await getTranslations("Footer");
   const tn = await getTranslations("Nav");
-  const tc = await getTranslations("Contact");
+  
   const locale = (await getLocale()) as AppLocale;
   const year = new Date().getFullYear();
 
@@ -135,16 +135,16 @@ export default async function Footer() {
           </div>
           <div className="v8-editorial-footer-bottom-right">
             <p className="v8-editorial-footer-slogan">CONSTRUYENDO UN MEJOR MAÑANA</p>
-            <div className="v8-editorial-footer-socials">
-              <a href="#" aria-label="Instagram">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-              </a>
-              <a href="#" aria-label="Facebook">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
-              </a>
-              <a href="#" aria-label="TikTok">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg>
-              </a>
+            <div className="v8-editorial-footer-socials" role="group" aria-label="Redes sociales — próximamente">
+              <span className="v8-editorial-footer-social-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+              </span>
+              <span className="v8-editorial-footer-social-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+              </span>
+              <span className="v8-editorial-footer-social-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg>
+              </span>
             </div>
           </div>
         </div>
