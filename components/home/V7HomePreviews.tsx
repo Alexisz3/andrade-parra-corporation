@@ -157,36 +157,94 @@ export function V7ServicesPreview({
   locale: AppLocale;
   copy: PreviewCopy;
 }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activeService = services[activeIndex];
+
+  if (!activeService) return null;
+
   return (
-    <section className="v8-services-preview" aria-labelledby="services-preview-title">
-      <div className="v7-container v8-services-preview-grid">
-        <div className="v7-services-preview-intro">
-          <p className="v7-eyebrow">{copy.eyebrow}</p>
-          <h2 id="services-preview-title" className="v7-preview-title">{copy.title}</h2>
-          <p>{copy.body}</p>
-          <Link href="/services" className="v8-outline-button">{copy.action}<span aria-hidden="true">→</span></Link>
-        </div>
-        <div className="v8-services-image">
-          <Image
-            src={`/images/proyectos/${services[1]?.heroImage ?? services[0]?.heroImage}`}
-            alt=""
-            fill
-            sizes="(max-width: 900px) calc(100vw - 3rem), 25rem"
-            className="object-cover"
-          />
-        </div>
-        <ol className="v7-services-preview-list">
-          {services.map((service, index) => (
-            <li key={service.id}>
-              <Link href={{ pathname: "/services/[slug]", params: { slug: service.slugs[locale] } }}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <div>
-                  <h3>{service.title[locale]}</h3>
+    <section className="v8-editorial-services" aria-labelledby="services-preview-title">
+      <div className="v8-editorial-services-container">
+        <div className="v8-editorial-services-left">
+          <p className="v8-editorial-eyebrow">
+            {copy.eyebrow}
+            <span className="v8-editorial-line"></span>
+          </p>
+          <h2 id="services-preview-title" className="v8-editorial-services-title">
+            {copy.title}
+          </h2>
+          <p className="v8-editorial-services-desc">
+            {copy.body}
+          </p>
+          
+          <div className="v8-editorial-accordion">
+            {services.map((service, index) => {
+              const isActive = index === activeIndex;
+              return (
+                <div 
+                  key={service.id} 
+                  className={`v8-editorial-accordion-item ${isActive ? 'is-active' : ''}`}
+                >
+                  <button
+                    className="v8-editorial-accordion-trigger"
+                    onClick={() => setActiveIndex(index)}
+                    aria-expanded={isActive}
+                  >
+                    <span className="v8-editorial-accordion-num">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span className="v8-editorial-accordion-line"></span>
+                    <h3 className="v8-editorial-accordion-title">{service.title[locale]}</h3>
+                    <span className="v8-editorial-accordion-icon" aria-hidden="true">
+                      {isActive ? "−" : "+"}
+                    </span>
+                  </button>
+                  {isActive && (
+                    <div className="v8-editorial-accordion-content">
+                      <p>{service.shortDescription[locale]}</p>
+                    </div>
+                  )}
                 </div>
-              </Link>
-            </li>
-          ))}
-        </ol>
+              );
+            })}
+          </div>
+
+          <Link href="/services" className="v8-editorial-services-cta">
+            {copy.action}
+          </Link>
+        </div>
+
+        <div className="v8-editorial-services-right">
+          <div className="v8-editorial-services-image-wrapper">
+            {services.map((service, index) => (
+              <div 
+                key={service.id}
+                className={`v8-editorial-services-image ${index === activeIndex ? 'is-active' : ''}`}
+                aria-hidden={index !== activeIndex}
+              >
+                <Image
+                  src={`/images/proyectos/${service.heroImage}`}
+                  alt={service.title[locale]}
+                  fill
+                  priority={index === 0}
+                  loading={index === 0 ? "eager" : "lazy"}
+                  sizes="(min-width: 1024px) 55vw, 100vw"
+                  className="object-cover"
+                />
+              </div>
+            ))}
+          </div>
+          <footer className="v8-editorial-services-footer">
+            <div className="v8-editorial-services-footer-left">
+              <span className="v8-editorial-services-footer-line"></span>
+              <p>{locale === 'es-US' ? 'CONSTRUCCIÓN Y REMODELACIÓN EN HOUSTON' : 'CONSTRUCTION AND REMODELING IN HOUSTON'}</p>
+            </div>
+            <div className="v8-editorial-services-footer-right">
+              <span className="v8-editorial-services-footer-line-wide"></span>
+              <p>HOUSTON, TX</p>
+            </div>
+          </footer>
+        </div>
       </div>
     </section>
   );
