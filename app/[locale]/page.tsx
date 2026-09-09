@@ -8,7 +8,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import StructuredData from "@/components/StructuredData";
 import TrustBar from "@/components/home/TrustBar";
-import V7Hero from "@/components/home/V7Hero";
+import V7HeroPremium from "@/components/home/V7HeroPremium";
 import {
   V7AboutPreview,
   V7FeaturedProjects,
@@ -41,7 +41,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       <StructuredData />
       <Header />
       <main id="contenido" tabIndex={-1}>
-        <V7Hero
+        <V7HeroPremium
           projects={getFeaturedProjects()}
           copy={{
             eyebrow: t("heroEyebrow"),

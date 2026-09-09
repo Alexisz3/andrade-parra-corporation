@@ -55,9 +55,9 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
           title={ta("eyebrow")}
           tagline={ta("heading")}
           intro={th("valuesBody4")}
-          imageSrc="/images/proyectos/exterior-lujo-01.jpeg"
+          imageSrc="/images/heroes/hero-nosotros.jpg"
           imageAlt={ta("heading")}
-          compact
+          variant="about"
         />
 
         <V7About copy={editorialCopy} />

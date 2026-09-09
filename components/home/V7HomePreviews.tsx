@@ -37,7 +37,7 @@ export function V7FeaturedProjects({
         </header>
 
         <ul className="v7-featured-grid">
-          {projects.slice(0, 3).map((project, index) => (
+          {projects.slice(0, 6).map((project, index) => (
             <li key={project.id}>
               <Link
                 href={{ pathname: "/projects/[slug]", params: { slug: project.slugs[locale] } }}

@@ -37,9 +37,11 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const headerClass = `v7-header v7-header-glass ${solid ? "is-solid" : ""}`;
+
   return (
     <>
-      <header className={`v7-header ${solid ? "is-solid" : ""}`}>
+      <header className={headerClass}>
         <div className="v7-container v7-header-inner">
           <Link href="/" className="v7-brand-link" aria-label={`${BRAND.name} — ${t("home")}`}>
             <BrandLogo variant="approved" decorative className="v7-header-logo" />

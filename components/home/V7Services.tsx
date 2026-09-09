@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
@@ -19,7 +19,31 @@ export interface V7ServicesCopy {
 export default function V7Services({ services, copy }: { services: Service[]; copy: V7ServicesCopy }) {
   const locale = useLocale() as AppLocale;
   const [active, setActive] = useState(0);
+  const listRef = useRef<HTMLOListElement>(null);
   const current = services[active];
+
+  useEffect(() => {
+    const list = listRef.current;
+    if (!list) return;
+
+    // Use IntersectionObserver to spy on the scroll position
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const idx = Number(entry.target.getAttribute("data-index"));
+          setActive(idx);
+        }
+      });
+    }, {
+      root: list,
+      threshold: 0.6, // Update when 60% of the card is visible
+    });
+
+    const items = list.querySelectorAll("li");
+    items.forEach((item) => observer.observe(item));
+
+    return () => observer.disconnect();
+  }, []);
 
   if (!current) return null;
 
@@ -37,9 +61,9 @@ export default function V7Services({ services, copy }: { services: Service[]; co
         </div>
 
         <div className="v7-services-grid">
-          <ol className="v7-service-list">
+          <ol className="v7-service-list" ref={listRef}>
             {services.map((service, index) => (
-              <li key={service.id}>
+              <li key={service.id} data-index={index}>
                 <Link
                   href={{ pathname: "/services/[slug]", params: { slug: service.slugs[locale] } }}
                   aria-current={active === index ? "true" : undefined}

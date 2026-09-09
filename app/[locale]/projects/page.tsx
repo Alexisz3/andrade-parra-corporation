@@ -62,9 +62,9 @@ export default async function ProjectsPage({ params }: PageProps<"/[locale]/proj
           title={t("eyebrow")}
           tagline={t("heading")}
           intro={t("intro")}
-          imageSrc="/images/proyectos/exterior-lujo-01.jpeg"
+          imageSrc="/images/heroes/hero-proyectos.jpg"
           imageAlt={t("heading")}
-          compact
+          variant="projects"
         />
 
         <V7ProjectLibrary

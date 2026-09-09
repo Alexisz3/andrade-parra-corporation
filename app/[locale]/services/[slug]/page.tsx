@@ -115,8 +115,9 @@ export default async function ServiceDetail({ params }: PageProps<"/[locale]/ser
           tagline={service.shortDescription[loc]}
           imageSrc={`/images/proyectos/${service.heroImage}`}
           imageAlt={service.title[loc]}
-          compact
           plainTitle
+          variant="service-detail"
+          badge={service.title[loc]}
         />
 
         <section className="v7-detail-body">

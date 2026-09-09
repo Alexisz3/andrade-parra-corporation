@@ -52,8 +52,9 @@ export default async function ProcessPage({ params }: PageProps<"/[locale]/proce
         <PageHero
           title={tn("process")}
           tagline={th("processHeading")}
-          imageSrc="/images/proyectos/estructura-08.jpeg"
+          imageSrc="/images/heroes/hero-proceso.jpg"
           imageAlt={th("processHeading")}
+          variant="process"
         />
 
         <section className="v7-process-section">

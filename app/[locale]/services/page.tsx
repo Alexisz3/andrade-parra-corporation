@@ -39,10 +39,7 @@ export default async function ServicesPage({ params }: PageProps<"/[locale]/serv
   setRequestLocale(locale);
 
   const tn = await getTranslations("Nav");
-  const [th, tv7] = await Promise.all([
-    getTranslations("Home"),
-    getTranslations("HomeV7"),
-  ]);
+  const tv7 = await getTranslations("HomeV7");
   const services = getPublishedServices();
 
   return (
@@ -51,10 +48,11 @@ export default async function ServicesPage({ params }: PageProps<"/[locale]/serv
       <main id="contenido" tabIndex={-1}>
         <PageHero
           title={tn("services")}
-          tagline={th("servicesIntro")}
-          imageSrc="/images/proyectos/cocina-granito-01.jpeg"
+          tagline={tv7("servicesPreviewTitle")}
+          intro={tv7("servicesIntro")}
+          imageSrc="/images/heroes/hero-servicios.jpg"
           imageAlt={tn("services")}
-          compact
+          variant="services"
         />
 
         <V7Services
