@@ -15,15 +15,25 @@ export default async function GlobalCta({
 
   if (variant === "home") {
     return (
-      <section className="v8-home-cta" aria-labelledby="global-cta-title">
-        <div className="v7-container v8-home-cta-inner">
-          <div>
-            <p className="v7-eyebrow">{t("homeCtaEyebrow")}</p>
-            <h2 id="global-cta-title">{t("homeCtaTitle")}</h2>
+      <section className="v8-editorial-cta" aria-labelledby="global-cta-title">
+        <div className="v8-editorial-cta-bg"></div>
+        <div className="v7-container v8-editorial-cta-inner">
+          <div className="v8-editorial-cta-left">
+            <p className="v8-editorial-cta-eyebrow">
+              SU PROYECTO PUEDE EMPEZAR AQUÍ
+            </p>
+            <h2 id="global-cta-title" className="v8-editorial-cta-title">
+              Conversemos sobre su proyecto.
+            </h2>
+            <p className="v8-editorial-cta-body">
+              Cuéntenos su idea y hagámosla realidad juntos.
+            </p>
           </div>
-          <Link href="/quote" className="v7-button v7-button-amber">
-            {t("homeCtaAction")} <span aria-hidden="true">→</span>
-          </Link>
+          <div className="v8-editorial-cta-right">
+            <Link href="/quote" className="v8-editorial-cta-button">
+              Solicitar cotización
+            </Link>
+          </div>
         </div>
       </section>
     );
