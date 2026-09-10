@@ -9,7 +9,8 @@ interface PageHeroProps {
   intro?: string;
   imageSrc: string;
   imageAlt: string;
-  compact?: boolean;
+  /** Portada a viewport completo (Header transparente encima). */
+  cover?: boolean;
   plainTitle?: boolean;
   /** Variante que define alineación, gradiente y decoración única de la página. */
   variant?: PageHeroVariant;
@@ -84,6 +85,7 @@ export default function PageHero({
   intro,
   imageSrc,
   imageAlt,
+  cover = false,
   plainTitle = false,
   variant,
   badge,
@@ -100,7 +102,10 @@ export default function PageHero({
     : "v7-pagehero-center";
 
   return (
-    <section className="v7-hero-premium v7-hero-internal" aria-label={title}>
+    <section
+      className={`v7-hero-premium v7-hero-internal${cover ? " v7-hero-cover" : ""}`}
+      aria-label={title}
+    >
       {/* Fondo fotográfico */}
       <div className="v7-hero-premium-bg">
         <Image

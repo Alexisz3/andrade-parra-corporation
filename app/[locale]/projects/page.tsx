@@ -65,6 +65,7 @@ export default async function ProjectsPage({ params }: PageProps<"/[locale]/proj
           imageSrc="/images/heroes/hero-proyectos.jpg"
           imageAlt={t("heading")}
           variant="projects"
+          cover
         />
 
         <V7ProjectLibrary
@@ -81,9 +82,8 @@ export default async function ProjectsPage({ params }: PageProps<"/[locale]/proj
             viewProject: tv7("viewProject"),
             previous: tv7("previous"),
             next: tv7("next"),
-            pause: tv7("pause"),
-            resume: tv7("resume"),
             regionLabel: tv7("carouselRegion"),
+            footerNote: tv7("featuredPreviewFooter"),
           }}
         />
 

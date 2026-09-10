@@ -8,7 +8,6 @@ import type { AppLocale } from "@/i18n/routing";
 import type { Project, ProjectCategory } from "@/content/projects";
 import ZoomButton from "@/components/ZoomButton";
 
-const AUTOPLAY_MS = 9000;
 const CATEGORY_ORDER: ProjectCategory[] = [
   "exteriors",
   "kitchens",
@@ -31,9 +30,8 @@ export interface V7ProjectLibraryCopy {
   viewProject: string;
   previous: string;
   next: string;
-  pause: string;
-  resume: string;
   regionLabel: string;
+  footerNote: string;
 }
 
 function Arrow({ left = false }: { left?: boolean }) {
@@ -51,14 +49,6 @@ function Arrow({ left = false }: { left?: boolean }) {
   );
 }
 
-function PlayPause({ paused }: { paused: boolean }) {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8">
-      {paused ? <path d="m9 7 8 5-8 5V7Z" /> : <path d="M9 6v12M15 6v12" />}
-    </svg>
-  );
-}
-
 export default function V7ProjectLibrary({
   projects,
   copy,
@@ -71,10 +61,6 @@ export default function V7ProjectLibrary({
   const viewportRef = useRef<HTMLDivElement>(null);
   const [filter, setFilter] = useState<Filter>("all");
   const [active, setActive] = useState(0);
-  const [inView, setInView] = useState(false);
-  const [documentVisible, setDocumentVisible] = useState(true);
-  const [userPaused, setUserPaused] = useState(false);
-  const [interacting, setInteracting] = useState(false);
   const [motionAllowed, setMotionAllowed] = useState(false);
 
   const counts = useMemo(() => {
@@ -99,34 +85,14 @@ export default function V7ProjectLibrary({
 
   useEffect(() => {
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => {
-      setMotionAllowed(!query.matches);
-      if (query.matches) setUserPaused(true);
-    };
+    const sync = () => setMotionAllowed(!query.matches);
     sync();
     query.addEventListener("change", sync);
     return () => query.removeEventListener("change", sync);
   }, []);
 
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setInView(entry.intersectionRatio >= 0.2),
-      { threshold: [0, 0.2, 0.5] }
-    );
-    observer.observe(section);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const sync = () => setDocumentVisible(!document.hidden);
-    document.addEventListener("visibilitychange", sync);
-    return () => document.removeEventListener("visibilitychange", sync);
-  }, []);
-
   const scrollTo = useCallback(
-    (index: number, announce = true) => {
+    (index: number, focusCard = false) => {
       const viewport = viewportRef.current;
       if (!viewport || visible.length === 0) return;
       const next = (index + visible.length) % visible.length;
@@ -134,11 +100,13 @@ export default function V7ProjectLibrary({
       if (!item) return;
       setActive(next);
       viewport.scrollTo({ left: item.offsetLeft, behavior: motionAllowed ? "smooth" : "auto" });
-      if (announce) item.focus({ preventScroll: true });
+      if (focusCard) item.focus({ preventScroll: true });
     },
     [motionAllowed, visible.length]
   );
 
+  // El proyecto "activo" (para el contador) es la tarjeta más cercana al borde
+  // izquierdo del viewport mientras el usuario desplaza el rail.
   useEffect(() => {
     const viewport = viewportRef.current;
     if (!viewport) return;
@@ -167,21 +135,15 @@ export default function V7ProjectLibrary({
     };
   }, [visible.length]);
 
-  const running =
-    visible.length > 1 && motionAllowed && inView && documentVisible && !userPaused && !interacting;
-
-  useEffect(() => {
-    if (!running) return;
-    const timer = window.setTimeout(() => scrollTo(active + 1, false), AUTOPLAY_MS);
-    return () => window.clearTimeout(timer);
-  }, [active, running, scrollTo]);
-
   const chooseFilter = (next: Filter) => {
     setActive(0);
     setFilter(next);
-    setInteracting(false);
     viewportRef.current?.scrollTo({ left: 0, behavior: "auto" });
   };
+
+  const count = visible.length;
+  const position = Math.min(active + 1, count);
+  const progress = count > 1 ? (active / (count - 1)) * 100 : 100;
 
   return (
     <section ref={sectionRef} id="proyectos" className="v7-section v7-projects" aria-labelledby="home-projects-title">
@@ -219,33 +181,15 @@ export default function V7ProjectLibrary({
 
           <div className="v7-library-controls">
             <output aria-live="polite">
-              {String(Math.min(active + 1, visible.length)).padStart(2, "0")} / {String(visible.length).padStart(2, "0")}
+              {String(position).padStart(2, "0")} <i aria-hidden="true">/</i> {String(count).padStart(2, "0")}
             </output>
-            <button type="button" onClick={() => scrollTo(active - 1, false)} aria-label={copy.previous}>
+            <button type="button" onClick={() => scrollTo(active - 1)} aria-label={copy.previous}>
               <Arrow left />
             </button>
-            <button
-              type="button"
-              onClick={() => setUserPaused((value) => !value)}
-              aria-label={userPaused ? copy.resume : copy.pause}
-              aria-pressed={userPaused}
-            >
-              <PlayPause paused={userPaused} />
-            </button>
-            <button type="button" onClick={() => scrollTo(active + 1, false)} aria-label={copy.next}>
+            <button type="button" onClick={() => scrollTo(active + 1)} aria-label={copy.next}>
               <Arrow />
             </button>
           </div>
-        </div>
-
-        <div className="v7-library-progress" aria-hidden="true">
-          <span
-            key={`${filter}-${active}`}
-            style={{
-              animationDuration: `${AUTOPLAY_MS}ms`,
-              animationPlayState: running ? "running" : "paused",
-            }}
-          />
         </div>
 
         <div
@@ -258,21 +202,13 @@ export default function V7ProjectLibrary({
           onKeyDown={(event) => {
             if (event.key === "ArrowLeft") {
               event.preventDefault();
-              scrollTo(active - 1, false);
+              scrollTo(active - 1);
             }
             if (event.key === "ArrowRight") {
               event.preventDefault();
-              scrollTo(active + 1, false);
+              scrollTo(active + 1);
             }
           }}
-          onMouseEnter={() => setInteracting(true)}
-          onMouseLeave={() => setInteracting(false)}
-          onFocusCapture={() => setInteracting(true)}
-          onBlurCapture={(event) => {
-            if (!viewportRef.current?.contains(event.relatedTarget as Node | null)) setInteracting(false);
-          }}
-          onPointerDown={() => setInteracting(true)}
-          onPointerUp={() => setInteracting(false)}
         >
           <ul className="v7-project-track">
             {visible.map((project, index) => (
@@ -280,9 +216,9 @@ export default function V7ProjectLibrary({
                 key={project.id}
                 data-project-index={index}
                 tabIndex={-1}
-                aria-label={`${index + 1} / ${visible.length}: ${project.title[locale]}`}
+                aria-label={`${index + 1} / ${count}: ${project.title[locale]}`}
                 aria-roledescription="slide"
-                className={index === 0 && filter === "all" ? "v7-project-slide v7-project-slide-featured" : "v7-project-slide"}
+                className="v7-project-slide"
               >
                 <article className="v7-project-article">
                   <Link
@@ -294,36 +230,45 @@ export default function V7ProjectLibrary({
                         src={`/images/proyectos/${project.coverPhoto.file}`}
                         alt={project.title[locale]}
                         fill
-                        loading={index < 2 ? "eager" : "lazy"}
-                        sizes="(min-width: 1100px) 46vw, (min-width: 700px) 60vw, 86vw"
+                        loading={index < 3 ? "eager" : "lazy"}
+                        sizes="(min-width: 1100px) 30vw, (min-width: 700px) 55vw, 84vw"
                         className="object-cover"
                       />
                       <span className="v7-project-index">APC · {String(projects.indexOf(project) + 1).padStart(2, "0")}</span>
+                      <span className="v7-project-cta" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                          <path d="m9 18 6-6-6-6" />
+                        </svg>
+                      </span>
                     </div>
                     <div className="v7-project-info">
-                      <div>
-                        <span className="v7-meta">
-                          {copy.category[project.category]} · {project.location} · {project.status === "completed" ? copy.completed : copy.inProgress}
-                        </span>
-                        <h3>{project.title[locale]}</h3>
-                        <p>{project.excerpt[locale]}</p>
-                      </div>
-                      <span className="v7-project-link">
-                        {copy.viewProject}
-                        <span aria-hidden="true">↗</span>
-                      </span>
+                      <span className="v7-meta">{copy.category[project.category]}</span>
+                      <h3>{project.title[locale]}</h3>
+                      <p className="v7-project-line">
+                        {project.location}
+                        <span aria-hidden="true"> · </span>
+                        {project.status === "completed" ? copy.completed : copy.inProgress}
+                      </p>
                     </div>
                   </Link>
                   <ZoomButton
                     src={`/images/proyectos/${project.coverPhoto.file}`}
                     alt={project.title[locale]}
                     orientation={project.coverPhoto.orientation}
-                    className="absolute right-3 top-3 z-10"
+                    className="v7-project-zoom"
                   />
                 </article>
               </li>
             ))}
           </ul>
+        </div>
+
+        <div className="v7-rail-footer">
+          <span className="v7-rail-track" aria-hidden="true">
+            <span style={{ width: `${progress}%` }} />
+          </span>
+          <span className="v7-rail-index" aria-hidden="true">{String(position).padStart(2, "0")}</span>
+          <span className="v7-rail-note">{copy.footerNote}</span>
         </div>
       </div>
     </section>
