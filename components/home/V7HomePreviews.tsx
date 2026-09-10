@@ -34,123 +34,85 @@ export function V7FeaturedProjects({
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const featured = projects.slice(0, 3);
-  const activeProject = featured[activeIndex];
 
-  const nextProject = () => setActiveIndex((prev) => (prev + 1) % featured.length);
-  const prevProject = () => setActiveIndex((prev) => (prev - 1 + featured.length) % featured.length);
-
-  if (!activeProject) return null;
+  if (!featured.length) return null;
 
   return (
     <section className="v8-editorial-featured" aria-labelledby="featured-preview-title">
-      <div className="v8-editorial-container">
-        <div className="v8-editorial-left">
-          <div className="v8-editorial-image-wrapper">
-            {featured.map((project, idx) => (
-              <div 
-                key={project.id} 
-                className={`v8-editorial-image ${idx === activeIndex ? 'is-active' : ''}`}
-                aria-hidden={idx !== activeIndex}
-              >
-                <Image
-                  src={`/images/proyectos/${project.coverPhoto.file}`}
-                  alt={project.title[locale]}
-                  fill
-                  priority={idx === 0}
-                  loading={idx === 0 ? "eager" : "lazy"}
-                  sizes="(min-width: 1024px) 60vw, 100vw"
-                  className="object-cover"
-                />
-              </div>
-            ))}
-            <div className="v8-editorial-overlay">
-              <div className="v8-editorial-overlay-content">
-                <p className="v8-editorial-meta">
-                  {category[activeProject.category]} · {activeProject.location}
-                </p>
-                <h3 className="v8-editorial-overlay-title">{activeProject.title[locale]}</h3>
-                <Link
-                  href={{ pathname: "/projects/[slug]", params: { slug: activeProject.slugs[locale] } }}
-                  className="v8-editorial-link-white"
+      <div className="v8-featured-inner">
+        <header className="v8-featured-head">
+          <div className="v8-featured-head-top">
+            <p className="v8-featured-eyebrow">
+              {copy.eyebrow}
+              <span className="v8-featured-eyebrow-line" aria-hidden="true" />
+            </p>
+            <Link href="/projects" className="v8-featured-viewall">
+              {copy.action} <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+          <h2 id="featured-preview-title" className="v8-featured-title">
+            {copy.title.split("\n").flatMap((line, index) =>
+              index === 0 ? line : [<br key={index} />, line]
+            )}
+          </h2>
+          <p className="v8-featured-desc">{copy.body}</p>
+        </header>
+
+        <ul className="v8-featured-list">
+          {featured.map((project, idx) => {
+            const isActive = idx === activeIndex;
+            return (
+              <li key={project.id} className={`v8-featured-row${isActive ? " is-active" : ""}`}>
+                <button
+                  type="button"
+                  className="v8-featured-trigger"
+                  aria-expanded={isActive}
+                  aria-controls={`v8-featured-panel-${project.id}`}
+                  onClick={() => setActiveIndex((current) => (current === idx ? -1 : idx))}
                 >
-                  {copy.viewProject} <span aria-hidden="true">→</span>
-                </Link>
-                <div className="v8-editorial-controls-row">
-                  <span className="v8-editorial-counter">
-                    {String(activeIndex + 1).padStart(2, '0')} / {String(featured.length).padStart(2, '0')}
+                  <span className="v8-featured-num">{String(idx + 1).padStart(2, "0")}</span>
+                  <span className="v8-featured-trigger-text">
+                    <span className="v8-featured-cat">{category[project.category]}</span>
+                    <span className="v8-featured-name">{project.title[locale]}</span>
+                    <span className="v8-featured-loc">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                        <circle cx="12" cy="10" r="3" />
+                      </svg>
+                      {project.location}
+                    </span>
                   </span>
-                  <div className="v8-editorial-progress">
-                    <div className="v8-editorial-progress-bar" style={{ width: `${((activeIndex + 1) / featured.length) * 100}%` }}></div>
-                  </div>
-                  <div className="v8-editorial-nav">
-                    <button onClick={prevProject} aria-label={copy.previous}>
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                    </button>
-                    <button onClick={nextProject} aria-label={copy.next}>
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </button>
+                  <span className="v8-featured-icon" aria-hidden="true" />
+                </button>
+
+                <div id={`v8-featured-panel-${project.id}`} className="v8-featured-panel">
+                  <div className="v8-featured-panel-inner">
+                    <div className="v8-featured-media">
+                      <Image
+                        src={`/images/proyectos/${project.coverPhoto.file}`}
+                        alt={project.title[locale]}
+                        fill
+                        priority={idx === 0}
+                        sizes="(min-width: 1101px) 1152px, 100vw"
+                        className="object-cover"
+                      />
+                      <Link
+                        href={{ pathname: "/projects/[slug]", params: { slug: project.slugs[locale] } }}
+                        className="v8-featured-media-link"
+                      >
+                        {copy.viewProject} <span aria-hidden="true">→</span>
+                      </Link>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
+              </li>
+            );
+          })}
+        </ul>
 
-        <div className="v8-editorial-right">
-          <header className="v8-editorial-header">
-            <div className="v8-editorial-header-top">
-              <p className="v8-editorial-eyebrow">
-                {copy.eyebrow}
-              </p>
-              <Link href="/projects" className="v8-editorial-view-all">
-                {copy.action} <span aria-hidden="true">→</span>
-              </Link>
-            </div>
-            <h2 id="featured-preview-title" className="v8-editorial-title">
-              {copy.title.split("\n").flatMap((line, index) =>
-                index === 0 ? line : [<br key={index} />, line]
-              )}
-            </h2>
-            <p className="v8-editorial-desc">
-              {copy.body}
-            </p>
-          </header>
-
-          <ol className="v8-editorial-list">
-            {featured.map((project, idx) => {
-              const isActive = idx === activeIndex;
-              return (
-                <li 
-                  key={project.id}
-                >
-                  <button
-                    className={`v8-editorial-item ${isActive ? 'is-active' : ''}`}
-                    onClick={() => setActiveIndex(idx)}
-                    aria-pressed={isActive}
-                    type="button"
-                  >
-                    <span className="v8-editorial-num">{String(idx + 1).padStart(2, '0')}</span>
-                    <div className="v8-editorial-item-content">
-                      <p className="v8-editorial-item-cat">{category[project.category]}</p>
-                      <h4 className="v8-editorial-item-title">{project.title[locale]}</h4>
-                      <p className="v8-editorial-item-loc">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        {project.location}
-                      </p>
-                    </div>
-                    <div className="v8-editorial-item-arrow">
-                      <span aria-hidden="true">→</span>
-                    </div>
-                  </button>
-                </li>
-              );
-            })}
-          </ol>
-
-          <footer className="v8-editorial-featured-footer">
-            <p>{copy.footer}</p>
-          </footer>
-        </div>
+        <footer className="v8-editorial-featured-footer">
+          <p>{copy.footer}</p>
+        </footer>
       </div>
     </section>
   );
