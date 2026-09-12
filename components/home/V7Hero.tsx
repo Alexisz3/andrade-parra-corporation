@@ -1,11 +1,20 @@
-"use client";
-
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "@/i18n/navigation";
-import type { Project } from "@/content/projects";
 
-const ROTATION_MS = 8000;
+/**
+ * Portada de Inicio: una sola fotografía a sangre, copy a la izquierda y
+ * pie de datos abajo. La foto vive en `public/images/heroes/` como el resto
+ * de portadas del sitio.
+ *
+ * El scrim NO oscurece la foto entera: pesa a la izquierda —donde va el
+ * copy— y se disuelve antes de la mitad para que el patio, la piscina y los
+ * árboles de la derecha se sigan leyendo. La franja superior la aporta el
+ * propio Header (`.v7-header::after`), así que aquí no se repite.
+ *
+ * Sin estado ni efectos: es un componente de servidor.
+ */
+
+const HERO_IMAGE = "/images/heroes/hero-home-patio.jpg";
 
 export interface V7HeroCopy {
   eyebrow: string;
@@ -14,101 +23,26 @@ export interface V7HeroCopy {
   body: string;
   quote: string;
   projects: string;
+  /** Pie del hero: ubicación y alcance. Ambos salen de copy ya aprobado. */
+  metaLocation: string;
+  metaScope: string;
 }
 
-export default function V7Hero({ projects, copy }: { projects: Project[]; copy: V7HeroCopy }) {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [active, setActive] = useState(0);
-  const [previous, setPrevious] = useState(0);
-  const [inView, setInView] = useState(false);
-  const [documentVisible, setDocumentVisible] = useState(true);
-  const [motionAllowed, setMotionAllowed] = useState(false);
-
-  const total = projects.length;
-  const current = projects[active];
-  const previousProject = projects[previous];
-
-  useEffect(() => {
-    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => {
-      setMotionAllowed(!query.matches);
-    };
-    sync();
-    query.addEventListener("change", sync);
-    return () => query.removeEventListener("change", sync);
-  }, []);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setInView(entry.intersectionRatio >= 0.35),
-      { threshold: [0, 0.35, 0.7] }
-    );
-    observer.observe(section);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const sync = () => setDocumentVisible(!document.hidden);
-    document.addEventListener("visibilitychange", sync);
-    return () => document.removeEventListener("visibilitychange", sync);
-  }, []);
-
-  useEffect(() => {
-    if (total < 2) return;
-    const nextProject = projects[(active + 1) % total];
-    const preloader = new window.Image();
-    preloader.decoding = "async";
-    preloader.src = `/images/proyectos/${nextProject.coverPhoto.file}`;
-  }, [active, projects, total]);
-
-  const goTo = useCallback(
-    (index: number) => {
-      if (!total) return;
-      const nextIndex = (index + total) % total;
-      setPrevious(active);
-      setActive(nextIndex);
-    },
-    [active, total]
-  );
-
-  const running =
-    total > 1 && motionAllowed && inView && documentVisible;
-
-  useEffect(() => {
-    if (!running) return;
-    const timer = window.setTimeout(() => goTo(active + 1), ROTATION_MS);
-    return () => window.clearTimeout(timer);
-  }, [active, goTo, running]);
-
-  if (!current) return null;
-
+export default function V7Hero({ copy }: { copy: V7HeroCopy }) {
   return (
-    <section ref={sectionRef} className="v7-hero" aria-labelledby="home-hero-title">
+    <section className="v7-hero" aria-labelledby="home-hero-title">
       <div className="v7-hero-media" aria-hidden="true">
-        {previous !== active && previousProject ? (
-          <Image
-            src={`/images/proyectos/${previousProject.coverPhoto.file}`}
-            alt=""
-            fill
-            sizes="100vw"
-            className="v7-hero-image"
-          />
-        ) : null}
         <Image
-          key={current.id}
-          src={`/images/proyectos/${current.coverPhoto.file}`}
+          src={HERO_IMAGE}
           alt=""
           fill
-          preload={active === 0}
+          preload
           loading="eager"
           sizes="100vw"
-          className="v7-hero-image v7-hero-image-current"
+          className="v7-hero-image"
         />
       </div>
       <div className="v7-hero-overlay" aria-hidden="true" />
-      <div className="v7-hero-plan" aria-hidden="true" />
 
       <div className="v7-container v7-hero-inner">
         <div className="v7-hero-grid">
@@ -121,14 +55,23 @@ export default function V7Hero({ projects, copy }: { projects: Project[]; copy: 
             </h1>
             <p className="v7-hero-lead">{copy.body}</p>
             <div className="v7-hero-ctas">
-              <Link href="/quote" className="v7-button v7-button-amber">
+              <Link href="/quote" className="v7-button v7-button-amber v7-hero-cta-primary">
                 {copy.quote} <span aria-hidden="true">→</span>
               </Link>
-              <Link href="/projects" className="v7-button v7-button-ghost-light">
+              <Link href="/projects" className="v7-button v7-button-ghost-light v7-hero-cta-secondary">
                 {copy.projects} <span aria-hidden="true">↗</span>
               </Link>
             </div>
           </div>
+        </div>
+
+        <div className="v7-hero-meta">
+          <span className="v7-hero-meta-rule" aria-hidden="true" />
+          <ul>
+            <li>{copy.metaLocation}</li>
+            <li>{copy.metaScope}</li>
+            <li>EN / ES</li>
+          </ul>
         </div>
       </div>
     </section>

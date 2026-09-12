@@ -97,7 +97,15 @@ export default function LocaleSwitcher() {
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
       >
-        <span aria-hidden="true" className={`v7-language-flag ${locale === "es-US" ? "is-es" : "is-en"}`} />
+        {/* Globo en vez de bandera: el idioma no es un país, y sobre la foto
+            del hero lee mejor un icono de trazo que un rectángulo de color.
+            Las banderas siguen en el menú desplegable, donde ayudan a
+            distinguir las dos opciones de un vistazo. */}
+        <svg className="v7-language-globe" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M3.6 9h16.8M3.6 15h16.8" />
+          <path d="M12 3c2.4 2.4 3.6 5.4 3.6 9s-1.2 6.6-3.6 9c-2.4-2.4-3.6-5.4-3.6-9S9.6 5.4 12 3Z" />
+        </svg>
         <span aria-hidden="true" className="v7-language-code">{LOCALE_CODES[locale].toUpperCase()}</span>
         <svg viewBox="0 0 14 14" aria-hidden="true">
           <path d="M3 5.25 7 9l4-3.75" />

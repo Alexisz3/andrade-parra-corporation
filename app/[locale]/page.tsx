@@ -22,10 +22,11 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const locale = rawLocale as AppLocale;
   setRequestLocale(locale);
 
-  const [t, tn, tp] = await Promise.all([
+  const [t, tn, tp, th] = await Promise.all([
     getTranslations("HomeV7"),
     getTranslations("Nav"),
     getTranslations("Projects"),
+    getTranslations("Home"),
   ]);
 
   const category: Record<ProjectCategory, string> = {
@@ -42,7 +43,6 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       <Header />
       <main id="contenido" tabIndex={-1}>
         <V7HeroPremium
-          projects={getFeaturedProjects()}
           copy={{
             eyebrow: t("heroEyebrow"),
             titleLead: t("heroTitleLead"),
@@ -50,6 +50,10 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             body: t("heroBody"),
             quote: tn("quote"),
             projects: tn("projects"),
+            // Dato de lugar ya usado tal cual en content/projects.ts; alcance
+            // tomado de la banda de confianza, no es copy nuevo.
+            metaLocation: "Houston, TX",
+            metaScope: th("trustResidentialCommercial"),
           }}
         />
         <TrustBar />

@@ -45,6 +45,8 @@ export async function getV7EditorialCopy(): Promise<V7EditorialCopy> {
     contactTitle: t("contactTitle"),
     contactBody: t("contactBody"),
     contactArea: t("contactArea"),
+    contactEmailLabel: t("contactEmailLabel"),
+    contactSign: t("contactSign"),
     quote: tn("quote"),
     call: tn("callShort"),
   };

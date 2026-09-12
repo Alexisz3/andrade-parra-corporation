@@ -43,12 +43,13 @@ export default async function ContactPage({ params }: PageProps<"/[locale]/conta
   setRequestLocale(locale);
 
   const editorialCopy = await getV7EditorialCopy();
+  const tc = await getTranslations("Contact");
 
   return (
     <>
       <Header />
       <main id="contenido" tabIndex={-1}>
-        <V7Contact copy={editorialCopy} page />
+        <V7Contact copy={editorialCopy} microcopy={tc("heroMicrocopy")} />
         <ServiceArea />
       </main>
       <Footer />

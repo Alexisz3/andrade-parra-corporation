@@ -5,7 +5,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing, LOCALE_PREFIXES, type AppLocale } from "@/i18n/routing";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import PageHero from "@/components/PageHero";
+import V7EditorialCover from "@/components/home/V7EditorialCover";
 import GlobalCta from "@/components/GlobalCta";
 import { V7About, V7Craft, V7Team } from "@/components/home/V7EditorialSections";
 import { getV7EditorialCopy } from "@/lib/v7-editorial-copy";
@@ -51,13 +51,21 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
     <>
       <Header />
       <main id="contenido" tabIndex={-1}>
-        <PageHero
-          title={ta("eyebrow")}
-          tagline={ta("heading")}
-          intro={th("valuesBody4")}
-          imageSrc="/images/heroes/hero-nosotros.jpg"
-          imageAlt={ta("heading")}
-          variant="about"
+        <V7EditorialCover
+          imageSrc="/images/heroes/hero-nosotros-fachada.jpg"
+          imageAlt={ta("heroCoverImageAlt")}
+          scrollHref="#nosotros"
+          // Titular en frase, no una palabra en versales: aquí la portada
+          // presenta a dos personas, no a un catálogo.
+          phrasing="phrase"
+          copy={{
+            kicker: ta("eyebrow"),
+            title: ta("heading"),
+            intro: th("valuesBody4"),
+            scrollCueLabel: ta("heroCoverScrollCue"),
+            linkLabel: ta("heroScrollCue"),
+            tagline: ta("heroCoverTagline"),
+          }}
         />
 
         <V7About copy={editorialCopy} />

@@ -1,7 +1,21 @@
 import Image from "next/image";
+import HeroScrollCue from "./HeroScrollCue";
 
 /** Controla la personalidad visual única de cada página. */
 export type PageHeroVariant = "projects" | "services" | "about" | "process" | "service-detail";
+
+/** Copy + fondo de la composición móvil alternativa (ver `mobileCover`). */
+export interface MobileCoverContent {
+  eyebrow: string;
+  title: string;
+  meta: string;
+  category: string;
+  location: string;
+  scrollCueLabel: string;
+  scrollCueHref: string;
+  imageSrc: string;
+  imageAlt: string;
+}
 
 interface PageHeroProps {
   title: string;
@@ -11,6 +25,18 @@ interface PageHeroProps {
   imageAlt: string;
   /** Portada a viewport completo (Header transparente encima). */
   cover?: boolean;
+  /** Etiqueta del indicador de scroll (sólo portada). Sin ella no se muestra. */
+  scrollCueLabel?: string;
+  /** Ancla de la sección siguiente para el indicador, p. ej. "#proyectos". */
+  scrollCueHref?: string;
+  /**
+   * Composición alternativa SOLO para ≤768px: fondo, copy y layout propios
+   * (título a la izquierda + bloque informativo), en vez de reescalar la
+   * portada de escritorio. Sin ella, `cover` se comporta igual en todos los
+   * anchos. Pensada para una página a la vez (hoy sólo Proyectos); el resto
+   * de consumidores de `cover` no la usan y no cambian.
+   */
+  mobileCover?: MobileCoverContent;
   plainTitle?: boolean;
   /** Variante que define alineación, gradiente y decoración única de la página. */
   variant?: PageHeroVariant;
@@ -46,7 +72,19 @@ const Icons = {
   ),
 };
 
-// Mapa de configuración visual por variante
+/**
+ * Portada compartida (prop `cover`): Proyectos, Servicios y Nosotros.
+ *
+ * Degradado DIRECCIONAL, no viñeta de marco: un realce muy suave detrás del
+ * título (radial acotado al centro) + un scrim vertical que sostiene cabecera
+ * e indicador y deja el tercio medio casi limpio, para que la fotografía —y
+ * sus bordes— sigan leyéndose. El `cover` ignora `align`/`overlay`/`decoration`
+ * de la variante y usa esto, así las tres páginas comparten el mismo lenguaje.
+ */
+const COVER_OVERLAY =
+  "radial-gradient(78% 62% at 50% 45%, rgba(0,0,0,0.32) 0%, rgba(0,0,0,0.10) 56%, rgba(0,0,0,0) 84%), linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.17) 15%, rgba(0,0,0,0.30) 44%, rgba(0,0,0,0.50) 72%, rgba(0,0,0,0.80) 100%)";
+
+// Mapa de configuración visual por variante (páginas SIN `cover`).
 const VARIANT_CONFIG: Record<PageHeroVariant, {
   align: "left" | "center" | "right";
   overlay: string;
@@ -86,14 +124,22 @@ export default function PageHero({
   imageSrc,
   imageAlt,
   cover = false,
+  scrollCueLabel,
+  scrollCueHref,
+  mobileCover,
   plainTitle = false,
   variant,
   badge,
 }: PageHeroProps) {
   const config = variant ? VARIANT_CONFIG[variant] : null;
-  const align = config?.align ?? "center";
-  const overlayStyle = config?.overlay ?? "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0.88) 100%)";
-  const decoration = config?.decoration ?? "none";
+  // La portada (`cover`) unifica las tres páginas: centrado + scrim direccional.
+  // El filete de marca lo dibuja el CSS del kicker (::before del eyebrow), así
+  // que la decoración por variante no se renderiza en modo portada.
+  const align = cover ? "center" : (config?.align ?? "center");
+  const overlayStyle = cover
+    ? COVER_OVERLAY
+    : (config?.overlay ?? "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0.88) 100%)");
+  const decoration = cover ? "none" : (config?.decoration ?? "none");
 
   const alignClass = align === "left"
     ? "v7-pagehero-left"
@@ -103,10 +149,13 @@ export default function PageHero({
 
   return (
     <section
-      className={`v7-hero-premium v7-hero-internal${cover ? " v7-hero-cover" : ""}`}
+      className={`v7-hero-premium v7-hero-internal${cover ? " v7-hero-cover" : ""}${mobileCover ? " v7-hero-has-mobile-cover" : ""}`}
       aria-label={title}
     >
-      {/* Fondo fotográfico */}
+      {/* Fondo fotográfico. Con `mobileCover`, dos fotos reales (una por
+          rango): la de escritorio se oculta ≤768px y viceversa por CSS
+          (`v7-hero-bg-*-only` en globals.css); ninguna se recorta con
+          object-position ajena a su propia composición. */}
       <div className="v7-hero-premium-bg">
         <Image
           src={imageSrc}
@@ -115,14 +164,28 @@ export default function PageHero({
           priority
           sizes="100vw"
           style={{ objectFit: "cover" }}
+          className={mobileCover ? "v7-hero-bg-desktop-only" : undefined}
         />
+        {mobileCover && (
+          <Image
+            src={mobileCover.imageSrc}
+            alt={mobileCover.imageAlt}
+            fill
+            priority
+            sizes="100vw"
+            style={{ objectFit: "cover", objectPosition: "68% 56%" }}
+            className="v7-hero-bg-mobile-only"
+          />
+        )}
       </div>
 
-      {/* Overlay dinámico */}
+      {/* Overlay dinámico. En ≤768px con `mobileCover`, globals.css sustituye
+          este mismo degradado por uno pensado para copy a la izquierda. */}
       <div className="v7-hero-premium-overlay" style={{ background: overlayStyle }} />
 
-      {/* Contenido */}
-      <div className={`v7-hero-premium-content ${alignClass}`}>
+      {/* Contenido de escritorio (portada centrada). Con `mobileCover` se
+          oculta ≤768px; sin ella, es idéntico en todos los anchos. */}
+      <div className={`v7-hero-premium-content ${alignClass}${mobileCover ? " v7-hero-content-desktop-only" : ""}`}>
 
         {/* Decoración única por variante */}
         {decoration === "line" && (
@@ -142,11 +205,46 @@ export default function PageHero({
 
         <p className="v7-hero-premium-eyebrow">{title}</p>
         <h1 className="v7-hero-premium-title">
-          {tagline || title}
+          {/* Un "\n" en el copy fuerza el salto de línea aprobado sin
+              hardcodear el idioma; sin "\n" queda un único fragmento. */}
+          {(tagline || title).split("\n").flatMap((line, index) =>
+            index === 0 ? [line] : [<br key={index} />, line]
+          )}
           {plainTitle ? null : <span className="text-accent">.</span>}
         </h1>
         {intro && <p className="v7-hero-premium-meta">{intro}</p>}
       </div>
+
+      {/* Composición móvil alternativa (≤768px, sólo si se pasa `mobileCover`):
+          título a la izquierda + bloque informativo secundario. Un único
+          <h1> queda expuesto a la vez — el otro pasa a display:none por CSS,
+          así que no hay doble encabezado para lectores de pantalla. */}
+      {mobileCover && (
+        <div className="v7-hero-mobile-cover">
+          <p className="v7-hero-mobile-eyebrow">{mobileCover.eyebrow}</p>
+          <h1 className="v7-hero-mobile-title">{mobileCover.title}</h1>
+          <p className="v7-hero-mobile-meta">{mobileCover.meta}</p>
+          <div className="v7-hero-mobile-secondary">
+            <span>{mobileCover.category}</span>
+            <span className="v7-hero-mobile-secondary-dot" aria-hidden="true" />
+            <span>{mobileCover.location}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Indicador de scroll a la sección siguiente (sólo portada). El
+          desplazamiento animado y el respaldo nativo viven en HeroScrollCue.
+          Con `mobileCover`, cada rango usa su propio texto/ancla. */}
+      {cover && scrollCueLabel && scrollCueHref && (
+        <div className={mobileCover ? "v7-hero-cue-desktop-only" : undefined}>
+          <HeroScrollCue label={scrollCueLabel} href={scrollCueHref} />
+        </div>
+      )}
+      {mobileCover && (
+        <div className="v7-hero-cue-mobile-only">
+          <HeroScrollCue label={mobileCover.scrollCueLabel} href={mobileCover.scrollCueHref} />
+        </div>
+      )}
     </section>
   );
 }

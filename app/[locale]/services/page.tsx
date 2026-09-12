@@ -6,7 +6,7 @@ import { routing, LOCALE_PREFIXES, type AppLocale } from "@/i18n/routing";
 import { getPublishedServices } from "@/content/services";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import PageHero from "@/components/PageHero";
+import V7EditorialCover from "@/components/home/V7EditorialCover";
 import GlobalCta from "@/components/GlobalCta";
 import V7Services from "@/components/home/V7Services";
 
@@ -40,19 +40,29 @@ export default async function ServicesPage({ params }: PageProps<"/[locale]/serv
 
   const tn = await getTranslations("Nav");
   const tv7 = await getTranslations("HomeV7");
+  const ts = await getTranslations("Services");
   const services = getPublishedServices();
 
   return (
     <>
       <Header />
       <main id="contenido" tabIndex={-1}>
-        <PageHero
-          title={tn("services")}
-          tagline={tv7("servicesPreviewTitle")}
-          intro={tv7("servicesIntro")}
-          imageSrc="/images/heroes/hero-servicios.jpg"
-          imageAlt={tn("services")}
-          variant="services"
+        <V7EditorialCover
+          count={services.length}
+          imageSrc="/images/heroes/hero-servicios-cocina.jpg"
+          imageAlt={ts("heroCoverImageAlt")}
+          scrollHref="#servicios"
+          copy={{
+            kicker: ts("heroCoverKicker"),
+            title: tn("services"),
+            intro: ts("heroCoverIntro"),
+            countLabel: ts("heroCoverServicesLabel"),
+            // Mismo dato de lugar que la portada de Proyectos y las fichas
+            // de obra: no es copy, es la ciudad donde se trabaja.
+            location: "Houston, TX",
+            scrollCueLabel: ts("heroScrollCue"),
+            tagline: ts("heroCoverTagline"),
+          }}
         />
 
         <V7Services

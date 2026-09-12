@@ -73,7 +73,7 @@
     "heroEyebrow": "CONSTRUCCIÓN Y REMODELACIÓN EN HOUSTON",
     "heroTitleLead": "Trabajo real.",
     "heroTitleAccent": "Resultados que se ven.",
-    "heroBody": "Construcción, remodelación y mejoras con atención directa, alcance claro y fotografías reales de nuestro trabajo.",
+    "heroBody": "Construcción, remodelación y mejoras con atención directa, alcance claro y resultados reales.",
     "currentProject": "PROYECTO ACTUAL",
     "viewProject": "Ver proyecto",
     "similar": "Quiero algo similar",
@@ -143,7 +143,7 @@
     "afterLabel": "Después",
     "contactEyebrow": "HABLEMOS DE SU PROYECTO",
     "contactTitle": "Una idea clara empieza con una conversación.",
-    "contactBody": "Envíenos los datos básicos del espacio y le ayudamos a ordenar el siguiente paso.",
+    "contactBody": "Comparta la idea, el espacio y el objetivo del proyecto. Le ayudamos a convertirlo en un siguiente paso claro.",
     "contactArea": "Houston y alrededores, TX",
     "featuredPreviewEyebrow": "PROYECTOS DESTACADOS",
     "featuredPreviewTitle": "Obras que hablan\npor sí solas.",
@@ -170,7 +170,9 @@
     "trustBilingualDetail": "Comunicación clara y directa",
     "allProjects": "Todos",
     "statusCompleted": "Terminado",
-    "statusInProgress": "En proceso"
+    "statusInProgress": "En proceso",
+    "contactEmailLabel": "Email",
+    "contactSign": "Construyamos algo juntos."
   },
   "Services": {
     "housing": {
@@ -209,6 +211,12 @@
       "title": "Instalaciones sanitarias",
       "description": "Plomería completa, desde la estructura hasta el acabado final."
     },
+    "heroScrollCue": "Deslizar para explorar",
+    "heroCoverKicker": "NUESTROS SERVICIOS",
+    "heroCoverIntro": "Construcción, remodelación y mejoras para interiores y exteriores, con atención directa, alcances claros y ejecución de calidad.",
+    "heroCoverServicesLabel": "servicios",
+    "heroCoverTagline": "Espacios construidos para durar",
+    "heroCoverImageAlt": "Cocina remodelada de noche: isla de mármol veteado, salpicadero a juego, gabinetes oscuros, grifería dorada y lámparas de latón.",
     "metaTitle": "Servicios de construcción y remodelación en Houston, TX | Andrade Parra Corporation",
     "metaDescription": "Obra nueva, remodelación, cocinas y baños, espacios exteriores y reparaciones en Houston y alrededores. Cada proyecto empieza revisando lo que usted necesita."
   },
@@ -250,8 +258,18 @@
   },
   "Projects": {
     "eyebrow": "PROYECTOS",
-    "heading": "Trabajo real. Proceso visible.",
+    "heading": "Trabajo real.\nProceso visible.",
     "intro": "Proyectos de construcción y remodelación en Houston.",
+    "heroScrollCue": "Deslizar para explorar",
+    "heroCoverKicker": "NUESTRO TRABAJO",
+    "heroCoverIntro": "Explore obras terminadas y en proceso, organizadas por categoría.",
+    "heroCoverProjectsLabel": "proyectos",
+    "heroCoverTagline": "Espacios que inspiran una mejor vida",
+    "heroCoverImageAlt": "Patio residencial al atardecer: piscina, terraza cubierta con sala de estar y comedor exterior, y jardín iluminado.",
+    "mobileCategory": "CONSTRUCCIÓN · REMODELACIÓN",
+    "mobileLocation": "HOUSTON, TX",
+    "mobileScrollCue": "Ver proyectos",
+    "mobileImageAlt": "Casco de obra y planos sobre una mesa de trabajo, con la estructura de una vivienda en remodelación al fondo.",
     "filterAll": "Todos",
     "filterKitchens": "Cocinas",
     "filterBathrooms": "Baños",
@@ -306,7 +324,8 @@
     "directions": "Cómo llegar",
     "visitNote": "Llame antes para que podamos atenderle con calma.",
     "areaAsk": "¿No ve su zona? Pregúntenos, es posible que igual podamos ayudarle.",
-    "metaDescription": "Llámenos, escríbanos por WhatsApp o envíe los detalles de su proyecto. Andrade Parra Corporation trabaja en Houston y alrededores."
+    "metaDescription": "Llámenos, escríbanos por WhatsApp o envíe los detalles de su proyecto. Andrade Parra Corporation trabaja en Houston y alrededores.",
+    "heroMicrocopy": "Atención directa. Respuesta clara."
   },
   "Footer": {
     "tagline": "Construcción y remodelación en Houston, TX.",
@@ -409,6 +428,10 @@
   "About": {
     "eyebrow": "NOSOTROS",
     "heading": "Dos apellidos, una manera de trabajar",
+    "heroScrollCue": "Conocer más",
+    "heroCoverScrollCue": "Deslizar para explorar",
+    "heroCoverTagline": "Relaciones reales. Trabajo bien hecho",
+    "heroCoverImageAlt": "Fachada de una vivienda de dos plantas al anochecer: piedra clara, ventanales iluminados, jardín delantero con iluminación y entrada de hormigón.",
     "storyHeading": "Nuestra historia",
     "teamHeading": "Las personas detrás de Andrade Parra Corporation",
     "valuesHeading": "Cómo trabajamos",
@@ -417,6 +440,9 @@
   },
   "Faq": {
     "heading": "Preguntas frecuentes",
+    "heroCoverScrollCue": "Deslizar para explorar",
+    "heroCoverTagline": "Respuestas claras desde el inicio",
+    "heroCoverImageAlt": "Mesa de trabajo de piedra oscura con un plano desplegado, muestras de mármol y madera, un rollo de planos y un portátil, en una oficina de diseño con luz cálida.",
     "metaDescription": "Encuentre respuestas claras a las preguntas más comunes sobre nuestros servicios de construcción y remodelación en Houston."
   }
 }

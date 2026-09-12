@@ -71,8 +71,11 @@ function useAssignedContact() {
   return WHATSAPP_CONTACTS[index];
 }
 
+// Una sola superficie carbón translúcida para las tres acciones: icono fino +
+// etiqueta en fila, sin paneles de color, altura contenida. El objetivo táctil
+// es toda la celda (≥ 52 px de alto, ~⅓ del ancho), muy por encima de 44 px.
 const ITEM =
-  "flex min-h-[56px] flex-1 flex-col items-center justify-center gap-1 text-[0.7rem] font-medium";
+  "relative flex min-h-[52px] flex-1 items-center justify-center gap-2 px-2 text-[0.8rem] font-medium tracking-wide text-bone/90 transition-colors hover:text-bone active:text-bone";
 
 export default function MobileContactBar() {
   const t = useTranslations("Nav");
@@ -103,14 +106,18 @@ export default function MobileContactBar() {
       </a>
 
       {/*
-        Hueco del mismo alto que la barra. Sin él, la barra tapa el final del
-        pie —los enlaces legales y los teléfonos— en todas las páginas.
+        Hueco del mismo alto que la barra (contenido + safe-area). Sin él, la
+        barra tapa el final del pie —enlaces legales y teléfonos— en todas las
+        páginas.
       */}
-      <div aria-hidden="true" className="h-[64px] lg:hidden" />
+      <div
+        aria-hidden="true"
+        className="h-[calc(52px+env(safe-area-inset-bottom))] lg:hidden"
+      />
 
       <nav
         aria-label={t("contactBar")}
-        className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-3 border-t border-bone/15 bg-carbon text-bone lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 flex divide-x divide-bone/10 border-t border-bone/12 bg-carbon/90 text-bone backdrop-blur-md supports-[backdrop-filter]:bg-carbon/72 lg:hidden"
         // Respeta la barra de gestos de iOS: sin esto, el último tramo de los
         // botones cae bajo el indicador del sistema y no se puede pulsar.
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
@@ -120,7 +127,7 @@ export default function MobileContactBar() {
           onClick={() => track("phone_clicked", { contact: contact.id, source: "mobile_bar" })}
           className={ITEM}
         >
-          <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.7">
+          <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth="1.6">
             <path d="M5 4h3l2 5-2.5 1.5a11 11 0 0 0 5 5L14 13l5 2v3a2 2 0 0 1-2.2 2A16 16 0 0 1 3 6.2 2 2 0 0 1 5 4Z" strokeLinejoin="round" />
           </svg>
           {t("callShort")}
@@ -131,9 +138,9 @@ export default function MobileContactBar() {
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => track("whatsapp_clicked", { contact: contact.id, source: "mobile_bar" })}
-          className={`${ITEM} border-x border-bone/15 bg-whatsapp text-carbon`}
+          className={ITEM}
         >
-          <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="currentColor">
+          <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[18px] w-[18px]" fill="currentColor">
             <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.5 14.1c-.2.6-1.2 1.2-1.7 1.2-.5.1-1 .1-3.2-.8-2.7-1.1-4.4-3.9-4.5-4-.1-.2-1-1.4-1-2.6 0-1.2.6-1.8.9-2 .2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.4.5-.3.3c-.1.1-.2.3 0 .5.2.3.7 1.2 1.6 2 1.1.9 1.5 1 1.7 1.1.2.1.4.1.5-.1l.7-.9c.2-.2.3-.2.5-.1l2 .9c.2.1.4.2.4.3.1.1.1.6-.1 1.2Z" />
           </svg>
           WhatsApp
@@ -142,12 +149,14 @@ export default function MobileContactBar() {
         {/* Sin evento propio: el embudo ya registra `quote_started` al montar
             el formulario, y `lib/analytics.ts` mantiene a propósito una lista
             cerrada de eventos. Uno más aquí solo duplicaría la misma etapa. */}
-        <Link href="/quote" className={`${ITEM} bg-action text-bone transition-colors hover:bg-action-hover active:bg-action-active`}>
-          <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.7">
+        <Link href="/quote" className={ITEM}>
+          <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth="1.6">
             <path d="M8 4h8l3 3v13H5V4h3Z" strokeLinejoin="round" />
             <path d="M9 11h6M9 15h4" strokeLinecap="round" />
           </svg>
           {t("quoteShort")}
+          {/* Único acento de color: fino subrayado rojo APC bajo «Cotización». */}
+          <span aria-hidden="true" className="absolute bottom-[7px] left-1/2 h-[2px] w-7 -translate-x-1/2 rounded-full bg-accent" />
         </Link>
       </nav>
     </>

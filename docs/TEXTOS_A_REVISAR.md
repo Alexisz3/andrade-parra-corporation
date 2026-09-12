@@ -169,3 +169,81 @@ no existen, y que se piden en `docs/MATERIAL_PENDIENTE_CLIENTE.html`:
 Mientras esos datos no existan, **la propuesta correcta es la más sobria de
 las dos**: un texto que no promete nada envejece bien; uno que promete lo que
 no puede cumplir se convierte en el argumento del cliente descontento.
+
+---
+
+## Copy nuevo pendiente de revisión
+
+**Fase de portada de Proyectos · 11 de septiembre de 2026.** Al rediseñar la
+portada de `/proyectos` se añadió un cierre editorial en la esquina inferior
+derecha que **no existía antes en ningún idioma**. No está aprobado: se
+registra aquí para que el responsable lo confirme, lo reescriba o lo retire.
+
+| Clave | Texto puesto | Por qué se registra |
+|---|---|---|
+| `Projects.heroCoverTagline` | ES «Espacios que inspiran una mejor vida» · EN «Spaces that inspire a better life» | Es una frase de marca, no un dato: no afirma licencias, plazos ni resultados, así que no choca con la regla de contenido. Pero sí es intercambiable —describiría igual a cualquier constructora— y ese es justo el criterio que las Prioridades 1-4 usaron para retirar texto. Si el responsable no la reconoce como propia de la empresa, la portada funciona igual sin ella. |
+
+`Projects.heroCoverImageAlt` se añadió en la misma tanda pero no entra en esta
+tabla: es texto alternativo de accesibilidad, describe lo que se ve en la
+fotografía y no afirma autoría de la obra.
+
+**Portada de Servicios · 11 de septiembre de 2026.** La misma portada
+editorial se aplicó a `/servicios`, con tres textos que tampoco existían
+antes. Dos de ellos rozan criterios que este documento ya usó para retirar
+copy, así que van aquí antes de darse por buenos.
+
+| Clave | Texto puesto | Por qué se registra |
+|---|---|---|
+| `Services.heroCoverTagline` | ES «Espacios construidos para durar» · EN «Spaces built to last» | **Es una afirmación de durabilidad**, justo la categoría de la Prioridad 3 de este documento. No dice cuántos años ni bajo qué condiciones, así que no es una garantía formal, pero promete algo que el sitio no puede demostrar. La portada funciona sin ella. |
+| `Services.heroCoverIntro` | ES «…con atención directa, alcances claros y ejecución de calidad.» · EN «…with direct communication, clear scope, and quality workmanship.» | «Ejecución de calidad» es un superlativo sin respaldo del mismo tipo que «altos estándares». Las dos primeras mitades sí son verificables —la atención es directa y el alcance se define por escrito—; la tercera es la que habría que revisar. |
+| `Services.heroScrollCue` | Antes «Explorar servicios» → ahora «Deslizar para explorar» | No es texto nuevo: se reusa la frase que ya estaba aprobada en `Projects.heroScrollCue`, para que las dos portadas digan lo mismo. Se anota sólo para que el cambio quede con fecha. |
+
+`Services.heroCoverKicker`, `heroCoverServicesLabel` y `heroCoverImageAlt` no
+entran en la tabla: son una etiqueta de sección, el sustantivo del contador
+—que cuenta servicios reales de `content/services.ts`— y texto alternativo de
+accesibilidad.
+
+**Portada de Nosotros · 11 de septiembre de 2026.** La portada editorial se
+aplicó también a `/nosotros`. Casi todo el copy ya estaba aprobado y se
+reutiliza tal cual: `About.eyebrow`, `About.heading` (el titular),
+`Home.valuesBody4` (la descripción) y `About.heroScrollCue` (ahora el link
+«Conocer más»). Sólo un texto es nuevo.
+
+| Clave | Texto puesto | Por qué se registra |
+|---|---|---|
+| `About.heroCoverTagline` | ES «Relaciones reales. Trabajo bien hecho» · EN «Real relationships. Work done right» | «Trabajo bien hecho» es una afirmación de calidad sin respaldo, de la misma familia que «ejecución de calidad» en Servicios. «Relaciones reales» sí describe algo verificable —el trato es directo con Jose, no con un comercial— y encaja con lo que ya dice `About`. La portada funciona si se recorta a la primera mitad. |
+
+`About.heroCoverScrollCue` («Deslizar para explorar») no entra en la tabla:
+es la misma frase ya aprobada en `Projects.heroScrollCue`, repetida aquí para
+que las tres portadas digan lo mismo. `About.heroCoverImageAlt` tampoco: es
+texto alternativo de accesibilidad y describe la fotografía sin afirmar que
+la obra sea de la empresa.
+
+**Portada de Preguntas · 11 de septiembre de 2026.** La portada editorial se
+aplicó a `/preguntas`, que hasta ahora no tenía ninguna. El eyebrow, el
+titular y la frase de instrucción se reutilizan tal cual de
+`HomeV7.faqEyebrow`, `HomeV7.faqTitle` y `HomeV7.faqPrompt` — antes abrían la
+lista de preguntas y ahora abren la página, así que **dejaron de mostrarse
+dos veces**. Sólo el cierre de esquina es nuevo.
+
+| Clave | Texto puesto | Por qué se registra |
+|---|---|---|
+| `Faq.heroCoverTagline` | ES «Respuestas claras desde el inicio» · EN «Clear answers from the start» | Es una promesa sobre cómo se comunica la empresa, no sobre el resultado de la obra, así que es más defendible que «trabajo bien hecho» o «construidos para durar»: lo que promete se puede comprobar leyendo las ocho respuestas de abajo. Aun así, es una afirmación sobre el propio servicio y conviene que el responsable la lea. |
+
+`Faq.heroCoverScrollCue` y `Faq.heroCoverImageAlt` no entran en la tabla: la
+primera repite la frase ya aprobada de las otras portadas, la segunda es
+texto alternativo de accesibilidad.
+
+**Portada de Contacto · 11 de septiembre de 2026.** La portada editorial se
+aplicó a `/contacto`. El eyebrow, el titular y el área de servicio se
+reutilizan de `HomeV7.contactEyebrow`, `HomeV7.contactTitle` y
+`HomeV7.contactArea`, ya aprobados. Tres textos son nuevos o cambian.
+
+| Clave | Texto puesto | Por qué se registra |
+|---|---|---|
+| `HomeV7.contactBody` | Antes «Envíenos los datos básicos del espacio y le ayudamos a ordenar el siguiente paso.» → ahora «Comparta la idea, el espacio y el objetivo del proyecto. Le ayudamos a convertirlo en un siguiente paso claro.» | No afirma nada nuevo: describe la misma conversación con otras palabras. Se registra porque sustituye copy que ya había pasado revisión. |
+| `HomeV7.contactSign` | ES «Construyamos algo juntos.» · EN «Let's build something together.» | Cierre de la hoja de contacto, en serif cursiva. Es una invitación, no una promesa de resultado — de las cuatro frases de cierre de las portadas, la única que no afirma nada sobre la obra. |
+| `Contact.heroMicrocopy` | ES «Atención directa. Respuesta clara.» · EN «Direct attention. Clear answers.» | «Atención directa» es verificable: los dos teléfonos de la propia hoja son los de Jose y Mario, no una centralita. «Respuesta clara» es una promesa sobre el trato; sin plazo asociado, pero conviene que el responsable la lea. |
+
+`HomeV7.contactEmailLabel` es sólo la etiqueta «Email», antes escrita a mano
+en el componente y ahora traducible.

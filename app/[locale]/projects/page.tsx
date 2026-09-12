@@ -6,7 +6,7 @@ import { routing, LOCALE_PREFIXES, type AppLocale } from "@/i18n/routing";
 import { PROJECTS, type ProjectCategory } from "@/content/projects";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import PageHero from "@/components/PageHero";
+import V7EditorialCover from "@/components/home/V7EditorialCover";
 import V7ProjectLibrary from "@/components/home/V7ProjectLibrary";
 import GlobalCta from "@/components/GlobalCta";
 import V7BeforeAfterSection from "@/components/home/V7BeforeAfterSection";
@@ -58,14 +58,20 @@ export default async function ProjectsPage({ params }: PageProps<"/[locale]/proj
     <>
       <Header />
       <main id="contenido" tabIndex={-1}>
-        <PageHero
-          title={t("eyebrow")}
-          tagline={t("heading")}
-          intro={t("intro")}
-          imageSrc="/images/heroes/hero-proyectos.jpg"
-          imageAlt={t("heading")}
-          variant="projects"
-          cover
+        <V7EditorialCover
+          count={PROJECTS.length}
+          imageSrc="/images/heroes/hero-proyectos-patio.jpg"
+          imageAlt={t("heroCoverImageAlt")}
+          scrollHref="#proyectos"
+          copy={{
+            kicker: t("heroCoverKicker"),
+            title: t("eyebrow"),
+            intro: t("heroCoverIntro"),
+            countLabel: t("heroCoverProjectsLabel"),
+            location: PROJECTS[0]?.location ?? "Houston, TX",
+            scrollCueLabel: t("heroScrollCue"),
+            tagline: t("heroCoverTagline"),
+          }}
         />
 
         <V7ProjectLibrary

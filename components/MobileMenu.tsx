@@ -95,7 +95,10 @@ export default function MobileMenu({ open, onClose, links, triggerRef }: MobileM
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[60] lg:hidden">
+    // Disponible en todo el rango donde el Header muestra la hamburguesa
+    // (≤1180px, donde .v7-desktop-nav se oculta en app/globals.css); a partir
+    // de 1181px vuelve la navegación de escritorio y este panel se retira.
+    <div className="fixed inset-0 z-[60] min-[1181px]:hidden">
       <button
         type="button"
         aria-label={t("closeMenu")}

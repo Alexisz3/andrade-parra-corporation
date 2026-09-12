@@ -73,7 +73,7 @@
     "heroEyebrow": "CONSTRUCTION & REMODELING IN HOUSTON",
     "heroTitleLead": "Real work.",
     "heroTitleAccent": "Results you can see.",
-    "heroBody": "Construction, remodeling, and improvements with direct communication, clear scope, and real photographs of our work.",
+    "heroBody": "Construction, remodeling, and improvements with direct communication, clear scope, and real results.",
     "currentProject": "CURRENT PROJECT",
     "viewProject": "View project",
     "similar": "I want something similar",
@@ -143,7 +143,7 @@
     "afterLabel": "After",
     "contactEyebrow": "LET'S TALK ABOUT YOUR PROJECT",
     "contactTitle": "A clear idea starts with a conversation.",
-    "contactBody": "Send us the basics about your space and we'll help organize the next step.",
+    "contactBody": "Share the idea, the space, and the goal of the project. We help you turn it into a clear next step.",
     "contactArea": "Houston and surrounding areas, TX",
     "featuredPreviewEyebrow": "FEATURED PROJECTS",
     "featuredPreviewTitle": "Work that speaks\nfor itself.",
@@ -170,7 +170,9 @@
     "trustBilingualDetail": "Clear, direct communication",
     "allProjects": "All",
     "statusCompleted": "Completed",
-    "statusInProgress": "In progress"
+    "statusInProgress": "In progress",
+    "contactEmailLabel": "Email",
+    "contactSign": "Let's build something together."
   },
   "Services": {
     "housing": {
@@ -209,6 +211,12 @@
       "title": "Plumbing",
       "description": "Complete plumbing work, from rough-in to final fixtures."
     },
+    "heroScrollCue": "Swipe to explore",
+    "heroCoverKicker": "OUR SERVICES",
+    "heroCoverIntro": "Construction, remodeling, and improvements for interiors and exteriors, with direct communication, clear scope, and quality workmanship.",
+    "heroCoverServicesLabel": "services",
+    "heroCoverTagline": "Spaces built to last",
+    "heroCoverImageAlt": "Remodeled kitchen at night: veined marble island, matching backsplash, dark cabinetry, brass fixtures and pendant lights.",
     "metaTitle": "Construction & Remodeling Services in Houston, TX | Andrade Parra Corporation",
     "metaDescription": "New builds, remodeling, kitchens and baths, outdoor spaces and repairs in Houston and nearby areas. Every project starts by reviewing what you need."
   },
@@ -250,8 +258,18 @@
   },
   "Projects": {
     "eyebrow": "PROJECTS",
-    "heading": "Real work. You see how it's done.",
+    "heading": "Real work.\nYou see how it's done.",
     "intro": "Construction and remodeling projects in Houston.",
+    "heroScrollCue": "Swipe to explore",
+    "heroCoverKicker": "OUR WORK",
+    "heroCoverIntro": "Explore finished and in-progress work, organized by category.",
+    "heroCoverProjectsLabel": "projects",
+    "heroCoverTagline": "Spaces that inspire a better life",
+    "heroCoverImageAlt": "Residential backyard at dusk: pool, covered patio with lounge seating and outdoor dining, and a lit garden.",
+    "mobileCategory": "CONSTRUCTION · REMODELING",
+    "mobileLocation": "HOUSTON, TX",
+    "mobileScrollCue": "See projects",
+    "mobileImageAlt": "Hard hat and blueprints on a workbench, with a home's remodel framing in the background.",
     "filterAll": "All",
     "filterKitchens": "Kitchens",
     "filterBathrooms": "Bathrooms",
@@ -306,7 +324,8 @@
     "directions": "Get directions",
     "visitNote": "Please call ahead so we can make time for you.",
     "areaAsk": "Do not see your area? Ask us — we may still be able to help.",
-    "metaDescription": "Call us, message us on WhatsApp or send your project details. Andrade Parra Corporation serves Houston and surrounding areas."
+    "metaDescription": "Call us, message us on WhatsApp or send your project details. Andrade Parra Corporation serves Houston and surrounding areas.",
+    "heroMicrocopy": "Direct attention. Clear answers."
   },
   "Footer": {
     "tagline": "Construction & remodeling in Houston, TX.",
@@ -409,6 +428,10 @@
   "About": {
     "eyebrow": "ABOUT",
     "heading": "Two names, one way of working",
+    "heroScrollCue": "Learn more",
+    "heroCoverScrollCue": "Swipe to explore",
+    "heroCoverTagline": "Real relationships. Work done right",
+    "heroCoverImageAlt": "Two-story home facade at dusk: light stone, lit windows, landscaped front yard with uplighting and a concrete driveway.",
     "storyHeading": "Our story",
     "teamHeading": "The people behind Andrade Parra Corporation",
     "valuesHeading": "How we work",
@@ -417,6 +440,9 @@
   },
   "Faq": {
     "heading": "Frequently Asked Questions",
+    "heroCoverScrollCue": "Swipe to explore",
+    "heroCoverTagline": "Clear answers from the start",
+    "heroCoverImageAlt": "Dark stone work table with an unrolled floor plan, marble and wood samples, a roll of drawings and a laptop, in a warmly lit design office.",
     "metaDescription": "Find clear answers to the most common questions about our construction and remodeling services in Houston."
   }
 }
