@@ -122,7 +122,13 @@ console.log(`--- motor: ${ENGINE} ---`);
     // Enabled + un frame de margen asegura que React ya asoció el onClick.
     await p.waitForFunction(() => document.readyState === "complete");
     await trigger.click();
-    const toggle = p.locator('[role="menuitemradio"]', { hasText: "EN" });
+    // La opción NO activa, no "la que dice EN": desde el rediseño del
+    // selector cada opción muestra su nombre completo ("English",
+    // "Español") más un subtítulo, así que buscar por texto "EN" es frágil
+    // (coincide también con la "en" de "Sitio en español"). Aquí siempre
+    // partimos del locale contrario al destino, así que la NO activa es
+    // inequívocamente la que hay que pulsar.
+    const toggle = p.locator('[role="menuitemradio"][aria-checked="false"]');
     await toggle.waitFor({ state: "visible" });
     await toggle.click();
     try {
@@ -684,7 +690,7 @@ if (process.env.QA_LEGACY_QUOTE_FLOW === "1") {
   await p.goto(URL + "/es", { waitUntil: "domcontentloaded" });
   await p.waitForTimeout(1000);
   check("Arquitectura: Inicio usa previews V8, no páginas completas",
-    (await p.locator(".v8-editorial-featured,.v8-editorial-services,.v8-about-preview,.v8-editorial-cta").count()) === 4 &&
+    (await p.locator(".v8-editorial-featured,.v8-svc,.v8-about-preview,.v7-cta2").count()) === 4 &&
     (await p.locator(".v7-projects,.v7-services,.v7-about,.v7-faq,.v7-contact").count()) === 0);
 
   for (const [path, selector] of [
@@ -711,14 +717,77 @@ if (process.env.QA_LEGACY_QUOTE_FLOW === "1") {
   await p.goto(URL + "/es", { waitUntil: "domcontentloaded" });
   await p.waitForTimeout(1200);
 
-  const accordionItems = await p.locator(".v8-editorial-services .v8-editorial-accordion-item").count();
+  const accordionItems = await p.locator(".v8-svc .v8-svc-item").count();
   const servicesCtaHref = await p
-    .locator(".v8-editorial-services .v8-editorial-services-cta")
+    .locator(".v8-svc .v8-svc-cta")
     .getAttribute("href");
   check("Inicio: la previa de servicios muestra 5 servicios en acordeón con un CTA general",
     accordionItems === 5 && /\/servicios$/.test(servicesCtaHref ?? ""),
     `${accordionItems} items · CTA ${servicesCtaHref}`);
 
+  // Apertura única: activar dos filas seguidas nunca deja dos abiertas, y
+  // activar la misma fila dos veces la cierra (también debe poder quedar
+  // todo cerrado).
+  const triggers = p.locator(".v8-svc .v8-svc-trigger");
+  const activeCount = () => p.locator(".v8-svc .v8-svc-item.is-active").count();
+  check("Servicios: arranca con el acordeón cerrado", (await activeCount()) === 0);
+
+  await triggers.nth(0).click();
+  await p.waitForTimeout(400);
+  check("Servicios: un toque abre exactamente un servicio", (await activeCount()) === 1);
+
+  await triggers.nth(2).click();
+  await p.waitForTimeout(400);
+  const secondActive = await p.locator(".v8-svc .v8-svc-item.is-active").evaluateAll(
+    (els) => els.map((el) => el.querySelector(".v8-svc-name")?.textContent)
+  );
+  check("Servicios: abrir otro cierra el anterior — apertura única",
+    (await activeCount()) === 1, JSON.stringify(secondActive));
+
+  await triggers.nth(2).click();
+  await p.waitForTimeout(400);
+  check("Servicios: tocar la fila abierta la cierra — puede quedar todo cerrado",
+    (await activeCount()) === 0);
+  await ctx.close();
+}
+
+// ─── 8b. Servicios: acordeón en móvil (imagen, atributos y CTA por fila) ──
+{
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const p = await ctx.newPage();
+  await p.goto(URL + "/es", { waitUntil: "domcontentloaded" });
+  await p.waitForTimeout(1000);
+
+  const section = p.locator(".v8-svc");
+  await section.scrollIntoViewIfNeeded();
+  check("Servicios móvil: la columna de vista previa de escritorio no se renderiza",
+    (await p.locator(".v8-svc-right").count()) === 0 ||
+    !(await p.locator(".v8-svc-right").isVisible().catch(() => false)));
+
+  const trigger = p.locator(".v8-svc-trigger").nth(1);
+  await trigger.click();
+  await p.waitForTimeout(500);
+  const panel = p.locator(".v8-svc-item.is-active .v8-svc-panel");
+  check("Servicios móvil: el panel abierto enseña imagen, atributos y CTA",
+    (await panel.locator("img").count()) > 0 &&
+    (await panel.locator(".v8-svc-tags li").count()) === 3 &&
+    (await panel.locator(".v8-svc-panel-link").count()) === 1);
+
+  check("Servicios móvil: el disparador es un botón con aria-expanded/aria-controls",
+    (await trigger.evaluate((el) => el.tagName.toLowerCase())) === "button" &&
+    (await trigger.getAttribute("aria-expanded")) === "true" &&
+    !!(await trigger.getAttribute("aria-controls")));
+
+  const box = await trigger.boundingBox();
+  check("Servicios móvil: la fila entera cumple el mínimo táctil de 44px",
+    !!box && box.height >= 44, box ? `${Math.round(box.height)}px` : "sin caja");
+  await ctx.close();
+}
+
+// ─── 8c. Servicios: enlaces únicos y detalles de la página dedicada ─────
+{
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const p = await ctx.newPage();
   await p.goto(URL + "/es/servicios", { waitUntil: "domcontentloaded" });
   await p.waitForTimeout(1200);
   const hrefs = await p.locator(".v7-services a[href*='/servicios/']").evaluateAll((els) =>
@@ -805,7 +874,10 @@ if (process.env.QA_LEGACY_QUOTE_FLOW === "1") {
       if ((await trigger.getAttribute("aria-expanded")) !== "true") {
         await trigger.click().catch(() => {});
       }
-      const btn = p.locator('[role="menuitemradio"]', { hasText: to });
+      // Con solo 2 locales, "la opción NO activa" es siempre la de destino
+      // — buscar por texto ("EN"/"ES") es frágil desde que las opciones
+      // muestran el nombre completo del idioma más un subtítulo.
+      const btn = p.locator('[role="menuitemradio"][aria-checked="false"]');
       await btn.waitFor({ state: "visible" });
       await btn.click().catch(() => {});
       try {

@@ -45,6 +45,7 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
 
   const ta = await getTranslations("About");
   const th = await getTranslations("Home");
+  const tv7 = await getTranslations("HomeV7");
   const editorialCopy = await getV7EditorialCopy();
 
   return (
@@ -72,7 +73,7 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
         <V7Team copy={editorialCopy} />
         <V7Craft copy={editorialCopy} />
 
-        <GlobalCta />
+        <GlobalCta eyebrow={tv7("ctaAboutEyebrow")} title={tv7("ctaAboutTitle")} />
       </main>
       <Footer />
     </>

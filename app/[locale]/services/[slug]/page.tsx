@@ -187,8 +187,13 @@ export default async function ServiceDetail({ params }: PageProps<"/[locale]/ser
               </aside>
             </div>
 
+            {/* El `id` es el destino del «Ver proyectos» del acordeón de la
+                portada: cada servicio lleva a SUS obras, no al listado
+                general. Si un servicio se quedara sin obras relacionadas el
+                bloque no existe y el enlace cae al inicio de la página, que
+                sigue siendo una respuesta razonable. */}
             {related.length > 0 ? (
-              <div className="mt-16 border-t border-line pt-12">
+              <div id="proyectos-relacionados" className="mt-16 scroll-mt-28 border-t border-line pt-12">
                 <span className="eyebrow text-accent">{tp("eyebrow")}</span>
                 <div className="mt-6 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
                   {related.map((project) => (

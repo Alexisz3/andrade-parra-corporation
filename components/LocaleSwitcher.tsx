@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { useParams, useSearchParams } from "next/navigation";
-import { routing, LOCALE_CODES, type AppLocale } from "@/i18n/routing";
+import { routing, LOCALE_CODES, LOCALE_NAMES, LOCALE_TAGLINES, type AppLocale } from "@/i18n/routing";
 import { resolveLocalizedDestination } from "@/i18n/localized-destination";
 
 /**
@@ -97,17 +97,15 @@ export default function LocaleSwitcher() {
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
       >
-        {/* Globo en vez de bandera: el idioma no es un país, y sobre la foto
-            del hero lee mejor un icono de trazo que un rectángulo de color.
-            Las banderas siguen en el menú desplegable, donde ayudan a
-            distinguir las dos opciones de un vistazo. */}
+        {/* Globo, nunca bandera: el selector representa un IDIOMA, no un
+            país — una bandera de EE. UU. o de México implicaría lo segundo. */}
         <svg className="v7-language-globe" viewBox="0 0 24 24" aria-hidden="true">
           <circle cx="12" cy="12" r="9" />
           <path d="M3.6 9h16.8M3.6 15h16.8" />
           <path d="M12 3c2.4 2.4 3.6 5.4 3.6 9s-1.2 6.6-3.6 9c-2.4-2.4-3.6-5.4-3.6-9S9.6 5.4 12 3Z" />
         </svg>
         <span aria-hidden="true" className="v7-language-code">{LOCALE_CODES[locale].toUpperCase()}</span>
-        <svg viewBox="0 0 14 14" aria-hidden="true">
+        <svg className="v7-language-chevron" viewBox="0 0 14 14" aria-hidden="true">
           <path d="M3 5.25 7 9l4-3.75" />
         </svg>
       </button>
@@ -120,10 +118,18 @@ export default function LocaleSwitcher() {
               type="button"
               role="menuitemradio"
               aria-checked={isCurrent}
+              className={isCurrent ? "is-active" : undefined}
               onClick={() => switchTo(l)}
             >
-              <span><span aria-hidden="true" className={`v7-language-flag ${l === "es-US" ? "is-es" : "is-en"}`} />{LOCALE_CODES[l].toUpperCase()}</span>
-              <i aria-hidden="true">{isCurrent ? "✓" : ""}</i>
+              <span className="v7-language-option-text">
+                <strong>{LOCALE_NAMES[l]}</strong>
+                <small>{LOCALE_TAGLINES[l]}</small>
+              </span>
+              {isCurrent ? (
+                <svg className="v7-language-check" viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M3.5 8.5 7 12l6.5-7.5" />
+                </svg>
+              ) : null}
             </button>
           );
         })}

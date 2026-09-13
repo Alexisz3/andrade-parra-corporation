@@ -5,9 +5,18 @@ import TrackedContactLink from "@/components/TrackedContactLink";
 
 export interface V7EditorialCopy {
   craftEyebrow: string;
+  /** Puede llevar un `\n` para forzar el corte de línea del titular, igual
+   *  que en el resto de titulares editoriales del sitio (GlobalCta,
+   *  V7FeaturedProjects). */
   craftTitle: string;
   craftBody: string;
   craftCallouts: string[];
+  /** Refuerzo corto de tres puntos, justo antes de las tarjetas. */
+  craftBullets: string[];
+  /** Tarjetitas comerciales — entre 4 y 5; el layout da a la última todo el
+   *  ancho cuando el total es impar, a modo de cierre. */
+  craftCards: { title: string; body: string }[];
+  craftCtaLabel: string;
   aboutEyebrow: string;
   aboutTitle: string;
   aboutBody: string;
@@ -37,30 +46,85 @@ export interface V7EditorialCopy {
   call: string;
 }
 
+function CheckIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="m5 12.5 4.5 4.5L19 7" />
+    </svg>
+  );
+}
+
+/**
+ * Bloque comercial de detalle — la idea es que el visitante entienda, en el
+ * orden en que lee, que el cuidado en lo pequeño (encuentros, materiales,
+ * revisión final) es lo que separa un trabajo bien hecho de uno improvisado.
+ *
+ * El orden del marcado es también el orden en móvil (cabecera → argumentos
+ * → bullets → tarjetas → CTA → foto): en escritorio, `grid-template-areas`
+ * reubica la foto a la derecha sin tocar ese orden, así que el foco (tab)
+ * sigue el mismo recorrido que la lectura en ambos casos salvo por la foto,
+ * que no lleva nada enfocable.
+ */
 export function V7Craft({ copy }: { copy: V7EditorialCopy }) {
+  const titleLines = copy.craftTitle.split("\n");
+  const cards = copy.craftCards;
+  const lastCardSpansFull = cards.length % 2 === 1;
+
   return (
     <section className="v7-section v7-craft" aria-labelledby="craft-title">
       <div className="v7-container v7-craft-grid">
-        <div className="v7-craft-copy">
+        <div className="v7-craft-head">
           <p className="v7-eyebrow">{copy.craftEyebrow}</p>
-          <h2 id="craft-title" className="v7-section-title"><em>{copy.craftTitle}</em></h2>
-          <p>{copy.craftBody}</p>
-          <ol>
-            {copy.craftCallouts.map((item, index) => (
-              <li key={item}><span>{String(index + 1).padStart(2, "0")}</span>{item}</li>
-            ))}
-          </ol>
+          <h2 id="craft-title" className="v7-section-title">
+            {titleLines.flatMap((line, index) => (index === 0 ? [line] : [<br key={index} />, line]))}
+          </h2>
+          <p className="v7-craft-lead">{copy.craftBody}</p>
         </div>
+
+        <ol className="v7-craft-args">
+          {copy.craftCallouts.map((item, index) => (
+            <li key={item}><span>{String(index + 1).padStart(2, "0")}</span>{item}</li>
+          ))}
+        </ol>
+
+        <ul className="v7-craft-bullets">
+          {copy.craftBullets.map((item) => (
+            <li key={item}><CheckIcon />{item}</li>
+          ))}
+        </ul>
+
+        <ul className="v7-craft-cards">
+          {cards.map((card, index) => (
+            <li
+              key={card.title}
+              className={lastCardSpansFull && index === cards.length - 1 ? "v7-craft-card is-full" : "v7-craft-card"}
+            >
+              <p className="v7-craft-card-title">{card.title}</p>
+              <p className="v7-craft-card-body">{card.body}</p>
+            </li>
+          ))}
+        </ul>
+
+        {/* La foto va antes que el CTA en el marcado a propósito: en móvil
+            el orden pedido es tarjetas → foto → CTA, y así coincide con el
+            recorrido de foco además del visual (`grid-template-areas` sólo
+            reordena la pintura, no el tabulador). En escritorio no cambia
+            nada — la foto sigue siendo la columna aparte de la derecha. */}
         <figure className="v7-craft-figure">
           <Image
             src="/images/proyectos/cocina-cuarzo-05.jpeg"
             alt=""
             fill
-            sizes="(min-width: 900px) 55vw, 100vw"
+            sizes="(min-width: 901px) 46vw, 100vw"
             className="object-cover"
           />
           <figcaption>Andrade Parra Corporation · Houston, TX</figcaption>
         </figure>
+
+        <Link href="/quote" className="v7-text-link v7-craft-cta">
+          {copy.craftCtaLabel}
+          <span aria-hidden="true">→</span>
+        </Link>
       </div>
     </section>
   );

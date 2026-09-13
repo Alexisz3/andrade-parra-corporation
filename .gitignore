@@ -20,23 +20,75 @@ _fotos_originales/
 # sin consentimiento por escrito. No reincorporar sin autorización firmada.
 public/images/proyectos/cocina-cuarzo-04.jpeg
 public/images/proyectos/cocina-cuarzo-06.jpeg
+public/images/proyectos/estructura-03.jpeg
+public/images/proyectos/estructura-06.jpeg
+public/images/proyectos/proyecto-05.jpeg
+public/images/proyectos/proyecto-06.jpeg
+public/images/proyectos/proyecto-10.jpeg
+public/images/proyectos/proyecto-13.jpeg
+public/images/proyectos/proyecto-15.jpeg
+public/images/proyectos/proyecto-16.jpeg
+public/images/proyectos/proyecto-22.jpeg
+public/images/proyectos/proyecto-24.jpeg
 
 # Fotografías no usadas por la aplicación actual. Permanecen locales para
 # revisión del cliente, pero no se publican por inercia en el repositorio.
+# `cocina-cuarzo-02/-07` y `estructura-05/-07` YA NO están aquí: son la
+# misma obra que su portada, sin nadie en el encuadre, y ahora forman parte
+# de la galería de su ficha (content/projects.ts).
 public/images/proyectos/acabado-01.jpeg
 public/images/proyectos/bano-02.jpeg
 public/images/proyectos/cocina-cuarzo-01.jpeg
-public/images/proyectos/cocina-cuarzo-02.jpeg
 public/images/proyectos/cocina-cuarzo-03.jpeg
-public/images/proyectos/cocina-cuarzo-07.jpeg
 public/images/proyectos/demolicion-01.jpeg
 public/images/proyectos/demolicion-02.jpeg
-public/images/proyectos/estructura-03.jpeg
-public/images/proyectos/estructura-05.jpeg
-public/images/proyectos/estructura-06.jpeg
-public/images/proyectos/estructura-07.jpeg
 public/images/proyectos/exterior-jardin-02.jpeg
 public/images/proyectos/plomeria-02-descartada.jpeg
+
+# Lote proyecto-01..29.jpeg (subido 2026-09-12, sin catalogar): baño en
+# mármol/demolición sin confirmar que sea el mismo espacio (01-04), tubería
+# genérica sin contexto (07), cerca lateral sin vincular con seguridad a una
+# obra (12), detalle decorativo que no parece obra propia — no coincide con
+# el estilo de fachada de Houston del resto del catálogo (18 recorte de
+# rostro parcial, se descarta por cautela; 29). El 28 es un duplicado exacto
+# de `exterior-lujo-01.jpeg`, ya publicado. El resto (08,09,11,14,17,19,20,
+# 21,23,25,26,27) ya forman parte de una ficha con su nombre descriptivo
+# (cochera-nueva-*, cochera-arcos-*, cocina-cascada-cuarzo-*,
+# cocina-granito-salvia-*).
+public/images/proyectos/proyecto-01.jpeg
+public/images/proyectos/proyecto-02.jpeg
+public/images/proyectos/proyecto-03.jpeg
+public/images/proyectos/proyecto-04.jpeg
+public/images/proyectos/proyecto-07.jpeg
+public/images/proyectos/proyecto-08.jpeg
+public/images/proyectos/proyecto-09.jpeg
+public/images/proyectos/proyecto-11.jpeg
+public/images/proyectos/proyecto-12.jpeg
+public/images/proyectos/proyecto-14.jpeg
+public/images/proyectos/proyecto-17.jpeg
+public/images/proyectos/proyecto-18.jpeg
+public/images/proyectos/proyecto-19.jpeg
+public/images/proyectos/proyecto-20.jpeg
+public/images/proyectos/proyecto-21.jpeg
+public/images/proyectos/proyecto-23.jpeg
+public/images/proyectos/proyecto-25.jpeg
+public/images/proyectos/proyecto-26.jpeg
+public/images/proyectos/proyecto-27.jpeg
+public/images/proyectos/proyecto-28.jpeg
+public/images/proyectos/proyecto-29.jpeg
+
+# Lote original del cliente (IMG_3468–IMG_3515) sin catalogar, colocado aquí
+# solo para revisarlo y procesarlo con sharp. Ninguna ficha referencia estos
+# nombres — todo usa las versiones ya redimensionadas con nombre descriptivo.
+# No deben publicarse: incluyen encuadres descartados y material aún sin
+# criterio de selección definitivo.
+public/images/proyectos/IMG_*.JPG
+
+# Copias sueltas de fotos originales del cliente (mismo nombre de fábrica de
+# WhatsApp que ya está resguardado en `_fotos_originales/`), encontradas
+# directamente en la carpeta pública sin revisar ni catalogar. Ninguna ficha
+# las referencia por este nombre — no deben publicarse.
+public/images/proyectos/WhatsApp Image*.jpeg
 
 # Salidas de QA: capturas pesadas, se regeneran con `node qa/capture.mjs`.
 qa/shots/
@@ -61,3 +113,4 @@ skills-lock.json
 # Residuos de ejecuciones de QA (Lighthouse, pruebas del formulario).
 output/
 tmp/
+.vercel

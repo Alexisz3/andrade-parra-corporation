@@ -9,11 +9,9 @@ import Footer from "@/components/Footer";
 import StructuredData from "@/components/StructuredData";
 import TrustBar from "@/components/home/TrustBar";
 import V7HeroPremium from "@/components/home/V7HeroPremium";
-import {
-  V7AboutPreview,
-  V7FeaturedProjects,
-  V7ServicesPreview,
-} from "@/components/home/V7HomePreviews";
+import V7FeaturedProjects from "@/components/home/V7FeaturedProjects";
+import V7ServicesAccordion from "@/components/home/V7ServicesAccordion";
+import { V7AboutPreview } from "@/components/home/V7HomePreviews";
 import GlobalCta from "@/components/GlobalCta";
 
 export default async function HomePage({ params }: PageProps<"/[locale]">) {
@@ -67,12 +65,10 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             body: t("featuredPreviewBody"),
             action: t("featuredPreviewAction"),
             viewProject: t("viewProject"),
-            previous: t("previous"),
-            next: t("next"),
             footer: t("featuredPreviewFooter"),
           }}
         />
-        <V7ServicesPreview
+        <V7ServicesAccordion
           services={getPublishedServices()}
           locale={locale}
           copy={{
@@ -80,6 +76,10 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             title: t("servicesPreviewTitle"),
             body: t("servicesPreviewBody"),
             action: t("servicesPreviewAction"),
+            viewProjects: t("servicesPreviewProjects"),
+            footerScope: t("servicesPreviewFooterScope"),
+            // Mismo dato de lugar que ya usan el hero y content/projects.ts.
+            location: "Houston, TX",
           }}
         />
         <V7AboutPreview
@@ -90,7 +90,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             action: t("aboutPreviewAction"),
           }}
         />
-        <GlobalCta variant="home" />
+        <GlobalCta />
       </main>
       <Footer />
     </>

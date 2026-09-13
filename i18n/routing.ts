@@ -40,6 +40,24 @@ export const LOCALE_CODES: Record<AppLocale, string> = {
 };
 
 /**
+ * Nombre y descripción de cada opción del selector de idioma.
+ *
+ * A propósito NO viven en `messages/*.json`: cada idioma se nombra a sí
+ * mismo, sin importar en qué idioma esté el resto del sitio — la opción
+ * "Español" dice "Español" tanto si el visitante ya está en /es como si
+ * está en /en. Traducirlas por locale activo produciría lo contrario de
+ * lo que un selector de idioma necesita mostrar.
+ */
+export const LOCALE_NAMES: Record<AppLocale, string> = {
+  "es-US": "Español",
+  "en-US": "English",
+};
+export const LOCALE_TAGLINES: Record<AppLocale, string> = {
+  "es-US": "Sitio en español",
+  "en-US": "English site",
+};
+
+/**
  * Registro único de rutas: aquí nace la navegación, el canonical, los
  * hreflang alternates y el sitemap. Si una ruta no está aquí, no existe
  * de forma coherente en el sitio.

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useId, useState } from "react";
+import { useId, useState, type KeyboardEvent } from "react";
 import type { BeforeAfterPair } from "@/content/before-after";
 
 interface BeforeAfterProps {
@@ -11,13 +11,17 @@ interface BeforeAfterProps {
   sliderLabel: string;
 }
 
+const KEYBOARD_STEP = 5;
+
 /**
  * Comparador antes/después.
  *
- * El control es un `input[type=range]` real, no un div con eventos de puntero:
- * así funciona de fábrica con ratón, gesto táctil, teclado (flechas, Home, End)
- * y lectores de pantalla, y no interfiere con el scroll vertical de la página.
- * Sin JavaScript se ve la foto «después» completa, que es el estado útil.
+ * El control es un `input[type=range]` real estirado sobre toda la foto
+ * (pista y manija propias ocultas vía CSS, no `opacity:0` — así conserva su
+ * anillo de foco nativo): arrastrar en cualquier punto de la imagen mueve el
+ * divisor, con ratón, dedo o teclado de fábrica. El círculo central y la
+ * línea divisoria son puramente decorativos, sincronizados con `position`
+ * pero con `pointer-events:none` — nunca interceptan el gesto.
  */
 export default function BeforeAfter({
   pair,
@@ -28,44 +32,50 @@ export default function BeforeAfter({
   const [position, setPosition] = useState(pair.initialPosition);
   const sliderId = useId();
 
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      setPosition((current) => Math.max(0, current - KEYBOARD_STEP));
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      setPosition((current) => Math.min(100, current + KEYBOARD_STEP));
+    }
+  };
+
   return (
-    <figure className="w-full">
-      <div className="relative aspect-[4/3] w-full overflow-hidden border border-steel/50">
+    <div className="v7-compare">
+      <Image
+        src={`/images/proyectos/${pair.afterFile}`}
+        alt={pair.afterAlt}
+        fill
+        priority
+        className="v7-compare-image"
+        sizes="(min-width: 1024px) 62vw, 100vw"
+      />
+
+      {/* La foto «antes» se recorta según la posición del divisor. */}
+      <div
+        className="v7-compare-before"
+        style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
+      >
         <Image
-          src={`/images/proyectos/${pair.afterFile}`}
-          alt={pair.afterAlt}
+          src={`/images/proyectos/${pair.beforeFile}`}
+          alt={pair.beforeAlt}
           fill
-          className="object-cover"
-          sizes="(min-width: 1024px) 560px, 100vw"
+          priority
+          className="v7-compare-image"
+          sizes="(min-width: 1024px) 62vw, 100vw"
         />
-
-        {/* La foto «antes» se recorta según la posición del divisor. */}
-        <div
-          className="absolute inset-0"
-          style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
-        >
-          <Image
-            src={`/images/proyectos/${pair.beforeFile}`}
-            alt={pair.beforeAlt}
-            fill
-            className="object-cover"
-            sizes="(min-width: 1024px) 560px, 100vw"
-          />
-        </div>
-
-        <div
-          className="pointer-events-none absolute inset-y-0 w-0.5 bg-redline"
-          style={{ left: `${position}%` }}
-          aria-hidden="true"
-        />
-
-        <span className="pointer-events-none absolute left-3 top-3 bg-ink/85 px-2 py-1 font-mono text-xs uppercase tracking-wider text-bone">
-          {beforeLabel}
-        </span>
-        <span className="pointer-events-none absolute right-3 top-3 bg-ink/85 px-2 py-1 font-mono text-xs uppercase tracking-wider text-bone">
-          {afterLabel}
-        </span>
       </div>
+
+      <div className="v7-compare-divider" style={{ left: `${position}%` }} aria-hidden="true" />
+      <div className="v7-compare-handle" style={{ left: `${position}%` }} aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6" /></svg>
+        <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" /></svg>
+      </div>
+
+      <span className="v7-compare-tag is-before">{beforeLabel}</span>
+      <span className="v7-compare-tag is-after">{afterLabel}</span>
 
       <label htmlFor={sliderId} className="sr-only">
         {sliderLabel}
@@ -78,12 +88,10 @@ export default function BeforeAfter({
         step={1}
         value={position}
         onChange={(event) => setPosition(Number(event.target.value))}
-        // Área táctil de 44px y acento visible en ambos temas.
-        className="mt-3 h-11 w-full cursor-ew-resize accent-redline"
+        onKeyDown={handleKeyDown}
+        className="v7-compare-input"
         aria-valuetext={`${position}%`}
       />
-
-      <figcaption className="mt-1 font-mono text-xs text-graphite">{pair.project}</figcaption>
-    </figure>
+    </div>
   );
 }

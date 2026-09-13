@@ -11,6 +11,25 @@ import type { ProjectCategory } from "./projects";
  * describe como orientativo porque cada obra es distinta y el cliente no ha
  * validado alcances concretos por servicio.
  */
+/**
+ * Iconos lineales de los atributos del acordeón de la portada. La lista es
+ * cerrada a propósito: el componente dibuja un SVG por nombre y un nombre
+ * suelto no tendría dibujo.
+ */
+export type ServiceHighlightIcon =
+  | "home"
+  | "key"
+  | "layers"
+  | "ruler"
+  | "grid"
+  | "wrench"
+  | "refresh";
+
+export interface ServiceHighlight {
+  icon: ServiceHighlightIcon;
+  label: Record<AppLocale, string>;
+}
+
 export interface Service {
   /** Estable e independiente del idioma. Se usa para emparejar slugs y para
    *  preseleccionar el servicio en el formulario de cotización. */
@@ -18,6 +37,16 @@ export interface Service {
   slugs: Record<AppLocale, string>;
   title: Record<AppLocale, string>;
   shortDescription: Record<AppLocale, string>;
+  /**
+   * Dos atributos cortos para el acordeón de la portada. Exactamente dos: a
+   * 360 px una tercera etiqueta parte la fila en dos líneas. La ubicación no
+   * va aquí — el componente la añade desde `location`, que es igual para
+   * todos los servicios.
+   *
+   * Rige la misma REGLA DE CONTENIDO del encabezado del archivo: son
+   * etiquetas de alcance, no promesas.
+   */
+  highlights: [ServiceHighlight, ServiceHighlight];
   introduction: Record<AppLocale, string>;
   scopeItems: Record<AppLocale, string[]>;
   processSummary: Record<AppLocale, string[]>;
@@ -50,6 +79,10 @@ export const SERVICES: Service[] = [
       "es-US": "Casas nuevas a medida con atención al detalle y ejecución precisa.",
       "en-US": "Custom new homes with attention to detail and precise execution.",
     },
+    highlights: [
+      { icon: "home", label: { "es-US": "Residencial", "en-US": "Residential" } },
+      { icon: "key", label: { "es-US": "Llave en mano", "en-US": "Turnkey" } },
+    ],
     introduction: {
       "es-US":
         "Construimos viviendas nuevas desde la planificación hasta la entrega. Cada proyecto parte de lo que usted necesita: el terreno, la distribución que busca y cómo quiere vivir el espacio. El alcance se define después de revisar el proyecto en conjunto.",
@@ -108,9 +141,13 @@ export const SERVICES: Service[] = [
     slugs: { "es-US": "remodelaciones", "en-US": "remodeling" },
     title: { "es-US": "Remodelaciones", "en-US": "Remodeling" },
     shortDescription: {
-      "es-US": "Transformamos espacios existentes para adaptarlos a su estilo de vida.",
-      "en-US": "We transform existing spaces to fit your lifestyle.",
+      "es-US": "Transformamos espacios existentes en ambientes funcionales, modernos y atemporales.",
+      "en-US": "We transform existing spaces into functional, modern and timeless environments.",
     },
+    highlights: [
+      { icon: "home", label: { "es-US": "Residencial", "en-US": "Residential" } },
+      { icon: "layers", label: { "es-US": "Interior / Exterior", "en-US": "Indoor / Outdoor" } },
+    ],
     introduction: {
       "es-US":
         "Renovamos espacios que ya existen: desde una habitación hasta una vivienda completa. Antes de proponer nada revisamos el estado real de lo que hay, porque en remodelación lo que se encuentra al abrir un muro cambia el alcance.",
@@ -169,9 +206,13 @@ export const SERVICES: Service[] = [
     slugs: { "es-US": "cocinas-y-banos", "en-US": "kitchens-and-bathrooms" },
     title: { "es-US": "Cocinas y baños", "en-US": "Kitchens & bathrooms" },
     shortDescription: {
-      "es-US": "Diseño y renovación con acabados de calidad y funcionalidad.",
-      "en-US": "Design and renovation with quality finishes and function.",
+      "es-US": "Diseñamos y renovamos cocinas y baños que combinan funcionalidad, estética y durabilidad.",
+      "en-US": "We design and renovate kitchens and bathrooms that combine function, aesthetics and durability.",
     },
+    highlights: [
+      { icon: "ruler", label: { "es-US": "Diseño a medida", "en-US": "Custom design" } },
+      { icon: "grid", label: { "es-US": "Materiales premium", "en-US": "Premium materials" } },
+    ],
     introduction: {
       "es-US":
         "Cocinas y baños son los espacios donde más se nota el acabado y donde más instalaciones se cruzan. Trabajamos encimeras, salpicaderos, gabinetes, revestimientos y la plomería que hay detrás, coordinando cada etapa para que el resultado funcione además de verse bien.",
@@ -230,9 +271,13 @@ export const SERVICES: Service[] = [
     slugs: { "es-US": "espacios-exteriores", "en-US": "outdoor-spaces" },
     title: { "es-US": "Espacios exteriores", "en-US": "Outdoor spaces" },
     shortDescription: {
-      "es-US": "Patios, terrazas, cocinas exteriores y piscinas construidas para durar.",
-      "en-US": "Patios, decks, outdoor kitchens, and pools built to last.",
+      "es-US": "Creamos espacios exteriores pensados para disfrutar, convivir y aprovechar mejor cada propiedad.",
+      "en-US": "We create outdoor spaces made for enjoying, gathering and getting more out of every property.",
     },
+    highlights: [
+      { icon: "layers", label: { "es-US": "Exterior", "en-US": "Outdoor" } },
+      { icon: "refresh", label: { "es-US": "Remodelación", "en-US": "Remodeling" } },
+    ],
     introduction: {
       "es-US":
         "Construimos espacios exteriores pensados para el clima de Houston: terrazas, patios, cocinas al aire libre, cocheras y estructuras de sombra. El material y el drenaje pesan tanto como el diseño, y eso se decide sobre el terreno.",
@@ -291,9 +336,13 @@ export const SERVICES: Service[] = [
     slugs: { "es-US": "reparaciones-y-mejoras", "en-US": "repairs-and-improvements" },
     title: { "es-US": "Reparaciones y mejoras", "en-US": "Repairs & improvements" },
     shortDescription: {
-      "es-US": "Soluciones confiables para mantener y mejorar su propiedad.",
-      "en-US": "Reliable solutions to maintain and improve your property.",
+      "es-US": "Resolvemos reparaciones y mejoras con atención directa, alcance claro y ejecución cuidada.",
+      "en-US": "We handle repairs and improvements with direct attention, clear scope and careful execution.",
     },
+    highlights: [
+      { icon: "wrench", label: { "es-US": "Mantenimiento", "en-US": "Maintenance" } },
+      { icon: "home", label: { "es-US": "Mejora residencial", "en-US": "Home upgrade" } },
+    ],
     introduction: {
       "es-US":
         "No toda intervención es una obra completa. Atendemos reparaciones puntuales y mejoras: daños por humedad, muros deteriorados, instalaciones que fallan o espacios que necesitan una actualización. Revisamos primero para entender el origen del problema, no solo lo visible.",

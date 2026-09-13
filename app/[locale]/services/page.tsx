@@ -77,7 +77,7 @@ export default async function ServicesPage({ params }: PageProps<"/[locale]/serv
           }}
         />
 
-        <GlobalCta />
+        <GlobalCta eyebrow={tv7("ctaServicesEyebrow")} title={tv7("ctaServicesTitle")} />
       </main>
       <Footer />
     </>

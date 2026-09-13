@@ -19,6 +19,12 @@ export async function getV7EditorialCopy(): Promise<V7EditorialCopy> {
     craftTitle: t("craftTitle"),
     craftBody: t("craftBody"),
     craftCallouts: [t("craftCallout1"), t("craftCallout2"), t("craftCallout3")],
+    craftBullets: [t("craftBullet1"), t("craftBullet2"), t("craftBullet3")],
+    craftCards: [1, 2, 3, 4, 5].map((n) => ({
+      title: t(`craftCard${n}Title`),
+      body: t(`craftCard${n}Body`),
+    })),
+    craftCtaLabel: t("craftCtaLabel"),
     aboutEyebrow: t("aboutEyebrow"),
     aboutTitle: t("aboutTitle"),
     aboutBody: t("aboutBody"),

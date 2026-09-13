@@ -1,0 +1,101 @@
+# Qué NO se sube a Vercel al desplegar desde local.
+#
+# `vercel deploy` sube el directorio de trabajo, no lo que hay en Git — y
+# cuando este archivo existe, Vercel deja de mirar `.gitignore` por su
+# cuenta. Por eso este archivo REPITE las exclusiones de `.gitignore`
+# (privacidad, secretos) además de las suyas propias: sin ellas viajarían
+# tanto los ficheros sin versionar como los que `.gitignore` mantiene fuera
+# del repositorio a propósito, y quedarían accesibles en la URL de preview.
+
+# Build y dependencias — no hace falta subirlos, Vercel construye desde cero.
+/node_modules
+/.next/
+/out/
+.git/
+*.tsbuildinfo
+npm-debug.log*
+
+# Secretos. Nunca subir variables de entorno reales; la plantilla sin
+# secretos sí puede viajar (documenta qué variables existen).
+.env*
+!.env.example
+
+# Material con datos personales — mismo motivo que en `.gitignore`.
+Formulario_Requerimientos_Web_Rellenable.pdf
+*.zip
+_fotos_originales/
+
+# Rostro de operario identificable sin consentimiento por escrito. No
+# reincorporar a ningún deploy sin autorización firmada.
+public/images/proyectos/cocina-cuarzo-04.jpeg
+public/images/proyectos/cocina-cuarzo-06.jpeg
+public/images/proyectos/proyecto-05.jpeg
+public/images/proyectos/proyecto-06.jpeg
+public/images/proyectos/proyecto-10.jpeg
+public/images/proyectos/proyecto-13.jpeg
+public/images/proyectos/proyecto-15.jpeg
+public/images/proyectos/proyecto-16.jpeg
+public/images/proyectos/proyecto-22.jpeg
+public/images/proyectos/proyecto-24.jpeg
+
+# Fotografías no usadas por la aplicación actual — quedan locales para
+# revisión del cliente, no se publican por inercia. `cocina-cuarzo-02/-07` y
+# `estructura-05/-07` YA NO están aquí: ahora forman parte de la galería de
+# su ficha (content/projects.ts) y deben viajar al deploy.
+public/images/proyectos/acabado-01.jpeg
+public/images/proyectos/bano-02.jpeg
+public/images/proyectos/cocina-cuarzo-01.jpeg
+public/images/proyectos/cocina-cuarzo-03.jpeg
+public/images/proyectos/demolicion-01.jpeg
+public/images/proyectos/demolicion-02.jpeg
+public/images/proyectos/estructura-03.jpeg
+public/images/proyectos/estructura-06.jpeg
+public/images/proyectos/exterior-jardin-02.jpeg
+public/images/proyectos/plomeria-02-descartada.jpeg
+
+# Lote proyecto-01..29.jpeg sin catalogar — ver el comentario equivalente
+# en .gitignore para el detalle de cada exclusión.
+public/images/proyectos/proyecto-01.jpeg
+public/images/proyectos/proyecto-02.jpeg
+public/images/proyectos/proyecto-03.jpeg
+public/images/proyectos/proyecto-04.jpeg
+public/images/proyectos/proyecto-07.jpeg
+public/images/proyectos/proyecto-08.jpeg
+public/images/proyectos/proyecto-09.jpeg
+public/images/proyectos/proyecto-11.jpeg
+public/images/proyectos/proyecto-12.jpeg
+public/images/proyectos/proyecto-14.jpeg
+public/images/proyectos/proyecto-17.jpeg
+public/images/proyectos/proyecto-18.jpeg
+public/images/proyectos/proyecto-19.jpeg
+public/images/proyectos/proyecto-20.jpeg
+public/images/proyectos/proyecto-21.jpeg
+public/images/proyectos/proyecto-23.jpeg
+public/images/proyectos/proyecto-25.jpeg
+public/images/proyectos/proyecto-26.jpeg
+public/images/proyectos/proyecto-27.jpeg
+public/images/proyectos/proyecto-28.jpeg
+public/images/proyectos/proyecto-29.jpeg
+
+# Fotos del cliente aún sin revisar ni catalogar en content/projects.ts.
+# La auditoría exige revisión visual previa (rostros identificables,
+# coherencia de ubicación) antes de publicar cualquier foto.
+public/images/proyectos/IMG_*.JPG
+
+# Copias sueltas de fotos originales del cliente (mismo nombre de fábrica de
+# WhatsApp que ya está resguardado en `_fotos_originales/`), encontradas
+# directamente en la carpeta pública sin revisar ni catalogar.
+public/images/proyectos/WhatsApp Image*.jpeg
+
+# Exploración de diseño y salidas de pruebas — material de trabajo, no
+# entra en la aplicación.
+design/
+test-results/
+playwright-report/
+qa/
+
+# Residuos de ejecuciones de QA y herramientas locales de los agentes.
+tmp/
+output/
+.claude/
+.DS_Store

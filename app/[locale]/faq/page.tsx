@@ -45,6 +45,7 @@ export default async function FaqPage({ params }: PageProps<"/[locale]/faq">) {
 
   const editorialCopy = await getV7EditorialCopy();
   const tf = await getTranslations("Faq");
+  const tv7 = await getTranslations("HomeV7");
 
   return (
     <>
@@ -70,7 +71,7 @@ export default async function FaqPage({ params }: PageProps<"/[locale]/faq">) {
         />
 
         <V7Faq copy={editorialCopy} />
-        <GlobalCta />
+        <GlobalCta eyebrow={tv7("ctaFaqEyebrow")} title={tv7("ctaFaqTitle")} />
       </main>
       <Footer />
     </>

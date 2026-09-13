@@ -103,6 +103,13 @@ export default async function ProjectsPage({ params }: PageProps<"/[locale]/proj
             before: tv7("beforeLabel"),
             after: tv7("afterLabel"),
             slider: t("compareLabel"),
+            previous: tv7("previous"),
+            next: tv7("next"),
+            counter: t("counter"),
+            trust1: tv7("beforeAfterTrust1"),
+            trust2: tv7("beforeAfterTrust2"),
+            trust3: tv7("beforeAfterTrust3"),
+            cta: tv7("beforeAfterCta"),
           }}
         />
 
