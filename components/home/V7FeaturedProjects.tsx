@@ -22,18 +22,16 @@ function PinIcon() {
 }
 
 /**
- * Avance de proyectos en la portada. No es un acordeón: cada obra enseña su
- * foto de entrada y la tarjeta entera es UN enlace al proyecto.
+ * Avance de proyectos en la portada — un TEASER, no una galería. Exactamente
+ * dos obras: una protagonista y una secundaria más compacta, cada tarjeta un
+ * único enlace directo al proyecto. El Home introduce; quien quiera ver más
+ * obras va a /proyectos — por eso aquí no hay una tercera tarjeta ni un
+ * acordeón: dos son suficientes para generar curiosidad sin sustituir la
+ * página que sí demuestra el trabajo completo.
  *
- * El acordeón anterior costaba dos toques para llegar a una obra —abrir la
- * fila y luego acertar en un botón de 133x44 superpuesto a la foto— y dejaba
- * dos de las tres fotos escondidas; en un móvil, donde el scroll es barato y
- * la foto es el argumento de venta, salía caro. Aquí el objetivo táctil es la
- * tarjeta completa y no hay estado que mantener, así que el componente es de
- * servidor y no manda JavaScript al navegador.
- *
- * Las tres imágenes quedan por debajo del pliegue (el hero ya precarga la
- * suya), así que ninguna lleva `preload`: cargan en diferido.
+ * No hay estado que mantener, así que el componente es de servidor y no
+ * manda JavaScript al navegador. Las dos imágenes quedan por debajo del
+ * pliegue (el hero ya precarga la suya), así que ninguna lleva `preload`.
  */
 export default function V7FeaturedProjects({
   projects,
@@ -46,7 +44,7 @@ export default function V7FeaturedProjects({
   category: Record<ProjectCategory, string>;
   copy: FeaturedCopy;
 }) {
-  const featured = projects.slice(0, 3);
+  const featured = projects.slice(0, 2);
 
   if (!featured.length) return null;
 

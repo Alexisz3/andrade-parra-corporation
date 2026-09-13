@@ -369,16 +369,17 @@ export const PROJECTS: Project[] = [
     status: "completed",
     title: { "es-US": "Reparaciones exteriores", "en-US": "Exterior repairs" },
     excerpt: {
-      "es-US": "Reparación de pared de ladrillo y mejoras en paisajismo y drenaje.",
-      "en-US": "Brick wall repair with landscaping and drainage improvements.",
+      "es-US": "Jardineras nuevas y mejoras de paisajismo junto al área de patio cubierta.",
+      "en-US": "New planting beds and landscaping improvements next to the covered patio area.",
     },
     location: "Houston, TX",
     coverPhoto: { file: "exterior-jardin-01.jpeg", orientation: "vertical" },
     gallery: [{ file: "exterior-jardin-01.jpeg", orientation: "vertical" }],
     featuredOnHome: false,
     // Alcance corto a propósito: la única foto disponible es del área de
-    // patio con jardineras ya terminadas — no muestra la reparación de pared
-    // que menciona el extracto, así que aquí solo entra lo que sí se ve.
+    // patio con jardineras ya terminadas. El extracto ANTES afirmaba una
+    // "reparación de pared de ladrillo" que ninguna foto de este proyecto
+    // muestra — se corrigió para no prometer algo que no se puede verificar.
     scope: {
       "es-US": ["Jardineras nuevas junto al área de patio cubierta"],
       "en-US": ["New planting beds next to the covered patio area"],
@@ -386,6 +387,10 @@ export const PROJECTS: Project[] = [
     workCompleted: {
       "es-US": ["Paisajismo"],
       "en-US": ["Landscaping"],
+    },
+    result: {
+      "es-US": "El área de patio cubierta quedó con jardineras nuevas, integrando vegetación junto al espacio de estar exterior.",
+      "en-US": "The covered patio area was finished with new planting beds, bringing greenery right up against the outdoor living space.",
     },
   },
   {

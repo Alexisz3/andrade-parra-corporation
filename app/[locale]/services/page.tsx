@@ -8,7 +8,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import V7EditorialCover from "@/components/home/V7EditorialCover";
 import GlobalCta from "@/components/GlobalCta";
-import V7Services from "@/components/home/V7Services";
+import V7ServicesAccordion from "@/components/home/V7ServicesAccordion";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -65,15 +65,17 @@ export default async function ServicesPage({ params }: PageProps<"/[locale]/serv
           }}
         />
 
-        <V7Services
+        <V7ServicesAccordion
           services={services}
+          locale={locale as AppLocale}
           copy={{
             eyebrow: tv7("servicesEyebrow"),
-            titleLead: tv7("servicesTitleLead"),
-            titleAccent: tv7("servicesTitleAccent"),
-            intro: tv7("servicesIntro"),
-            detail: tv7("serviceDetail"),
-            quote: tn("quote"),
+            title: `${tv7("servicesTitleLead")} ${tv7("servicesTitleAccent")}`,
+            body: tv7("servicesIntro"),
+            viewProjects: ts("viewRelatedProjects"),
+            // Mismo dato de lugar que el resto del sitio.
+            location: "Houston, TX",
+            footerScope: tv7("servicesPreviewFooterScope"),
           }}
         />
 

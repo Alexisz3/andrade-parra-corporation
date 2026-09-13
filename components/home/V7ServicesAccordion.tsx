@@ -10,8 +10,9 @@ export interface ServicesAccordionCopy {
   eyebrow: string;
   title: string;
   body: string;
-  /** CTA final de la sección — lleva al listado completo. */
-  action: string;
+  /** CTA final de la sección, si aplica — en la página de Servicios no hay
+   *  a dónde más llevar (ya es el listado completo), así que se omite. */
+  action?: string;
   /** CTA dentro de cada servicio abierto. */
   viewProjects: string;
   location: string;
@@ -82,7 +83,15 @@ function PinIcon() {
 }
 
 /**
- * Servicios en la portada. Acordeón de apertura única.
+ * Página de Servicios — acordeón vertical de apertura única, mobile-first.
+ *
+ * Sustituye a la lista horizontal con scroll-snap (`V7Services.tsx`, ya
+ * retirada) que en móvil se comportaba como un carrusel sin avisar: título
+ * cortado por `flex-basis`, servicio "activo" decidido por un
+ * IntersectionObserver que reaccionaba al scroll en vez de al toque, y
+ * ningún indicador de que había más contenido a los lados. Aquí no hay nada
+ * que deslizar: la lista es vertical, cada fila es un `button` real, y el
+ * usuario decide qué ve tocando, no arrastrando.
  *
  * Un solo estado, `activeId`, gobierna las dos composiciones: en móvil y
  * tablet abre el panel de la fila; en escritorio cambia la foto de la columna
@@ -97,7 +106,7 @@ function PinIcon() {
  * viaja en el HTML inicial —es la que ve un escritorio nada más llegar— y las
  * demás entran en `revealed` la primera vez que se abren o se sobrevuelan. En
  * móvil la columna derecha está en `display:none`, que el navegador nunca
- * descarga, así que la portada no paga ninguna foto de servicio hasta que el
+ * descarga, así que la página no paga ninguna foto de servicio hasta que el
  * visitante toca una fila.
  */
 export default function V7ServicesAccordion({
@@ -160,7 +169,7 @@ export default function V7ServicesAccordion({
   if (!services.length) return null;
 
   return (
-    <section className="v8-svc" aria-labelledby="services-preview-title">
+    <section id="servicios" className="v8-svc" aria-labelledby="services-preview-title">
       <div className="v8-svc-container">
         <div className="v8-svc-left">
           <p className="v8-svc-eyebrow">
@@ -219,7 +228,7 @@ export default function V7ServicesAccordion({
                         ) : null}
                       </div>
 
-                      <p className="v8-svc-panel-desc">{service.shortDescription[locale]}</p>
+                      <p className="v8-svc-panel-desc">{service.introduction[locale]}</p>
 
                       <ul className="v8-svc-tags">
                         {service.highlights.map((highlight) => (
@@ -252,10 +261,12 @@ export default function V7ServicesAccordion({
             })}
           </ul>
 
-          <Link href="/services" className="v8-svc-cta">
-            {copy.action}
-            <span aria-hidden="true">→</span>
-          </Link>
+          {copy.action ? (
+            <Link href="/services" className="v8-svc-cta">
+              {copy.action}
+              <span aria-hidden="true">→</span>
+            </Link>
+          ) : null}
         </div>
 
         <div className="v8-svc-right" aria-hidden="true">

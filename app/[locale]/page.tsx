@@ -3,14 +3,13 @@ import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing, type AppLocale } from "@/i18n/routing";
 import { getFeaturedProjects, type ProjectCategory } from "@/content/projects";
-import { getPublishedServices } from "@/content/services";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import StructuredData from "@/components/StructuredData";
 import TrustBar from "@/components/home/TrustBar";
 import V7HeroPremium from "@/components/home/V7HeroPremium";
 import V7FeaturedProjects from "@/components/home/V7FeaturedProjects";
-import V7ServicesAccordion from "@/components/home/V7ServicesAccordion";
+import V7ServicesTeaser from "@/components/home/V7ServicesTeaser";
 import { V7AboutPreview } from "@/components/home/V7HomePreviews";
 import GlobalCta from "@/components/GlobalCta";
 
@@ -68,18 +67,17 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             footer: t("featuredPreviewFooter"),
           }}
         />
-        <V7ServicesAccordion
-          services={getPublishedServices()}
-          locale={locale}
+        <V7ServicesTeaser
           copy={{
             eyebrow: t("servicesPreviewEyebrow"),
             title: t("servicesPreviewTitle"),
             body: t("servicesPreviewBody"),
             action: t("servicesPreviewAction"),
-            viewProjects: t("servicesPreviewProjects"),
-            footerScope: t("servicesPreviewFooterScope"),
-            // Mismo dato de lugar que ya usan el hero y content/projects.ts.
-            location: "Houston, TX",
+            rows: [
+              { title: t("servicesPreviewRow1Title"), body: t("servicesPreviewRow1Body") },
+              { title: t("servicesPreviewRow2Title"), body: t("servicesPreviewRow2Body") },
+              { title: t("servicesPreviewRow3Title"), body: t("servicesPreviewRow3Body") },
+            ],
           }}
         />
         <V7AboutPreview

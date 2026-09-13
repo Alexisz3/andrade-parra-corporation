@@ -690,12 +690,12 @@ if (process.env.QA_LEGACY_QUOTE_FLOW === "1") {
   await p.goto(URL + "/es", { waitUntil: "domcontentloaded" });
   await p.waitForTimeout(1000);
   check("Arquitectura: Inicio usa previews V8, no páginas completas",
-    (await p.locator(".v8-editorial-featured,.v8-svc,.v8-about-preview,.v7-cta2").count()) === 4 &&
-    (await p.locator(".v7-projects,.v7-services,.v7-about,.v7-faq,.v7-contact").count()) === 0);
+    (await p.locator(".v8-editorial-featured,.v8-svc-teaser,.v8-about-preview,.v7-cta2").count()) === 4 &&
+    (await p.locator(".v7-projects,.v8-svc,.v7-about,.v7-faq,.v7-contact").count()) === 0);
 
   for (const [path, selector] of [
     ["/es/proyectos", ".v7-projects"],
-    ["/es/servicios", ".v7-services"],
+    ["/es/servicios", ".v8-svc"],
     ["/es/nosotros", ".v7-about"],
     ["/es/contacto", ".v7-contact-page"],
     ["/es/proceso", ".v7-process-timeline"],
@@ -710,20 +710,45 @@ if (process.env.QA_LEGACY_QUOTE_FLOW === "1") {
   await ctx.close();
 }
 
-// ─── 8. Servicios: enlaces únicos y detalles ────────────────────────────
+// ─── 8. Inicio: teaser de servicios (3 categorías, sin acordeón) ────────
 {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const p = await ctx.newPage();
   await p.goto(URL + "/es", { waitUntil: "domcontentloaded" });
+  await p.waitForTimeout(1000);
+
+  // El Home NO debe traer el acordeón completo — eso vive en /servicios.
+  check("Inicio: no incluye el acordeón completo de servicios",
+    (await p.locator(".v8-svc").count()) === 0);
+
+  const rows = p.locator(".v8-svc-teaser-row");
+  const rowsCount = await rows.count();
+  const ctaHref = await p.locator(".v8-svc-teaser-cta").getAttribute("href");
+  check("Inicio: la previa de servicios muestra 3 categorías con un CTA general",
+    rowsCount === 3 && /\/servicios$/.test(ctaHref ?? ""),
+    `${rowsCount} filas · CTA ${ctaHref}`);
+
+  // Cada fila es un enlace completo hacia /servicios — nada que abrir.
+  const rowHrefs = await rows.evaluateAll((els) => els.map((el) => el.getAttribute("href")));
+  check("Inicio: la fila completa del servicio es un enlace a /servicios",
+    rowHrefs.every((h) => /\/servicios$/.test(h ?? "")), JSON.stringify(rowHrefs));
+
+  const box = await rows.first().boundingBox();
+  check("Inicio: la fila de servicio cumple el mínimo táctil de 64px",
+    !!box && box.height >= 64, box ? `${Math.round(box.height)}px` : "sin caja");
+  await ctx.close();
+}
+
+// ─── 8a. Servicios (página dedicada): acordeón vertical, apertura única ──
+{
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const p = await ctx.newPage();
+  await p.goto(URL + "/es/servicios", { waitUntil: "domcontentloaded" });
   await p.waitForTimeout(1200);
 
   const accordionItems = await p.locator(".v8-svc .v8-svc-item").count();
-  const servicesCtaHref = await p
-    .locator(".v8-svc .v8-svc-cta")
-    .getAttribute("href");
-  check("Inicio: la previa de servicios muestra 5 servicios en acordeón con un CTA general",
-    accordionItems === 5 && /\/servicios$/.test(servicesCtaHref ?? ""),
-    `${accordionItems} items · CTA ${servicesCtaHref}`);
+  check("Servicios: la página dedicada muestra los 5 servicios en acordeón",
+    accordionItems === 5, `${accordionItems} items`);
 
   // Apertura única: activar dos filas seguidas nunca deja dos abiertas, y
   // activar la misma fila dos veces la cierra (también debe poder quedar
@@ -755,7 +780,7 @@ if (process.env.QA_LEGACY_QUOTE_FLOW === "1") {
 {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const p = await ctx.newPage();
-  await p.goto(URL + "/es", { waitUntil: "domcontentloaded" });
+  await p.goto(URL + "/es/servicios", { waitUntil: "domcontentloaded" });
   await p.waitForTimeout(1000);
 
   const section = p.locator(".v8-svc");
@@ -790,7 +815,7 @@ if (process.env.QA_LEGACY_QUOTE_FLOW === "1") {
   const p = await ctx.newPage();
   await p.goto(URL + "/es/servicios", { waitUntil: "domcontentloaded" });
   await p.waitForTimeout(1200);
-  const hrefs = await p.locator(".v7-services a[href*='/servicios/']").evaluateAll((els) =>
+  const hrefs = await p.locator(".v8-svc a[href*='/servicios/']").evaluateAll((els) =>
     els.map((e) => e.getAttribute("href"))
   );
   const unique = new Set(hrefs);

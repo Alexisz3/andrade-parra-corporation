@@ -175,8 +175,8 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 
 /* Projects — portfolio editorial en rail horizontal */
 .v7-projects { overflow: hidden; background: var(--color-paper); padding-top: clamp(4rem, 6vw, 5rem); }
-.v7-projects-heading,.v7-services-heading { display: grid; grid-template-columns: minmax(0,1.35fr) minmax(18rem,.65fr); gap: 3rem; align-items: end; }
-.v7-projects-heading > p,.v7-services-heading > p { max-width: 34rem; margin: 0; color: var(--color-muted); font-size: 1.04rem; line-height: 1.65; }
+.v7-projects-heading { display: grid; grid-template-columns: minmax(0,1.35fr) minmax(18rem,.65fr); gap: 3rem; align-items: end; }
+.v7-projects-heading > p { max-width: 34rem; margin: 0; color: var(--color-muted); font-size: 1.04rem; line-height: 1.65; }
 .v7-projects .v7-projects-heading .v7-section-title { font-size: clamp(2.4rem, 4vw, 3.9rem); max-width: 26ch; margin-top: .55rem; line-height: 1; }
 
 .v7-library-toolbar { margin-top: clamp(2.25rem, 3.5vw, 3rem); display: flex; justify-content: space-between; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
@@ -221,27 +221,6 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 .v7-rail-track span { display: block; height: 100%; background: var(--color-brand); transition: width .4s ease; }
 .v7-rail-index { font-family: var(--font-mono); font-size: .8rem; color: var(--color-muted); }
 .v7-rail-note { font-family: var(--font-mono); font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--color-muted); white-space: nowrap; }
-
-/* Services */
-.v7-services { background: var(--color-carbon); color: var(--color-bone); }
-.v7-services-heading > p { color: rgb(252 250 246 / 66%); }
-.v7-services-grid { display: grid; grid-template-columns: minmax(17rem,.7fr) minmax(0,1.3fr); gap: clamp(2rem,6vw,6rem); margin-top: 4rem; align-items: start; }
-.v7-service-list { margin: 0; padding: 0; list-style: none; border-top: 1px solid rgb(252 250 246 / 17%); }
-.v7-service-list a { width: 100%; min-height: 5.25rem; display: grid; grid-template-columns: 2.2rem 1fr auto; gap: .8rem; align-items: center; border-bottom: 1px solid rgb(252 250 246 / 17%); color: rgb(252 250 246 / 58%); text-align: left; text-decoration:none; transition: color .2s, padding .2s; }
-.v7-service-list a[aria-current="true"] { color: var(--color-bone); padding-left: .7rem; }
-.v7-service-list a span { color: rgb(252 250 246 / 58%); font-family: var(--font-mono); font-size: .75rem; }
-.v7-service-list a[aria-current="true"] span { color:var(--color-bone); }
-.v7-service-list a strong { font-family: var(--font-newsreader),serif; font-size: clamp(1.3rem,2.2vw,2rem); font-weight: 500; }
-.v7-service-list a i { color: var(--color-action); font-style: normal; }
-.v7-service-feature { overflow:hidden; border: 1px solid rgb(252 250 246 / 20%); border-radius:var(--v7-radius); }
-.v7-service-image { position: relative; min-height: clamp(20rem,43vw,36rem); overflow: hidden; }
-.v7-service-image img { animation: v7-crossfade .5s ease both; }
-.v7-service-image > span { position:absolute; top:1rem; left:1rem; background:rgb(23 21 18 / 86%); padding:.45rem .65rem; font-family:var(--font-mono); font-size:.72rem; letter-spacing:.1em; }
-.v7-service-copy { padding: clamp(1.4rem,3vw,2.5rem); }
-.v7-service-copy h3 { max-width: 18ch; margin: .7rem 0 1rem; font-family: var(--font-newsreader),serif; font-size: clamp(1.8rem,3.2vw,3rem); line-height: 1.02; font-weight: 500; }
-.v7-service-copy > p:not(.v7-meta) { max-width: 48rem; color: rgb(252 250 246 / 65%); line-height: 1.65; }
-.v7-service-copy > div { display:flex; flex-wrap:wrap; gap:1.5rem; margin-top:1.5rem; }
-.v7-service-copy a { min-height:44px; width:fit-content; display:flex; align-items:center; border-bottom:1px solid var(--color-brand); color:var(--color-bone); font-weight:700; text-decoration:none; }
 
 /* Craft — bloque comercial de detalle (página Nosotros). Seis piezas
    colocadas por nombre (`grid-template-areas`) en vez de anidadas: así el
@@ -754,10 +733,10 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
   .v7-hero-grid { grid-template-columns:1fr; gap:2rem; }
   .v7-hero-copy { padding-bottom:0; }
   .v7-hero-title { font-size:clamp(3.2rem,15vw,5.7rem); }
-  .v7-projects-heading,.v7-services-heading,.v7-services-grid,.v7-about-grid,.v7-faq-grid,.v7-team-head,.v7-quote-heading,.v7-quote-grid { grid-template-columns:1fr; }
+  .v7-projects-heading,.v7-about-grid,.v7-faq-grid,.v7-team-head,.v7-quote-heading,.v7-quote-grid { grid-template-columns:1fr; }
   .v7-transform-layout { grid-template-columns:1fr; grid-template-areas:"intro" "visual" "trust" "cta"; row-gap:2.25rem; }
   .v7-transform-title { max-width:none; }
-  .v7-projects-heading,.v7-services-heading { gap:1.5rem; }
+  .v7-projects-heading { gap:1.5rem; }
 
   /* Craft — una columna; el mapa de áreas reordena la foto entre las
      tarjetas y el CTA (orden pedido para móvil), sin tocar el marcado. */
@@ -782,10 +761,6 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
   .v7-project-filters::-webkit-scrollbar { display: none; }
   .v7-project-filters button { flex: 0 0 auto; }
   .v7-rail-note { display: none; }
-  .v7-services-grid { gap:2rem; }
-  .v7-service-list { display:flex; gap:.7rem; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; }
-  .v7-service-list li { flex:0 0 75%; scroll-snap-align:start; }
-  .v7-service-list a { min-height:4.5rem; padding-inline:.5rem; border:1px solid rgb(252 250 246 / 17%); }
   .v7-about-story ul { grid-template-columns:1fr; }
   .v7-about-story li,.v7-about-story li:nth-child(2),.v7-about-story li:last-child { padding:1rem 0; border-right:0; border-bottom:1px solid rgb(252 250 246 / 16%); }
   .v7-faq-grid > div:first-child { position:relative; top:auto; }
@@ -814,8 +789,6 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
   .v7-progress { margin-top:.3rem; }
   .v7-project-viewport { margin-inline: -1.5rem; padding-inline: 1.5rem; scroll-padding-inline: 1.5rem; }
   .v7-project-slide { width: min(85vw, 20rem); }
-  .v7-service-list li { flex-basis:88%; }
-  .v7-service-image { min-height:20rem; }
 
   /* Craft — tarjetas a una columna y bullets en franja compacta envuelta;
      el resto (orden, tipografía base) ya lo resuelve el corte de 820px. */
@@ -1949,9 +1922,15 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 /* Mosaico: la obra 01 ocupa el ancho completo con foto y ficha en paralelo;
    02 y 03 van a la par debajo. Cada tarjeta enseña su foto de entrada, así
    que las tres se ven de un vistazo sin abrir nada. */
-.v8-featured-grid { grid-column:1 / -1; grid-row:4; list-style:none; margin:0 0 clamp(2rem,3.5vw,2.75rem); padding:0; display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:clamp(1.75rem,3vw,2.5rem); }
+/* Un solo par —protagonista + secundaria—, nunca tres: el teaser del Home
+   siempre apila una debajo de otra, nunca las reparte en columnas. La
+   secundaria lleva `max-width` en escritorio para que se LEA más pequeña
+   —no solo "la misma tarjeta pero después"—, tal como pide "proyecto
+   secundario, más compacto"; en móvil ocupa el ancho completo igual que
+   la protagonista. */
+.v8-featured-grid { grid-column:1 / -1; grid-row:4; list-style:none; margin:0 0 clamp(2rem,3.5vw,2.75rem); padding:0; display:grid; grid-template-columns:1fr; gap:clamp(2rem,4vw,3rem); }
 .v8-featured-card { min-width:0; }
-.v8-featured-card.is-lead { grid-column:1 / -1; }
+.v8-featured-card:not(.is-lead) { max-width:28rem; }
 
 /* La tarjeta entera es el enlace: un solo objetivo táctil por obra y una sola
    parada de tabulación, en vez del botón pequeño sobre la foto de antes. */
@@ -2075,6 +2054,36 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 .v8-svc-preview-footer-line { flex:1; height:1px; background:var(--color-line); }
 .v8-svc-preview-footer-right p { font-family:var(--font-mono); font-size:.7rem; font-weight:700; letter-spacing:.12em; color:var(--color-muted); margin:0; }
 
+/* Servicios en el Home — teaser estático de 3 filas, sin acordeón. La fila
+   entera es el enlace; nada aquí abre ni cambia de imagen. El acordeón
+   completo (`.v8-svc-*` arriba) vive en la página de Servicios, no aquí. */
+.v8-svc-teaser { padding-block:clamp(5rem,9vw,9rem); background:var(--color-surface); color:var(--color-ink); }
+.v8-svc-teaser-eyebrow { display:flex; align-items:center; gap:1rem; margin:0 0 1.25rem; font-family:var(--font-mono); font-size:.75rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:var(--color-brand); }
+.v8-svc-teaser-eyebrow-line { display:block; width:2rem; height:2px; background:var(--color-brand); }
+.v8-svc-teaser-title { max-width:20ch; margin:0 0 1.25rem; font-family:var(--font-newsreader),serif; font-size:clamp(2.5rem,4.5vw,3.75rem); font-weight:400; line-height:1.05; letter-spacing:-.02em; }
+.v8-svc-teaser-body { max-width:34rem; margin:0 0 clamp(2.5rem,4vw,3.5rem); color:var(--color-muted); font-size:1.05rem; line-height:1.6; }
+
+.v8-svc-teaser-list { list-style:none; margin:0 0 clamp(2.25rem,4vw,3rem); padding:0; border-top:1px solid var(--color-line); }
+.v8-svc-teaser-list li { border-bottom:1px solid var(--color-line); }
+.v8-svc-teaser-row {
+  width:100%; min-height:72px; display:grid; grid-template-columns:2.5rem 2.25rem minmax(0,1fr) 1.5rem; gap:1.1rem; align-items:center;
+  padding-block:1.1rem; color:inherit; text-decoration:none; transition:background .2s ease, padding-inline .2s ease;
+}
+.v8-svc-teaser-row:hover,.v8-svc-teaser-row:focus-visible { background:rgb(32 28 24 / 3%); padding-inline:.5rem; }
+.v8-svc-teaser-row:focus-visible { outline:2px solid var(--color-brand); outline-offset:-2px; }
+.v8-svc-teaser-icon { width:1.6rem; height:1.6rem; flex:none; fill:none; stroke:var(--color-brand); stroke-width:1.4; stroke-linecap:round; stroke-linejoin:round; }
+.v8-svc-teaser-num { font-family:var(--font-mono); font-size:.85rem; font-weight:700; color:var(--color-muted); }
+.v8-svc-teaser-text { display:flex; flex-direction:column; gap:.2rem; min-width:0; }
+.v8-svc-teaser-text strong { font-family:var(--font-newsreader),serif; font-size:clamp(1.2rem,1.8vw,1.4rem); font-weight:400; line-height:1.2; color:var(--color-ink); text-wrap:pretty; }
+.v8-svc-teaser-text span { color:var(--color-muted); font-size:.92rem; line-height:1.4; text-wrap:pretty; }
+.v8-svc-teaser-arrow { justify-self:end; color:var(--color-brand); font-size:1.1rem; transition:transform .2s ease; }
+.v8-svc-teaser-row:hover .v8-svc-teaser-arrow { transform:translateX(4px); }
+
+.v8-svc-teaser-cta { width:fit-content; display:inline-flex; align-items:center; gap:.5rem; min-height:44px; color:var(--color-brand-dark); font-weight:650; text-decoration:none; }
+.v8-svc-teaser-cta span { transition:transform .2s ease; }
+.v8-svc-teaser-cta:hover span { transform:translateX(3px); }
+.v8-svc-teaser-cta:focus-visible { outline:2px solid var(--color-brand); outline-offset:3px; }
+
 /* ========================================================= */
 /* V8 HOME RESPONSIVE MASTER PASS (1100px & 700px)           */
 /* ========================================================= */
@@ -2131,9 +2140,12 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
   .v8-featured-title { font-size: clamp(2.2rem, 8vw, 2.75rem); margin: 0.75rem 0 0.75rem; }
   .v8-featured-desc { margin-bottom: 1.75rem; }
 
-  /* Una obra por fila, foto arriba y ficha debajo: se ven las tres fotos
-     bajando con el pulgar, sin abrir ni cerrar nada. */
+  /* Una obra por fila, foto arriba y ficha debajo: se ven las dos fotos
+     bajando con el pulgar, sin abrir ni cerrar nada. La secundaria recupera
+     el ancho completo aquí — el `max-width` que la hace "más pequeña" solo
+     tiene sentido cuando hay espacio horizontal de sobra. */
   .v8-featured-grid { grid-template-columns: minmax(0, 1fr); gap: 2rem; margin-bottom: 1.75rem; }
+  .v8-featured-card:not(.is-lead) { max-width: none; }
   .v8-featured-card.is-lead .v8-featured-card-link { grid-template-columns: minmax(0, 1fr); gap: 1.1rem; }
   .v8-featured-card.is-lead .v8-featured-card-media { aspect-ratio: 4 / 3; }
   .v8-featured-card.is-lead .v8-featured-card-name { font-size: clamp(1.5rem, 6vw, 1.9rem); }
@@ -2183,7 +2195,14 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
   /* Botón final de ancho completo — coherente con el resto de CTAs de cierre
      de sección a este ancho (ver Featured Projects). */
   .v8-svc-cta { width: 100%; justify-content: center; min-height: 52px; }
-  
+
+  /* Services teaser (Home) */
+  .v8-svc-teaser { padding-block: 4.5rem; }
+  .v8-svc-teaser-title { font-size: clamp(2.2rem, 8vw, 2.75rem); }
+  .v8-svc-teaser-row { grid-template-columns: 2.1rem 1.9rem minmax(0,1fr) 1.25rem; gap: 0.85rem; }
+  .v8-svc-teaser-icon { width: 1.4rem; height: 1.4rem; }
+  .v8-svc-teaser-cta { width: 100%; justify-content: center; min-height: 52px; }
+
   /* About */
   .v8-about-preview { min-height: auto; flex-direction: column; align-items: stretch; }
   .v8-about-preview > img { position: relative; height: 18rem; width: 100%; object-fit: cover; }
