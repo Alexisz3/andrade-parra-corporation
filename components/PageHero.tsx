@@ -162,7 +162,17 @@ export default function PageHero({
           alt={imageAlt}
           fill
           priority
-          sizes="100vw"
+          // `100vw` a secas mide el ANCHO renderizado, pero con
+          // `object-fit: cover` en una portada que en móvil suele quedar más
+          // alta que ancha (texto apilado, `min-height` en auto), lo que de
+          // verdad decide cuánta imagen hace falta es el ALTO — y ahí "cabe"
+          // bastante más que el ancho del viewport. Sin este ajuste, Next
+          // pedía una variante pensada para 100% del ancho y el navegador la
+          // estiraba varias veces por encima de su tamaño real: de ahí el
+          // desenfoque reportado en las fotos de fondo en celular. Ver
+          // globals.css / PLAN_MICROANIMACIONES.md si esta portada cambia de
+          // proporción.
+          sizes="(min-width: 768px) 100vw, 250vw"
           style={{ objectFit: "cover" }}
           className={mobileCover ? "v7-hero-bg-desktop-only" : undefined}
         />
@@ -172,7 +182,10 @@ export default function PageHero({
             alt={mobileCover.imageAlt}
             fill
             priority
-            sizes="100vw"
+            // Solo se ve por debajo de 768px (v7-hero-bg-mobile-only en
+            // globals.css) — pide directamente una variante grande en vez de
+            // calcularla por ancho de viewport, mismo motivo que arriba.
+            sizes="250vw"
             style={{ objectFit: "cover", objectPosition: "68% 56%" }}
             className="v7-hero-bg-mobile-only"
           />

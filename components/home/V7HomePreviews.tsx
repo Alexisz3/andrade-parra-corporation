@@ -16,7 +16,15 @@ interface PreviewCopy {
 export function V7AboutPreview({ copy }: { copy: PreviewCopy }) {
   return (
     <section className="v8-about-preview v7-scroll-reveal" aria-labelledby="about-preview-title">
-      <Image src="/images/heroes/andrade-parra-hardhat-workbench.png" alt="" fill sizes="100vw" className="object-cover" />
+      {/* `250vw` en móvil: mismo ajuste que el resto de fondos a sangre del
+          sitio, ver V7Hero.tsx. */}
+      <Image
+        src="/images/heroes/andrade-parra-hardhat-workbench.png"
+        alt=""
+        fill
+        sizes="(min-width: 768px) 100vw, 250vw"
+        className="object-cover"
+      />
       <div className="v8-about-overlay" aria-hidden="true" />
       <div className="v7-container v8-about-preview-grid">
         <div>

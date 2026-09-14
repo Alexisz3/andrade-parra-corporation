@@ -86,7 +86,20 @@ export default function V7EditorialCover({
   return (
     <section className="v7-cover" aria-label={copy.title}>
       <div className="v7-cover-bg">
-        <Image src={imageSrc} alt={imageAlt} fill preload loading="eager" sizes="100vw" className="object-cover" />
+        {/* `250vw` en móvil, no `100vw`: con `object-cover` en una portada que
+            en celular queda más alta que ancha, el alto manda sobre el ancho
+            del viewport y "100% del ancho" se queda corto — Next servía una
+            variante pequeña que el navegador estiraba (el desenfoque
+            reportado en el fondo de estas portadas en celular). */}
+        <Image
+          src={imageSrc}
+          alt={imageAlt}
+          fill
+          preload
+          loading="eager"
+          sizes="(min-width: 768px) 100vw, 250vw"
+          className="object-cover"
+        />
       </div>
       <div className="v7-cover-overlay" aria-hidden="true" />
 

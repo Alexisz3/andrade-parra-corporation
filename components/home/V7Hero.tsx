@@ -38,7 +38,14 @@ export default function V7Hero({ copy }: { copy: V7HeroCopy }) {
           fill
           preload
           loading="eager"
-          sizes="100vw"
+          // En móvil esta portada suele quedar más alta que ancha (título de
+          // tres líneas + CTAs apiladas empujan el alto real por encima del
+          // viewport), y con `object-fit: cover` eso significa que hace
+          // falta mucha más imagen de la que sugiere "100% del ancho". Pedir
+          // solo eso hacía que Next sirviera una variante pequeña que el
+          // navegador terminaba estirando — el desenfoque reportado en el
+          // fondo del hero en celular.
+          sizes="(min-width: 768px) 100vw, 250vw"
           className="v7-hero-image"
         />
       </div>

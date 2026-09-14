@@ -345,13 +345,15 @@ export function V7Contact({ copy, microcopy }: { copy: V7EditorialCopy; microcop
     // /contacto sigue montando su experiencia V7. Se conserva a propósito.
     <section id="contacto" className="v7-contact v7-contact-page" aria-labelledby="contact-title">
       <div className="v7-contact-media" aria-hidden="true">
+        {/* `250vw` en móvil: mismo ajuste que el resto de fondos a sangre del
+            sitio, ver V7Hero.tsx. */}
         <Image
           src="/images/heroes/hero-contacto-terraza.jpg"
           alt=""
           fill
           preload
           loading="eager"
-          sizes="100vw"
+          sizes="(min-width: 768px) 100vw, 250vw"
           className="object-cover"
         />
       </div>

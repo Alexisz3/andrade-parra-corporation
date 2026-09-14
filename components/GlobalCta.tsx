@@ -93,11 +93,16 @@ export default async function GlobalCta({
   return (
     <section className="v7-cta2" aria-labelledby="global-cta-title">
       <div className="v7-cta2-media" aria-hidden="true">
+        {/* `250vw` en móvil: mismo motivo que el resto de fondos a sangre del
+            sitio — con `object-cover` en una franja que en celular queda más
+            alta que ancha, "100vw" describe solo el ancho y se queda corto,
+            así que Next servía una variante que el navegador terminaba
+            estirando. Ver V7Hero.tsx para el detalle completo. */}
         <Image
           src="/images/heroes/cta-arquitectura-patio.jpg"
           alt=""
           fill
-          sizes="100vw"
+          sizes="(min-width: 768px) 100vw, 250vw"
           className="object-cover"
         />
         <div className="v7-cta2-wash" />
