@@ -3,18 +3,23 @@ import { SERVICE_AREA } from "@/content/company";
 import { BUSINESS, BRAND } from "@/lib/site";
 
 /**
- * Zona de servicio y sede.
+ * Zona de servicio, sede y mapa.
  *
- * Por qué NO hay un `<iframe>` de Google Maps: pesa cerca de 700 KB, instala
- * cookies de terceros en cuanto la página carga (con lo que arrastra al sitio
- * al terreno del consentimiento de cookies) y hunde la métrica de velocidad —
- * todo para responder algo que un mapa contesta mal. Quien busca un contratista
- * no quiere ver un plano de la ciudad: quiere saber si trabajan en su zona y,
- * si acaso, cómo llegar.
+ * El mapa se pidió explícitamente pese al costo que describía este mismo
+ * comentario antes (peso, cookies de terceros, métrica de velocidad): ese
+ * argumento sigue siendo cierto, pero la decisión de mostrarlo de todos
+ * modos es del cliente, no mía. Para no pagar el coste completo:
  *
- * Eso se resuelve con texto y un enlace: "cómo llegar" abre Google Maps en la
- * app nativa del teléfono, que es donde el usuario realmente quiere navegar,
- * con cero coste para quien no lo pulsa.
+ *   · `loading="lazy"` — no descarga nada hasta que el mapa entra en
+ *     viewport, así que no compite con el LCP de arriba.
+ *   · URL de Google Maps SIN clave de API (`/maps?...&output=embed`): es el
+ *     truco de embed clásico, funciona sin facturación ni consola de Google
+ *     Cloud, a cambio de un iframe algo menos configurable que el Embed API
+ *     oficial — aquí no hace falta más que mostrar una zona.
+ *   · La consulta es "Houston, TX" a secas, NO la dirección real del
+ *     negocio: `hasPublicOffice` es `false`, así que este mapa tampoco debe
+ *     filtrar una ubicación exacta. Es la misma zona que ya describe el
+ *     texto de al lado, solo que dibujada.
  *
  * La dirección aparece solo si `hasPublicOffice` es cierto. La lista de
  * municipios, solo si el cliente confirmó cuáles cubre.
@@ -87,6 +92,22 @@ export default async function ServiceArea() {
               <p className="mt-4 text-sm text-muted">{tc("visitNote")}</p>
             </div>
           ) : null}
+        </div>
+
+        <div className="mt-10 border-t border-line pt-10">
+          <h2 className="font-mono text-xs uppercase tracking-[0.14em] text-accent">
+            {tc("mapLabel")}
+          </h2>
+          <div className="mt-4 aspect-[16/9] w-full overflow-hidden rounded-md border border-line sm:aspect-[21/9]">
+            <iframe
+              src="https://www.google.com/maps?q=Houston,Texas&z=10&output=embed"
+              title={tc("mapTitle")}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="h-full w-full border-0"
+            />
+          </div>
+          <p className="mt-3 text-sm text-muted">{tc("mapCaption")}</p>
         </div>
       </div>
     </section>

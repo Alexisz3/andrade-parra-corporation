@@ -2,7 +2,7 @@
 
 import { Suspense, useCallback, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import { WHATSAPP_CONTACTS } from "@/lib/site";
 import BrandLogo from "./BrandLogo";
 import LocaleSwitcher from "./LocaleSwitcher";
@@ -21,6 +21,7 @@ const FOCUSABLE =
 export default function MobileMenu({ open, onClose, links, triggerRef }: MobileMenuProps) {
   const t = useTranslations("Nav");
   const tc = useTranslations("Contact");
+  const pathname = usePathname();
   const panelRef = useRef<HTMLDivElement>(null);
 
   const handleKeyDown = useCallback(
@@ -134,17 +135,34 @@ export default function MobileMenu({ open, onClose, links, triggerRef }: MobileM
 
         <nav aria-label={t("menuTitle")} className="mt-8">
           <ul className="divide-y divide-bone/15 border-y border-bone/15">
-            {links.map((link) => (
-              <li key={`${link.href}-${link.hash ?? "page"}`}>
-                <Link
-                  href={link.hash ? { pathname: link.href, hash: link.hash } : link.href}
-                  onClick={onClose}
-                  className="flex min-h-[56px] items-center font-display text-xl"
-                >
-                  {t(link.key)}
-                </Link>
-              </li>
-            ))}
+            {links.map((link) => {
+              // Sin `hash`: es la página de fondo, no una sección dentro de
+              // ella, así que solo esos enlaces pueden marcarse "activos" —
+              // igual que ya hace la nav de escritorio en Header.tsx.
+              const isCurrent = !link.hash && pathname === link.href;
+              return (
+                <li key={`${link.href}-${link.hash ?? "page"}`}>
+                  <Link
+                    href={link.hash ? { pathname: link.href, hash: link.hash } : link.href}
+                    onClick={onClose}
+                    aria-current={isCurrent ? "page" : undefined}
+                    className={`flex min-h-[56px] items-center gap-3 font-display text-xl ${
+                      isCurrent ? "text-accent" : ""
+                    }`}
+                  >
+                    {/* Marcador visual además del color — el color solo no
+                        basta para quien no distingue bien el rojo del blanco. */}
+                    <span
+                      aria-hidden="true"
+                      className={`h-1.5 w-1.5 flex-none rounded-full bg-accent transition-opacity ${
+                        isCurrent ? "opacity-100" : "opacity-0"
+                      }`}
+                    />
+                    {t(link.key)}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </nav>
 

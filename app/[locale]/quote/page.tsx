@@ -8,6 +8,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import QuoteShell from "@/components/quote/QuoteShell";
 import { BRAND, WHATSAPP_CONTACTS, BUSINESS_EMAIL, OG_IMAGE } from "@/lib/site";
+import { EMAIL_ENABLED } from "@/lib/mail";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -103,6 +104,7 @@ export default async function QuotePage({ params, searchParams }: PageProps<"/[l
               phoneDisplay: c.phoneDisplay,
             }))}
             businessEmail={BUSINESS_EMAIL}
+            emailAvailable={EMAIL_ENABLED}
           />
         </NextIntlClientProvider>
       </main>

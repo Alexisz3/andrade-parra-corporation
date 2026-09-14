@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import StructuredData from "@/components/StructuredData";
 import TrustBar from "@/components/home/TrustBar";
 import V7HeroPremium from "@/components/home/V7HeroPremium";
+import V7MissionVision from "@/components/home/V7MissionVision";
 import V7FeaturedProjects from "@/components/home/V7FeaturedProjects";
 import V7ServicesTeaser from "@/components/home/V7ServicesTeaser";
 import { V7AboutPreview } from "@/components/home/V7HomePreviews";
@@ -54,6 +55,14 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
           }}
         />
         <TrustBar />
+        <V7MissionVision
+          locale={locale}
+          copy={{
+            eyebrow: t("missionVisionEyebrow"),
+            missionLabel: t("missionLabel"),
+            visionLabel: t("visionLabel"),
+          }}
+        />
         <V7FeaturedProjects
           projects={getFeaturedProjects()}
           locale={locale}

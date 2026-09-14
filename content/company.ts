@@ -27,6 +27,26 @@ export interface CompanyStory {
 
 export const COMPANY_STORY: CompanyStory | null = null;
 
+/* ─── Misión y visión ────────────────────────────────────────────────────
+ * Mismo patrón que COMPANY_STORY, por el mismo motivo: una misión o visión
+ * es una declaración oficial de la empresa, no una frase de ambiente que se
+ * pueda redactar por aproximación. Publicar un texto inventado bajo el
+ * nombre "Misión" o "Visión" de Andrade Parra Corporation sería atribuirle
+ * a la empresa una declaración que nunca hizo — el mismo problema que ya
+ * evita COMPANY_STORY, aplicado a dos frases en vez de a un párrafo largo.
+ *
+ * Pedido explícitamente en la sesión del 2026-09-13 ("colocar misión y
+ * visión en el Home"): la sección ya está montada en el Home
+ * (components/home/V7MissionVision.tsx) y aparece SOLA en cuanto esto deje
+ * de ser `null` — no hace falta tocar el componente ni la página.
+ */
+export interface MissionVision {
+  mission: Record<AppLocale, string>;
+  vision: Record<AppLocale, string>;
+}
+
+export const MISSION_VISION: MissionVision | null = null;
+
 /* ─── Personas ───────────────────────────────────────────────────────────
  * Se conocen tres nombres por el formulario (Jose Andrade, Ramon Andrade,
  * Mario Parra), pero NO se conocen sus cargos, ni su trayectoria, ni existe

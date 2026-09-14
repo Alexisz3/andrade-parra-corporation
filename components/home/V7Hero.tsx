@@ -55,10 +55,10 @@ export default function V7Hero({ copy }: { copy: V7HeroCopy }) {
             </h1>
             <p className="v7-hero-lead">{copy.body}</p>
             <div className="v7-hero-ctas">
-              <Link href="/quote" className="v7-button v7-button-amber v7-hero-cta-primary">
+              <Link href="/quote" className="v7-hero-cta-primary">
                 {copy.quote} <span aria-hidden="true">→</span>
               </Link>
-              <Link href="/projects" className="v7-button v7-button-ghost-light v7-hero-cta-secondary">
+              <Link href="/projects" className="v7-hero-cta-secondary">
                 {copy.projects} <span aria-hidden="true">↗</span>
               </Link>
             </div>

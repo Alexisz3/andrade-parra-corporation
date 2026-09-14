@@ -110,9 +110,15 @@ export function V7Craft({ copy }: { copy: V7EditorialCopy }) {
             recorrido de foco además del visual (`grid-template-areas` sólo
             reordena la pintura, no el tabulador). En escritorio no cambia
             nada — la foto sigue siendo la columna aparte de la derecha. */}
+        {/* Foto de la EMPRESA, no de una obra — esta sección vive en
+            Nosotros, y una foto de cocina aquí se leía como "otro proyecto
+            más" en vez de reforzar de quién se está hablando. Es la misma
+            imagen que ya usa V7AboutPreview (portada) para presentar a
+            Andrade Parra Corporation, así que la marca ya es coherente en
+            las dos apariciones en vez de introducir un tercer archivo. */}
         <figure className="v7-craft-figure">
           <Image
-            src="/images/proyectos/cocina-cuarzo-05.jpeg"
+            src="/images/heroes/andrade-parra-hardhat-workbench.png"
             alt=""
             fill
             sizes="(min-width: 901px) 46vw, 100vw"
@@ -265,10 +271,11 @@ function PersonIcon() {
   );
 }
 
-function PhoneIcon() {
+function WhatsAppIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M6.5 3.5h3l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.7 2 2 0 0 1 6.5 3.5Z" />
+      <path d="M4 20.5 5.2 16A8 8 0 1 1 8.5 19l-4.5 1.5Z" />
+      <path d="M9 10.2c0 2.8 2 4.8 4.8 4.8" />
     </svg>
   );
 }
@@ -325,12 +332,16 @@ export function V7Contact({ copy, microcopy }: { copy: V7EditorialCopy; microcop
         <aside className="v7-contact-sheet">
           <p className="v7-contact-sheet-area">{copy.contactArea}</p>
 
+          {/* WhatsApp, no llamada: es el canal que el cliente pidió aquí —
+              el mismo contacto sigue disponible por teléfono desde la barra
+              inferior móvil y desde la ficha de equipo en Nosotros. */}
           {WHATSAPP_CONTACTS.map((contact) => (
             <TrackedContactLink
               key={contact.id}
-              href={`tel:+${contact.phone}`}
-              event="phone_clicked"
+              href={`https://wa.me/${contact.phone}`}
+              event="whatsapp_clicked"
               params={{ contact: contact.id, source: "contact_page" }}
+              external
               className="v7-contact-row"
             >
               <span className="v7-contact-who">
@@ -338,7 +349,7 @@ export function V7Contact({ copy, microcopy }: { copy: V7EditorialCopy; microcop
                 {contact.name}
               </span>
               <span className="v7-contact-value">
-                <span className="v7-contact-icon" aria-hidden="true"><PhoneIcon /></span>
+                <span className="v7-contact-icon" aria-hidden="true"><WhatsAppIcon /></span>
                 {contact.phoneDisplay}
               </span>
             </TrackedContactLink>

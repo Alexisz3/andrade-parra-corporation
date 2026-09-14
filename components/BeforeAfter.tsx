@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useId, useState, type KeyboardEvent } from "react";
+import { useId, useRef, useState, type KeyboardEvent, type PointerEvent as ReactPointerEvent } from "react";
 import type { BeforeAfterPair } from "@/content/before-after";
 
 interface BeforeAfterProps {
@@ -16,12 +16,20 @@ const KEYBOARD_STEP = 5;
 /**
  * Comparador antes/después.
  *
- * El control es un `input[type=range]` real estirado sobre toda la foto
- * (pista y manija propias ocultas vía CSS, no `opacity:0` — así conserva su
- * anillo de foco nativo): arrastrar en cualquier punto de la imagen mueve el
- * divisor, con ratón, dedo o teclado de fábrica. El círculo central y la
- * línea divisoria son puramente decorativos, sincronizados con `position`
- * pero con `pointer-events:none` — nunca interceptan el gesto.
+ * El arrastre se maneja a mano con Pointer Events sobre el contenedor, NO
+ * dejándoselo al gesto nativo de `input[type=range]`. Se probó lo segundo
+ * primero (pista estirada sobre toda la foto) y en escritorio funcionaba,
+ * pero en un iPhone real arrastrar no hacía nada: Safari en iOS solo iniciA
+ * el arrastre nativo de un range si el dedo TOCA el thumb, y aquí el thumb
+ * estaba reducido a 1x1px (invisible a propósito, ver CSS) — sin superficie
+ * que tocar, no hay drag posible, solo el salto de `onChange` si el toque
+ * caía justo encima de esos 1x1px. Con Pointer Events el contenedor entero
+ * es la superficie de arrastre en cualquier dispositivo con puntero.
+ *
+ * El `input[type=range]` se conserva SOLO para teclado: sigue siendo
+ * focusable (Tab no depende de `pointer-events`) y accesible por lectores de
+ * pantalla, pero `pointer-events:none` en su CSS le quita el manejo del
+ * puntero — así nunca compite con el `onPointerDown` de aquí abajo.
  */
 export default function BeforeAfter({
   pair,
@@ -31,6 +39,38 @@ export default function BeforeAfter({
 }: BeforeAfterProps) {
   const [position, setPosition] = useState(pair.initialPosition);
   const sliderId = useId();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const draggingRef = useRef(false);
+
+  const updateFromClientX = (clientX: number) => {
+    const el = containerRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    if (rect.width === 0) return;
+    const ratio = ((clientX - rect.left) / rect.width) * 100;
+    setPosition(Math.min(100, Math.max(0, ratio)));
+  };
+
+  const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    // En ratón, solo el botón principal arrastra; táctil y lápiz no tienen
+    // "botón" (event.button llega en 0 de todos modos) así que no se filtran.
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    draggingRef.current = true;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    updateFromClientX(event.clientX);
+  };
+
+  const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (!draggingRef.current) return;
+    updateFromClientX(event.clientX);
+  };
+
+  const endDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
+    draggingRef.current = false;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+  };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "ArrowLeft") {
@@ -43,7 +83,14 @@ export default function BeforeAfter({
   };
 
   return (
-    <div className="v7-compare">
+    <div
+      ref={containerRef}
+      className="v7-compare"
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={endDrag}
+      onPointerCancel={endDrag}
+    >
       <Image
         src={`/images/proyectos/${pair.afterFile}`}
         alt={pair.afterAlt}
@@ -86,11 +133,11 @@ export default function BeforeAfter({
         min={0}
         max={100}
         step={1}
-        value={position}
+        value={Math.round(position)}
         onChange={(event) => setPosition(Number(event.target.value))}
         onKeyDown={handleKeyDown}
         className="v7-compare-input"
-        aria-valuetext={`${position}%`}
+        aria-valuetext={`${Math.round(position)}%`}
       />
     </div>
   );

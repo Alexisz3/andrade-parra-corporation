@@ -158,8 +158,18 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 .v7-hero-title { max-width: 16ch; margin: 1.15rem 0 1.5rem; font-size: clamp(3.25rem,6.2vw,6.8rem); line-height: .82; letter-spacing: -.055em; font-weight: 700; text-wrap: balance; }
 .v7-hero-title em { color: #f7f5f1; font-family: var(--font-newsreader),serif; font-weight: 500; }
 .v7-hero-lead { max-width: 39rem; color: rgb(252 250 246 / 78%); font-size: clamp(1rem,1.5vw,1.3rem); line-height: 1.55; }
-.v7-hero-ctas { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2rem; }
-.v7-hero .v7-button-ghost-light:hover { border-color:var(--color-brand); background:rgb(255 255 255 / 8%); color:var(--color-bone); }
+.v7-hero-ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 1.75rem; margin-top: 2rem; }
+/* Primaria: sólida, para que la acción de conversión no compita con nada.
+   Secundaria: enlace de texto subrayado, sin caja — el contraste entre las
+   dos ya marca la jerarquía sin necesitar un segundo botón lleno de borde. */
+.v7-hero-cta-primary { display:inline-flex; align-items:center; justify-content:center; gap:.9rem; min-height:3.5rem; border-radius:6px; padding:0 1.85rem; background:var(--color-action); color:#fff; font-weight:600; letter-spacing:.01em; text-decoration:none; transition:background .2s ease; }
+.v7-hero-cta-primary:hover { background:var(--color-action-hover); }
+.v7-hero-cta-primary:active { background:var(--color-action-active); }
+.v7-hero-cta-secondary { display:inline-flex; align-items:center; gap:.6rem; min-height:3.5rem; border-bottom:1px solid rgb(252 250 246 / 45%); color:var(--color-bone); font-weight:600; text-decoration:none; transition:border-color .2s ease; }
+.v7-hero-cta-secondary span { transition:transform .2s ease; }
+.v7-hero-cta-secondary:hover { border-color:var(--color-bone); }
+.v7-hero-cta-secondary:hover span { transform:translate(3px,-3px); }
+.v7-hero-cta-primary:focus-visible,.v7-hero-cta-secondary:focus-visible { outline:2px solid var(--color-action); outline-offset:3px; }
 .v7-hero :focus-visible { outline-color:var(--color-action); }
 .v7-carousel-controls { display:flex; align-items:center; gap:.2rem; }
 .v7-library-controls { display:flex; align-items:center; gap:.3rem; }
@@ -194,7 +204,13 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 .v7-library-controls button:hover { border-color: var(--color-ink); background: rgb(32 28 24 / 5%); }
 .v7-library-controls svg { width: 17px; }
 
-.v7-project-viewport { margin-top: clamp(1.75rem, 2.5vw, 2.5rem); overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: none; scroll-snap-type: x mandatory; scroll-padding-left: 0; }
+/* `proximity`, no `mandatory`: con las tarjetas casi a ancho de pantalla,
+   `mandatory` rechazaba un deslizar corto o suave — el navegador lo
+   interpretaba como "no llegó al siguiente punto de ajuste" y lo regresaba
+   de un salto a donde empezó, sintiéndose como si el dedo no hiciera nada.
+   `proximity` solo ajusta cuando el gesto ya casi llegó por su cuenta: deja
+   que cualquier arrastre, corto o largo, mueva el carril con naturalidad. */
+.v7-project-viewport { margin-top: clamp(1.75rem, 2.5vw, 2.5rem); overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: none; scroll-snap-type: x proximity; scroll-padding-left: 0; }
 .v7-project-viewport::-webkit-scrollbar { display: none; }
 .v7-project-track { display: flex; gap: clamp(1rem, 2vw, 1.65rem); width: max-content; margin: 0; padding: 0 0 .25rem; list-style: none; }
 .v7-project-slide { width: min(72vw, 23rem); scroll-snap-align: start; }
@@ -644,7 +660,12 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 .v7-transform-cta svg { transition:transform .2s ease; }
 
 .v7-transform-visual { grid-area:visual; display:flex; flex-direction:column; gap:1.25rem; }
-.v7-compare { position:relative; width:100%; aspect-ratio:4/3; overflow:hidden; border-radius:14px; background:var(--color-carbon); }
+/* `touch-action:pan-y`, no `none`: dejamos que el navegador siga gestionando
+   el scroll VERTICAL de la página de forma nativa si el gesto empieza sobre
+   la foto — solo el arrastre horizontal lo captura BeforeAfter.tsx a mano
+   con Pointer Events. `none` aquí atraparía a cualquiera que intente pasar
+   la página con el dedo justo desde encima del comparador. */
+.v7-compare { position:relative; width:100%; aspect-ratio:4/3; overflow:hidden; border-radius:14px; background:var(--color-carbon); touch-action:pan-y; cursor:ew-resize; user-select:none; -webkit-user-select:none; }
 .v7-compare-image { object-fit:cover; }
 .v7-compare-before { position:absolute; inset:0; overflow:hidden; }
 .v7-compare-divider { position:absolute; inset-block:0; width:2px; margin-left:-1px; background:#fff; pointer-events:none; }
@@ -653,7 +674,12 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 .v7-compare-tag { position:absolute; top:.85rem; z-index:1; border-radius:5px; padding:.4rem .65rem; background:rgb(23 21 18 / 78%); color:#fff; font:700 .65rem/1 var(--font-mono); letter-spacing:.12em; text-transform:uppercase; pointer-events:none; }
 .v7-compare-tag.is-before { left:.85rem; }
 .v7-compare-tag.is-after { right:.85rem; }
-.v7-compare-input { position:absolute; inset:0; z-index:2; width:100%; height:100%; margin:0; appearance:none; -webkit-appearance:none; background:transparent; cursor:ew-resize; touch-action:none; }
+/* `pointer-events:none`: el arrastre ya no lo maneja este input — lo hace el
+   `onPointerDown/Move` de BeforeAfter.tsx sobre `.v7-compare` — así el input
+   nunca compite por el gesto. Sigue en el DOM y en el orden de tabulación
+   solo para teclado (flechas) y lectores de pantalla; `pointer-events:none`
+   no afecta el foco por Tab, solo el hit-testing del puntero. */
+.v7-compare-input { position:absolute; inset:0; z-index:2; width:100%; height:100%; margin:0; appearance:none; -webkit-appearance:none; background:transparent; pointer-events:none; }
 .v7-compare-input::-webkit-slider-runnable-track { background:transparent; }
 .v7-compare-input::-webkit-slider-thumb { -webkit-appearance:none; width:1px; height:1px; background:transparent; }
 .v7-compare-input::-moz-range-track { background:transparent; }
@@ -1754,10 +1780,9 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
   line-height:1.5;
   color:rgb(252 250 246 / 82%);
 }
-.v7-hero-ctas { gap:1rem; margin-top:2.6rem; }
-.v7-hero-ctas .v7-button { min-height:4.1rem; border-radius:8px; font-size:.95rem; }
-.v7-hero-cta-primary { min-width:17.5rem; }
-.v7-hero-cta-secondary { min-width:11.25rem; }
+.v7-hero-ctas { gap:1.75rem; margin-top:2.6rem; }
+.v7-hero-cta-primary { min-height:4rem; padding-inline:2.25rem; font-size:.95rem; }
+.v7-hero-cta-secondary { min-height:4rem; font-size:.95rem; }
 
 /* Pie del hero: anclado al borde inferior de la sección, no al final del
    copy, para que quede a la misma altura sin importar cuánto crezca el
@@ -1807,9 +1832,8 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
   .v7-hero-title { max-width:none; font-size:clamp(2.875rem, 6.2vw, 3.625rem); margin:1.1rem 0 1.35rem; }
   .v7-hero-lead { max-width:34rem; font-size:1.05rem; }
   .v7-hero-ctas { margin-top:2rem; }
-  .v7-hero-ctas .v7-button { min-height:3.6rem; }
-  .v7-hero-cta-primary { min-width:15.5rem; }
-  .v7-hero-cta-secondary { min-width:9.5rem; }
+  .v7-hero-cta-primary { min-height:3.6rem; padding-inline:1.85rem; }
+  .v7-hero-cta-secondary { min-height:3.6rem; }
   .v7-hero-meta ul { font-size:.68rem; letter-spacing:.14em; gap:.5rem 1rem; }
   .v7-hero-meta li { gap:1rem; }
 }
@@ -1822,6 +1846,19 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 .v8-trust-list strong,.v8-trust-list span { display:block; }
 .v8-trust-list strong { font-size:.82rem; font-weight:700; line-height:1.25; }
 .v8-trust-list span { margin-top:.18rem; color:var(--color-muted); font-size:.73rem; line-height:1.3; }
+
+/* Misión y visión — bloque compacto, justo tras la banda de confianza, para
+   que se lea nada más entrar sin competir con el hero. */
+.v8-mission { padding-block:clamp(3.5rem,6vw,5rem); background:var(--color-paper); border-bottom:1px solid var(--color-line); }
+.v8-mission-eyebrow { margin:0 0 2rem; font-family:var(--font-mono); font-size:.75rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:var(--color-brand); }
+.v8-mission-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(2.5rem,5vw,5rem); }
+.v8-mission-label { margin:0 0 .75rem; font-family:var(--font-newsreader),serif; font-size:1.3rem; font-style:italic; color:var(--color-ink); }
+.v8-mission-text { margin:0; max-width:32rem; color:var(--color-muted); font-size:1.05rem; line-height:1.6; }
+
+@media (max-width:700px) {
+  .v8-mission { padding-block:2.75rem; }
+  .v8-mission-grid { grid-template-columns:1fr; gap:2rem; }
+}
 
 .v7-featured-preview { padding-block:clamp(4.75rem,7vw,6.75rem); overflow:hidden; background:var(--color-surface); }
 .v7-preview-title { font-family:var(--font-newsreader),serif; font-weight:400; line-height:.95; letter-spacing:-.045em; }
@@ -2336,14 +2373,15 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
       la piscina y la pérgola iluminada a la zona visible.
    2. TITULAR. `balance` reparte mal un bloque con <br> forzado y dejaba
       «ven.» sola en la última línea; `pretty` evita justo esa huérfana.
-   3. BOTONES. Apilados con anchos distintos (248px y 152px) la columna
-      se ve descuadrada: al mismo ancho la pila se lee intencionada, y la
-      jerarquía la sigue marcando el relleno rojo frente al ghost. */
+   3. BOTONES. Apilados con anchos distintos la columna se ve descuadrada:
+      al mismo ancho y centrados la pila se lee intencionada, y la
+      jerarquía la sigue marcando el relleno rojo frente al enlace. */
 @media (max-width: 700px) {
   .v7-hero-media { top: -18%; height: 118%; }
   .v7-hero-image { object-position: 55% 50%; }
   .v7-hero-title { text-wrap: pretty; }
-  .v7-hero-ctas { display: grid; grid-template-columns: 1fr; gap: .75rem; }
-  .v7-hero-ctas .v7-button { width: 100%; min-width: 0; }
+  .v7-hero-ctas { display: grid; grid-template-columns: 1fr; gap: 1.1rem; }
+  .v7-hero-cta-primary { width: 100%; }
+  .v7-hero-cta-secondary { width: 100%; justify-content: center; }
 }
 
