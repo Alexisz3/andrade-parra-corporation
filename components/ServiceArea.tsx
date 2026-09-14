@@ -87,7 +87,6 @@ export default async function ServiceArea() {
                 className="mt-5 inline-flex min-h-[48px] items-center gap-2 border border-ink px-5 text-sm font-medium text-ink transition-colors hover:bg-ink hover:text-paper"
               >
                 {tc("directions")}
-                <span aria-hidden="true">↗</span>
               </a>
               <p className="mt-4 text-sm text-muted">{tc("visitNote")}</p>
             </div>

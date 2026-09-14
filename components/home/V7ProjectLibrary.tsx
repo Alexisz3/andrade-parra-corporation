@@ -1,7 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import { startTransition, useCallback, useEffect, useMemo, useRef, useState, ViewTransition } from "react";
+import {
+  startTransition,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  ViewTransition,
+} from "react";
 import { useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
@@ -17,6 +26,60 @@ const CATEGORY_ORDER: ProjectCategory[] = [
 ];
 
 type Filter = ProjectCategory | "all";
+
+/*
+ * Recuerda filtro + posición de scroll entre visitas a la misma pestaña.
+ *
+ * El riel es scroll nativo de un `<div>`, no del `<html>`: Next.js restaura
+ * el scroll de la VENTANA al volver atrás, pero no el `scrollLeft` interno
+ * de un contenedor — así que sin esto, volver desde la ficha de un proyecto
+ * siempre reaparecía en la primera tarjeta, sin importar cuál se estaba
+ * viendo. `sessionStorage` (no `useState`) porque sobrevive al desmontaje
+ * completo de la página entre una navegación y la siguiente.
+ */
+const SCROLL_STORAGE_KEY = "v7-project-library-state";
+
+function readStoredState(): { filter: Filter; scrollLeft: number } | null {
+  try {
+    const raw = sessionStorage.getItem(SCROLL_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (typeof parsed?.scrollLeft !== "number" || typeof parsed?.filter !== "string") return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+/*
+ * `useSyncExternalStore`, no `useEffect` + `setState`, para leer el filtro
+ * guardado. `sessionStorage` no existe durante el render en servidor, así
+ * que el valor inicial del cliente tiene que poder diferir del HTML que
+ * mandó el servidor — exactamente el caso que este hook resuelve sin el
+ * parpadeo ni la re-renderización en cascada de sincronizar con un efecto
+ * (regla `react-hooks/set-state-in-effect`). No hay nada a lo que
+ * suscribirse de verdad (no cambia entre un render y el siguiente dentro de
+ * la misma pestaña), así que `subscribe` no hace nada y nunca notifica.
+ */
+function subscribeToNothing() {
+  return () => {};
+}
+
+function getServerFilterSnapshot(): Filter {
+  return "all";
+}
+
+function getClientFilterSnapshot(): Filter {
+  return readStoredState()?.filter ?? "all";
+}
+
+function writeStoredState(state: { filter: Filter; scrollLeft: number }) {
+  try {
+    sessionStorage.setItem(SCROLL_STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    // Privado/deshabilitado: se pierde el recuerdo de posición, no la navegación.
+  }
+}
 
 export interface V7ProjectLibraryCopy {
   eyebrow: string;
@@ -58,9 +121,21 @@ export default function V7ProjectLibrary({
 }) {
   const locale = useLocale() as AppLocale;
   const viewportRef = useRef<HTMLDivElement>(null);
-  const [filter, setFilter] = useState<Filter>("all");
+  // El filtro con el que arranca la visita: "all" en el servidor, el
+  // guardado en `sessionStorage` una vez hidrata en el cliente (ver el
+  // comentario de `getClientFilterSnapshot` más arriba).
+  const restoredFilter = useSyncExternalStore(
+    subscribeToNothing,
+    getClientFilterSnapshot,
+    getServerFilterSnapshot
+  );
+  // Una vez el visitante toca un filtro, esa elección manda sobre el
+  // restaurado — null significa "todavía no ha elegido nada esta visita".
+  const [filterOverride, setFilterOverride] = useState<Filter | null>(null);
+  const filter = filterOverride ?? restoredFilter;
   const [active, setActive] = useState(0);
   const [motionAllowed, setMotionAllowed] = useState(false);
+  const restoredScrollRef = useRef(false);
 
   const counts = useMemo(() => {
     const result = Object.fromEntries(CATEGORY_ORDER.map((category) => [category, 0])) as Record<
@@ -127,6 +202,22 @@ export default function V7ProjectLibrary({
   useEffect(() => {
     const viewport = viewportRef.current;
     if (!viewport) return;
+
+    // Salto de posición (sin animación) al recuperar una visita anterior.
+    // Espera a que `filter` ya sea el guardado —si todavía no lo es, el
+    // efecto de arriba está a punto de cambiarlo y este mismo efecto se
+    // repetirá con la lista correcta— para no saltar sobre las tarjetas
+    // equivocadas.
+    if (!restoredScrollRef.current) {
+      const saved = readStoredState();
+      if (!saved) {
+        restoredScrollRef.current = true;
+      } else if (saved.filter === filter) {
+        viewport.scrollLeft = saved.scrollLeft;
+        restoredScrollRef.current = true;
+      }
+    }
+
     let frame = 0;
     const sync = () => {
       cancelAnimationFrame(frame);
@@ -143,6 +234,7 @@ export default function V7ProjectLibrary({
           }
         });
         setActive(closest);
+        writeStoredState({ filter, scrollLeft: viewport.scrollLeft });
       });
     };
     viewport.addEventListener("scroll", sync, { passive: true });
@@ -150,7 +242,7 @@ export default function V7ProjectLibrary({
       cancelAnimationFrame(frame);
       viewport.removeEventListener("scroll", sync);
     };
-  }, [visible.length]);
+  }, [visible.length, filter]);
 
   const chooseFilter = (next: Filter) => {
     // `startTransition` es lo que activa el crossfade: un `setState` normal
@@ -158,9 +250,13 @@ export default function V7ProjectLibrary({
     // guía de Next citada ahí — "Regular setState calls do not trigger them").
     startTransition(() => {
       setActive(0);
-      setFilter(next);
+      setFilterOverride(next);
     });
     viewportRef.current?.scrollTo({ left: 0, behavior: "auto" });
+    // Un cambio de filtro manual es una decisión nueva del visitante: pisa
+    // cualquier posición recordada de una visita anterior, en vez de que el
+    // próximo montaje intente restaurar una posición de OTRO filtro.
+    writeStoredState({ filter: next, scrollLeft: 0 });
   };
 
   const count = visible.length;

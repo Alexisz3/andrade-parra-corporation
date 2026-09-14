@@ -292,7 +292,7 @@ export default function QuoteShell({
             <div className="v7-handoff" role="status">
               <strong>{t("handoffHeadingWhatsapp")}</strong>
               <p>{t("handoffBodyWhatsapp")} {t("handoffPhotos")}</p>
-              <a href={handoffUrl} target="_blank" rel="noopener noreferrer">{t("handoffReopenWhatsapp")} ↗</a>
+              <a href={handoffUrl} target="_blank" rel="noopener noreferrer">{t("handoffReopenWhatsapp")}</a>
             </div>
           ) : null}
 
@@ -323,9 +323,9 @@ export default function QuoteShell({
             <div className="v7-quote-card-top"><span className="v7-meta">{t("directMeta")}</span><b>ES / EN</b></div>
             <h2>{t("directTitle")}</h2><p>{t("directBody")}</p>
             <div className="v7-quote-contact-lines">
-              {whatsappTargets.map((contact) => <a key={contact.phone} href={`tel:+${contact.phone}`}><span><small>{contact.name}</small><strong>{contact.phoneDisplay ?? contact.phone.replace(/^1?(\d{3})(\d{3})(\d{4})$/, "($1) $2-$3")}</strong></span><i aria-hidden="true">↗</i></a>)}
-              {businessEmail ? <a href={`mailto:${businessEmail}`}><span><small>Email</small><strong>{businessEmail}</strong></span><i aria-hidden="true">↗</i></a> : null}
-              {whatsappTargets[0] ? <a href={`https://wa.me/${whatsappTargets[0].phone}`} target="_blank" rel="noopener noreferrer" className="is-whatsapp"><span><small>WhatsApp</small><strong>{t("channelWhatsapp")}</strong></span><i aria-hidden="true">↗</i></a> : null}
+              {whatsappTargets.map((contact) => <a key={contact.phone} href={`tel:+${contact.phone}`}><span><small>{contact.name}</small><strong>{contact.phoneDisplay ?? contact.phone.replace(/^1?(\d{3})(\d{3})(\d{4})$/, "($1) $2-$3")}</strong></span></a>)}
+              {businessEmail ? <a href={`mailto:${businessEmail}`}><span><small>Email</small><strong>{businessEmail}</strong></span></a> : null}
+              {whatsappTargets[0] ? <a href={`https://wa.me/${whatsappTargets[0].phone}`} target="_blank" rel="noopener noreferrer" className="is-whatsapp"><span><small>WhatsApp</small><strong>{t("channelWhatsapp")}</strong></span></a> : null}
             </div>
           </div>
           <div className="v7-quote-area"><strong>HOUSTON, TX</strong><span>{t("areaNote")}</span></div>

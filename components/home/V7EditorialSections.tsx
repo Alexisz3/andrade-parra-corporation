@@ -201,7 +201,11 @@ export function V7Team({ copy }: { copy: V7EditorialCopy }) {
                       alt={contact.name}
                       fill
                       sizes="(min-width: 1024px) 22vw, 45vw"
-                      className="object-cover"
+                      // `object-top`: el recorte por defecto (centrado) parte
+                      // por la cabeza en estas fotos de cuerpo entero, porque
+                      // sobra piso debajo y falta margen arriba. Recortando
+                      // desde abajo la cara queda siempre completa.
+                      className="object-cover object-top"
                     />
                     <i aria-hidden="true">0{index + 1}</i>
                   </div>
@@ -222,7 +226,7 @@ export function V7Team({ copy }: { copy: V7EditorialCopy }) {
                       event="phone_clicked"
                       params={{ contact: contact.id, source: "about_team" }}
                     >
-                      {copy.teamCall}<span aria-hidden="true">↗</span>
+                      {copy.teamCall}
                     </TrackedContactLink>
                     <TrackedContactLink
                       href={`https://wa.me/${contact.phone}`}
@@ -230,7 +234,7 @@ export function V7Team({ copy }: { copy: V7EditorialCopy }) {
                       params={{ contact: contact.id, source: "about_team" }}
                       external
                     >
-                      {copy.teamWhatsapp}<span aria-hidden="true">↗</span>
+                      {copy.teamWhatsapp}
                     </TrackedContactLink>
                     {contact.facebook ? (
                       <TrackedContactLink
@@ -239,7 +243,7 @@ export function V7Team({ copy }: { copy: V7EditorialCopy }) {
                         params={{ contact: contact.id, source: "about_team" }}
                         external
                       >
-                        {copy.teamFacebook}<span aria-hidden="true">↗</span>
+                        {copy.teamFacebook}
                       </TrackedContactLink>
                     ) : null}
                   </div>
@@ -247,18 +251,13 @@ export function V7Team({ copy }: { copy: V7EditorialCopy }) {
               </article>
             );
           })}
-          <aside className="v7-team-gallery">
-            <div className="v7-team-gallery-title">
-              <div><p className="v7-meta">{copy.teamGalleryTitle}</p><h3>{copy.teamGalleryBody}</h3></div>
-            </div>
-            <div className="v7-team-gallery-slots">
-              {[1, 2, 3].map((slot) => (
-                <div className="v7-team-gallery-slot" key={slot}>
-                  <span>{copy.teamPhotoPending}</span>
-                </div>
-              ))}
-            </div>
-          </aside>
+          {/* Galería "equipo en obra" retirada a propósito: todavía no hay
+              fotografías reales del equipo trabajando, y los recuadros
+              vacíos ("espacio reservado para fotografía") se veían como un
+              hueco en la página en vez de una promesa. Vuelve a aparecer en
+              cuanto haya material real que mostrar — ver V7EditorialCopy
+              (teamGalleryTitle/teamGalleryBody) y las clases
+              .v7-team-gallery* en globals.css, que se conservan. */}
         </div>
       </div>
     </section>
@@ -421,7 +420,6 @@ export function V7Contact({ copy, microcopy }: { copy: V7EditorialCopy; microcop
                 <span className="v7-contact-icon" aria-hidden="true"><FacebookIcon /></span>
                 {copy.contactFacebookLabel}
               </span>
-              <span className="v7-contact-value" aria-hidden="true">↗</span>
             </TrackedContactLink>
           ) : null}
 
