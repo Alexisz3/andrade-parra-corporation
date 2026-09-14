@@ -1,4 +1,5 @@
 import createNextIntlPlugin from "next-intl/plugin";
+import { buildCspHeaderValue } from "./lib/csp.mjs";
 
 const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 const isDevelopment = process.env.NODE_ENV === "development";
@@ -68,39 +69,24 @@ const nextConfig = {
            * y protege contra clickjacking sobre el formulario.
            */
           {
+            /*
+             * Política de seguridad de contenido — el valor sale de
+             * lib/csp.mjs, fuente única compartida con el `<meta
+             * http-equiv>` del layout raíz. Ver ese archivo para el porqué
+             * de la duplicación (Hostinger sobrescribe esta cabecera en
+             * producción) y para el detalle de cada directiva.
+             *
+             * SIN `upgrade-insecure-requests`: reescribe TODA petición
+             * http:// a https://, incluido `http://127.0.0.1`. WebKit no
+             * exime localhost, así que la hoja de estilos no cargaba en
+             * pruebas locales — sin CSS la cabecera perdía `position: fixed`
+             * y las tarjetas quedaban por encima del selector de idioma. Lo
+             * delató la suite en WebKit; Chromium y Firefox lo toleraban en
+             * silencio. En Vercel es además redundante: sirve solo HTTPS con
+             * HSTS y no hay ningún recurso en http:// que reescribir.
+             */
             key: "Content-Security-Policy",
-            value: [
-              "default-src 'self'",
-              // Google Analytics y Tag Manager, solo si se configura el ID.
-              `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""} https://www.googletagmanager.com`,
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-              "font-src 'self' https://fonts.gstatic.com data:",
-              // `data:` y `blob:` los necesita next/image y la previsualización
-              // de las fotos de referencia antes de enviarlas.
-              "img-src 'self' data: blob: https://www.google-analytics.com",
-              "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com",
-              "form-action 'self'",
-              // Sin esto el iframe del mapa de Contacto (ServiceArea.tsx) lo
-              // bloquea `default-src 'self'` en silencio: el navegador no
-              // muestra ningún error visible, solo un recuadro vacío.
-              "frame-src https://www.google.com",
-              "frame-ancestors 'none'",
-              "base-uri 'self'",
-              "object-src 'none'",
-              /*
-               * SIN `upgrade-insecure-requests`.
-               *
-               * La directiva reescribe TODA petición http:// a https://,
-               * incluido `http://127.0.0.1`. WebKit no exime localhost, así
-               * que la hoja de estilos no cargaba en pruebas locales: sin CSS
-               * la cabecera perdía `position: fixed` y las tarjetas quedaban
-               * por encima del selector de idioma. Lo delató la suite en
-               * WebKit; Chromium y Firefox lo toleraban en silencio.
-               *
-               * En Vercel es además redundante: sirve solo HTTPS con HSTS y
-               * no hay ningún recurso en http:// que reescribir.
-               */
-            ].join("; "),
+            value: buildCspHeaderValue(isDevelopment),
           },
         ],
       },

@@ -6,6 +6,7 @@ import { getTranslations, setRequestLocale, getMessages } from "next-intl/server
 import { Barlow_Condensed, Newsreader, Source_Sans_3 } from "next/font/google";
 import { routing, LOCALE_PREFIXES, type AppLocale } from "@/i18n/routing";
 import { SITE_URL, INDEXABLE, BRAND, OG_IMAGE } from "@/lib/site";
+import { buildCspMetaValue } from "@/lib/csp.mjs";
 import SkipLink from "@/components/SkipLink";
 import Analytics from "@/components/Analytics";
 import MobileContactBar from "@/components/MobileContactBar";
@@ -133,6 +134,20 @@ export default async function LocaleLayout({ children, params }: Props) {
       data-scroll-behavior="smooth"
       className={`${sourceSans.variable} ${newsreader.variable} ${barlowCondensed.variable}`}
     >
+      <head>
+        {/*
+          Repite la CSP de next.config.mjs dentro del propio HTML.
+          En Hostinger su CDN sobrescribe la cabecera `Content-Security-Policy`
+          real (docs/QA_DESPLIEGUE_HOSTINGER.md, hallazgo A1) — esta etiqueta
+          la genera la app, así que ningún intermediario puede quitarla. Ver
+          lib/csp.mjs para el porqué y el límite conocido (`frame-ancestors`
+          no aplica por `<meta>`, cubierto igualmente por `X-Frame-Options`).
+        */}
+        <meta
+          httpEquiv="Content-Security-Policy"
+          content={buildCspMetaValue(process.env.NODE_ENV === "development")}
+        />
+      </head>
       <body>
         {/* Puramente visual (aria-hidden) y sin texto que traducir: vive
             fuera del proveedor de i18n a propósito. */}
