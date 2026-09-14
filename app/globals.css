@@ -2455,18 +2455,21 @@ a.v8-editorial-footer-social-icon:hover { color:var(--color-brand); }
    mismo que los dos bloques de arriba: el @media (max-width:700px)
    anterior redefine `.v7-hero-ctas` y ganaría la cascada.
 
-   1. ENCUADRE. La foto es apaisada (16:9) y el hueco es vertical, así que
-      `cover` la ajusta por altura: se ve entera de arriba abajo y el
-      tercio superior queda en cielo, que no aporta nada. Se agranda la
-      capa de la imagen y se ancla abajo para recortar ese cielo y subir
-      la piscina y la pérgola iluminada a la zona visible.
+   1. ENCUADRE. La foto es apaisada (16:9) y el hueco es vertical y además
+      alto (el texto apilado empuja la sección por encima del viewport),
+      así que `cover` la ajusta por altura y ya de por sí solo queda
+      visible una franja angosta del ancho de la foto. La versión anterior
+      además AGRANDABA la capa de imagen (118% de alto) para recortar el
+      cielo del tercio superior — pero agrandar reduce todavía más el ancho
+      visible, así que la foto se sentía "incompleta" (mensaje del cliente,
+      2026-09-14). Sin agrandado: se ve más composición a los lados a
+      cambio de un poco de cielo arriba, que es el cambio pedido.
    2. TITULAR. `balance` reparte mal un bloque con <br> forzado y dejaba
       «ven.» sola en la última línea; `pretty` evita justo esa huérfana.
    3. BOTONES. Apilados con anchos distintos la columna se ve descuadrada:
       al mismo ancho y centrados la pila se lee intencionada, y la
       jerarquía la sigue marcando el relleno rojo frente al enlace. */
 @media (max-width: 700px) {
-  .v7-hero-media { top: -18%; height: 118%; }
   .v7-hero-image { object-position: 55% 50%; }
   .v7-hero-title { text-wrap: pretty; }
   .v7-hero-ctas { display: grid; grid-template-columns: 1fr; gap: 1.1rem; }
