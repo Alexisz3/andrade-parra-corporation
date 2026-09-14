@@ -15,6 +15,7 @@ import ZoomableImage from "@/components/ZoomableImage";
 import GlobalCta from "@/components/GlobalCta";
 import { Link } from "@/i18n/navigation";
 import ArrowRight from "@/components/icons/ArrowRight";
+import PageTransition from "@/components/PageTransition";
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
@@ -108,7 +109,7 @@ export default async function ProjectDetail({ params }: PageProps<"/[locale]/pro
   };
 
   return (
-    <>
+    <PageTransition>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
@@ -140,6 +141,7 @@ export default async function ProjectDetail({ params }: PageProps<"/[locale]/pro
               orientation={project.coverPhoto.orientation}
               eager
               preload
+              viewTransitionName={`project-photo-${project.id}`}
               sizes="(min-width: 1400px) 1340px, 100vw"
               className={`bg-carbon-raised ${
                 project.coverPhoto.orientation === "vertical"
@@ -164,7 +166,7 @@ export default async function ProjectDetail({ params }: PageProps<"/[locale]/pro
               <div>
                 <h2 className="font-display text-xl font-semibold text-ink">{t("theProject")}</h2>
                 <p className="mt-4 max-w-2xl text-pretty text-lg leading-relaxed text-ink">
-                  {project.excerpt[loc]}
+                  {project.description?.[loc] ?? project.excerpt[loc]}
                 </p>
 
                 {/* Alcance: solo si el cliente lo confirmó. */}
@@ -285,6 +287,7 @@ export default async function ProjectDetail({ params }: PageProps<"/[locale]/pro
                     src={`/images/proyectos/${photo.file}`}
                     alt={`${project.title[loc]} — ${i + 2}`}
                     orientation={photo.orientation}
+                    viewTransitionName={`project-gallery-${project.id}-${photo.file}`}
                     sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                     className={`bg-carbon ${
                       photo.orientation === "vertical"
@@ -334,6 +337,6 @@ export default async function ProjectDetail({ params }: PageProps<"/[locale]/pro
         <GlobalCta />
       </main>
       <Footer />
-    </>
+    </PageTransition>
   );
 }

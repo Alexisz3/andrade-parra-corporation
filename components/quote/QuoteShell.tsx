@@ -279,6 +279,14 @@ export default function QuoteShell({
               <span aria-hidden="true">→</span>
             </button>
           </div>
+          {sending ? (
+            // No mide un progreso real (no lo hay hasta que el servidor
+            // responde) — solo dice "esto sigue vivo", para que "Enviando..."
+            // no se sienta congelado. Ver PLAN_MICROANIMACIONES.md 2.4.
+            <div className="v7-sending-bar" role="presentation">
+              <span />
+            </div>
+          ) : null}
 
           {!isEmailChannel && handoffUrl ? (
             <div className="v7-handoff" role="status">

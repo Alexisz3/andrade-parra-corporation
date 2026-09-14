@@ -9,6 +9,7 @@ import PageHero from "@/components/PageHero";
 import ProcessTimeline from "@/components/ProcessTimeline";
 import GlobalCta from "@/components/GlobalCta";
 import { BRAND } from "@/lib/site";
+import PageTransition from "@/components/PageTransition";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -46,7 +47,7 @@ export default async function ProcessPage({ params }: PageProps<"/[locale]/proce
   const th = await getTranslations("Home");
 
   return (
-    <>
+    <PageTransition>
       <Header />
       <main id="contenido" tabIndex={-1}>
         <PageHero
@@ -66,6 +67,6 @@ export default async function ProcessPage({ params }: PageProps<"/[locale]/proce
         <GlobalCta />
       </main>
       <Footer />
-    </>
+    </PageTransition>
   );
 }

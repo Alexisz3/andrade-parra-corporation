@@ -10,6 +10,7 @@ import V7EditorialCover from "@/components/home/V7EditorialCover";
 import V7ProjectLibrary from "@/components/home/V7ProjectLibrary";
 import GlobalCta from "@/components/GlobalCta";
 import V7BeforeAfterSection from "@/components/home/V7BeforeAfterSection";
+import PageTransition from "@/components/PageTransition";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -55,7 +56,7 @@ export default async function ProjectsPage({ params }: PageProps<"/[locale]/proj
   };
 
   return (
-    <>
+    <PageTransition>
       <Header />
       <main id="contenido" tabIndex={-1}>
         <V7EditorialCover
@@ -105,7 +106,12 @@ export default async function ProjectsPage({ params }: PageProps<"/[locale]/proj
             slider: t("compareLabel"),
             previous: tv7("previous"),
             next: tv7("next"),
-            counter: t("counter"),
+            // `.raw()`, no `t()`: este mensaje es una plantilla literal con
+            // "{n}"/"{total}" que sustituye V7BeforeAfterCarousel a mano
+            // (ver su comentario ahí) — `t()` intenta interpolarla como
+            // ICU de inmediato, y como no se le pasan esos valores aquí,
+            // lanzaba FORMATTING_ERROR en cada carga de la página.
+            counter: t.raw("counter"),
             trust1: tv7("beforeAfterTrust1"),
             trust2: tv7("beforeAfterTrust2"),
             trust3: tv7("beforeAfterTrust3"),
@@ -116,6 +122,6 @@ export default async function ProjectsPage({ params }: PageProps<"/[locale]/proj
         <GlobalCta />
       </main>
       <Footer />
-    </>
+    </PageTransition>
   );
 }

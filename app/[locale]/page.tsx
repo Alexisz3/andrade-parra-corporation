@@ -13,6 +13,7 @@ import V7FeaturedProjects from "@/components/home/V7FeaturedProjects";
 import V7ServicesTeaser from "@/components/home/V7ServicesTeaser";
 import { V7AboutPreview } from "@/components/home/V7HomePreviews";
 import GlobalCta from "@/components/GlobalCta";
+import PageTransition from "@/components/PageTransition";
 
 export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const { locale: rawLocale } = await params;
@@ -36,7 +37,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   };
 
   return (
-    <>
+    <PageTransition>
       <StructuredData />
       <Header />
       <main id="contenido" tabIndex={-1}>
@@ -100,6 +101,6 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
         <GlobalCta />
       </main>
       <Footer />
-    </>
+    </PageTransition>
   );
 }

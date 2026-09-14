@@ -10,6 +10,7 @@ import { V7Faq } from "@/components/home/V7EditorialSections";
 import V7EditorialCover from "@/components/home/V7EditorialCover";
 import { getV7EditorialCopy } from "@/lib/v7-editorial-copy";
 import GlobalCta from "@/components/GlobalCta";
+import PageTransition from "@/components/PageTransition";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -48,7 +49,7 @@ export default async function FaqPage({ params }: PageProps<"/[locale]/faq">) {
   const tv7 = await getTranslations("HomeV7");
 
   return (
-    <>
+    <PageTransition>
       <Header />
       <main id="contenido" tabIndex={-1}>
         {/* La portada toma el encabezado que antes abría V7Faq (eyebrow,
@@ -74,6 +75,6 @@ export default async function FaqPage({ params }: PageProps<"/[locale]/faq">) {
         <GlobalCta eyebrow={tv7("ctaFaqEyebrow")} title={tv7("ctaFaqTitle")} />
       </main>
       <Footer />
-    </>
+    </PageTransition>
   );
 }

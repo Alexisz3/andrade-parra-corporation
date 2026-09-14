@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { startTransition, useCallback, useEffect, useMemo, useRef, useState, ViewTransition } from "react";
 import { useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
@@ -57,7 +57,6 @@ export default function V7ProjectLibrary({
   copy: V7ProjectLibraryCopy;
 }) {
   const locale = useLocale() as AppLocale;
-  const sectionRef = useRef<HTMLElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const [filter, setFilter] = useState<Filter>("all");
   const [active, setActive] = useState(0);
@@ -91,22 +90,40 @@ export default function V7ProjectLibrary({
     return () => query.removeEventListener("change", sync);
   }, []);
 
+  /*
+   * Scroll NATIVO, no arrastre simulado con Pointer Events.
+   *
+   * La primera versión de esto reimplementaba el arrastre a mano (como
+   * `BeforeAfter.tsx`), y capturaba el puntero para poder animar la tarjeta
+   * mientras se arrastra. Eso rompía el toque normal (el clic quedaba
+   * atrapado por la captura) y, verificado con pruebas automatizadas
+   * reales, además provocaba que el navegador cancelara el gesto a mitad de
+   * camino en vez de completarlo. Probado en un dispositivo real, el
+   * deslizar táctil tampoco quedaba fiable.
+   *
+   * El scroll nativo del navegador no tiene ninguno de esos problemas: es
+   * el mismo gesto que ya usa cualquier lista o carrusel del teléfono, así
+   * que siempre "se siente" táctil sin código propio que lo intente
+   * imitar. `scroll-snap-type: x proximity` (en globals.css) es la misma
+   * solución que ya se aplicó en esta sesión para el riel de Inicio.
+   * `scrollTo` con `behavior: "smooth"` es lo que le da su animación de
+   * desplazamiento a los botones ‹ › y al teclado.
+   */
   const scrollTo = useCallback(
-    (index: number, focusCard = false) => {
+    (index: number) => {
       const viewport = viewportRef.current;
       if (!viewport || visible.length === 0) return;
-      const next = (index + visible.length) % visible.length;
+      const next = ((index % visible.length) + visible.length) % visible.length;
       const item = viewport.querySelector<HTMLElement>(`[data-project-index="${next}"]`);
       if (!item) return;
       setActive(next);
       viewport.scrollTo({ left: item.offsetLeft, behavior: motionAllowed ? "smooth" : "auto" });
-      if (focusCard) item.focus({ preventScroll: true });
     },
     [motionAllowed, visible.length]
   );
 
-  // El proyecto "activo" (para el contador) es la tarjeta más cercana al borde
-  // izquierdo del viewport mientras el usuario desplaza el rail.
+  // El proyecto "activo" (para el contador) es la tarjeta más cercana al
+  // borde izquierdo del viewport mientras el usuario desliza el riel.
   useEffect(() => {
     const viewport = viewportRef.current;
     if (!viewport) return;
@@ -136,8 +153,13 @@ export default function V7ProjectLibrary({
   }, [visible.length]);
 
   const chooseFilter = (next: Filter) => {
-    setActive(0);
-    setFilter(next);
+    // `startTransition` es lo que activa el crossfade: un `setState` normal
+    // no dispara `<ViewTransition>` (ver PLAN_MICROANIMACIONES.md 1.2 y la
+    // guía de Next citada ahí — "Regular setState calls do not trigger them").
+    startTransition(() => {
+      setActive(0);
+      setFilter(next);
+    });
     viewportRef.current?.scrollTo({ left: 0, behavior: "auto" });
   };
 
@@ -146,7 +168,7 @@ export default function V7ProjectLibrary({
   const progress = count > 1 ? (active / (count - 1)) * 100 : 100;
 
   return (
-    <section ref={sectionRef} id="proyectos" className="v7-section v7-projects" aria-labelledby="home-projects-title">
+    <section id="proyectos" className="v7-section v7-projects" aria-labelledby="home-projects-title">
       <div className="v7-container">
         <div className="v7-projects-heading">
           <div>
@@ -192,76 +214,86 @@ export default function V7ProjectLibrary({
           </div>
         </div>
 
-        <div
-          ref={viewportRef}
-          className="v7-project-viewport"
-          role="region"
-          aria-roledescription="carousel"
-          aria-label={copy.regionLabel}
-          tabIndex={0}
-          onKeyDown={(event) => {
-            if (event.key === "ArrowLeft") {
-              event.preventDefault();
-              scrollTo(active - 1);
-            }
-            if (event.key === "ArrowRight") {
-              event.preventDefault();
-              scrollTo(active + 1);
-            }
-          }}
-        >
-          <ul className="v7-project-track">
-            {visible.map((project, index) => (
-              <li
-                key={project.id}
-                data-project-index={index}
-                tabIndex={-1}
-                aria-label={`${index + 1} / ${count}: ${project.title[locale]}`}
-                aria-roledescription="slide"
-                className="v7-project-slide"
-              >
-                <article className="v7-project-article">
-                  <Link
-                    href={{ pathname: "/projects/[slug]", params: { slug: project.slugs[locale] } }}
-                    className="v7-project-card"
-                  >
-                    <div className="v7-project-media">
-                      <Image
-                        src={`/images/proyectos/${project.coverPhoto.file}`}
-                        alt={project.title[locale]}
-                        fill
-                        loading={index < 3 ? "eager" : "lazy"}
-                        sizes="(min-width: 1100px) 30vw, (min-width: 700px) 55vw, 84vw"
-                        className="object-cover"
-                      />
-                      <span className="v7-project-index">APC · {String(projects.indexOf(project) + 1).padStart(2, "0")}</span>
-                      <span className="v7-project-cta" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                          <path d="m9 18 6-6-6-6" />
-                        </svg>
-                      </span>
-                    </div>
-                    <div className="v7-project-info">
-                      <span className="v7-meta">{copy.category[project.category]}</span>
-                      <h3>{project.title[locale]}</h3>
-                      <p className="v7-project-line">
-                        {project.location}
-                        <span aria-hidden="true"> · </span>
-                        {project.status === "completed" ? copy.completed : copy.inProgress}
-                      </p>
-                    </div>
-                  </Link>
-                  <ZoomButton
-                    src={`/images/proyectos/${project.coverPhoto.file}`}
-                    alt={project.title[locale]}
-                    orientation={project.coverPhoto.orientation}
-                    className="v7-project-zoom"
-                  />
-                </article>
-              </li>
-            ))}
-          </ul>
-        </div>
+        {/* Cambiar de filtro no navega a otra página, así que sin esto se
+            vería un corte seco entre una lista de tarjetas y la otra — un
+            crossfade avisa "mismo lugar, contenido distinto" en vez de
+            "algo se rompió". Ver PLAN_MICROANIMACIONES.md 1.2. */}
+        <ViewTransition key={filter} name="v7-project-library" share="auto" enter="auto" default="none">
+          <div
+            ref={viewportRef}
+            className="v7-stack"
+            role="region"
+            aria-roledescription="carousel"
+            aria-label={copy.regionLabel}
+            tabIndex={0}
+            onKeyDown={(event) => {
+              if (event.key === "ArrowLeft") {
+                event.preventDefault();
+                scrollTo(active - 1);
+              }
+              if (event.key === "ArrowRight") {
+                event.preventDefault();
+                scrollTo(active + 1);
+              }
+            }}
+          >
+            <div className="v7-stack-track">
+              {visible.map((project, index) => (
+                <div key={project.id} data-project-index={index} className="v7-stack-item">
+                  <article className="v7-project-article">
+                    <Link
+                      href={{ pathname: "/projects/[slug]", params: { slug: project.slugs[locale] } }}
+                      className="v7-project-card"
+                      aria-label={`${copy.category[project.category]}: ${project.title[locale]}`}
+                    >
+                      <div className="v7-project-media">
+                        {/* Mismo nombre que la portada de la ficha del
+                            proyecto (projects/[slug]/page.tsx): la
+                            tarjeta se transforma en la foto grande en vez
+                            de cortar en seco. Ver
+                            PLAN_MICROANIMACIONES.md 1.3. */}
+                        <ViewTransition name={`project-photo-${project.id}`}>
+                          <Image
+                            src={`/images/proyectos/${project.coverPhoto.file}`}
+                            alt={project.title[locale]}
+                            fill
+                            loading={index < 3 ? "eager" : "lazy"}
+                            sizes="(min-width: 700px) 26rem, 88vw"
+                            className="object-cover"
+                          />
+                        </ViewTransition>
+                        <span className="v7-project-index">
+                          APC · {String(projects.indexOf(project) + 1).padStart(2, "0")}
+                        </span>
+                        <div className="v7-stack-scrim" aria-hidden="true" />
+                        <div className="v7-stack-info">
+                          <span className="v7-meta">{copy.category[project.category]}</span>
+                          <h3>{project.title[locale]}</h3>
+                          <p className="v7-project-line">
+                            {project.location}
+                            <span aria-hidden="true"> · </span>
+                            {project.status === "completed" ? copy.completed : copy.inProgress}
+                          </p>
+                        </div>
+                        <span className="v7-project-cta" aria-hidden="true">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                            <path d="m9 18 6-6-6-6" />
+                          </svg>
+                        </span>
+                      </div>
+                    </Link>
+                    <ZoomButton
+                      src={`/images/proyectos/${project.coverPhoto.file}`}
+                      alt={project.title[locale]}
+                      orientation={project.coverPhoto.orientation}
+                      className="v7-project-zoom"
+                    />
+                  </article>
+                </div>
+              ))}
+            </div>
+          </div>
+        </ViewTransition>
 
         <div className="v7-rail-footer">
           <span className="v7-rail-track" aria-hidden="true">

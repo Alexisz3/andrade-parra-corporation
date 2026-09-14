@@ -49,7 +49,7 @@ export default function V7FeaturedProjects({
   if (!featured.length) return null;
 
   return (
-    <section className="v8-editorial-featured" aria-labelledby="featured-preview-title">
+    <section className="v8-editorial-featured v7-scroll-reveal" aria-labelledby="featured-preview-title">
       <div className="v8-featured-inner">
         <p className="v8-featured-eyebrow">
           {copy.eyebrow}

@@ -14,6 +14,7 @@ import ProjectCard from "@/components/ProjectCard";
 import GlobalCta from "@/components/GlobalCta";
 import { Link } from "@/i18n/navigation";
 import ArrowRight from "@/components/icons/ArrowRight";
+import PageTransition from "@/components/PageTransition";
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
@@ -103,7 +104,7 @@ export default async function ServiceDetail({ params }: PageProps<"/[locale]/ser
   };
 
   return (
-    <>
+    <PageTransition>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
@@ -208,6 +209,6 @@ export default async function ServiceDetail({ params }: PageProps<"/[locale]/ser
         <GlobalCta />
       </main>
       <Footer />
-    </>
+    </PageTransition>
   );
 }

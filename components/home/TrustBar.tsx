@@ -44,7 +44,7 @@ export default async function TrustBar() {
   };
 
   return (
-    <section className="v8-trust-bar" aria-label={t("trustServiceArea")}>
+    <section className="v8-trust-bar v7-scroll-reveal" aria-label={t("trustServiceArea")}>
       <div className="v7-container">
         <ul className="v8-trust-list">
           {TRUST_SIGNALS.map((signal, i) => (

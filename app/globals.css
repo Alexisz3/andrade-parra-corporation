@@ -53,7 +53,12 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 .eyebrow::before,
 .v7-eyebrow::before { content: ""; width: 2rem; height: 2px; background: var(--color-brand); }
 .v7-eyebrow { color: var(--color-muted); }
-.v7-eyebrow-light { color: rgb(252 250 246 / 70%); }
+/* Antes era blanco al 70%: sobre una foto con zonas claras (cielo, luces,
+   reflejos del agua) se perdía casi por completo. Este rojo más claro que
+   el de marca (que sí falla 4.5:1 sobre el fondo carbón plano de
+   `.v7-about`, verificado con axe) mantiene contraste tanto sobre fondos
+   oscuros planos como sobre las zonas claras de las fotos del hero. */
+.v7-eyebrow-light { color: #f2647d; text-shadow: 0 1px 3px rgb(0 0 0 / 55%), 0 0 10px rgb(0 0 0 / 35%); }
 .pb-safe { padding-bottom: max(var(--pb, 4rem), calc(env(safe-area-inset-bottom, 0px) + 3rem)); }
 .v7-container { width: min(100% - 3rem, 88rem); margin-inline: auto; }
 .v7-section { padding-block: clamp(5rem, 9vw, 9rem); }
@@ -159,16 +164,15 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 .v7-hero-title em { color: #f7f5f1; font-family: var(--font-newsreader),serif; font-weight: 500; }
 .v7-hero-lead { max-width: 39rem; color: rgb(252 250 246 / 78%); font-size: clamp(1rem,1.5vw,1.3rem); line-height: 1.55; }
 .v7-hero-ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 1.75rem; margin-top: 2rem; }
-/* Primaria: sólida, para que la acción de conversión no compita con nada.
-   Secundaria: enlace de texto subrayado, sin caja — el contraste entre las
-   dos ya marca la jerarquía sin necesitar un segundo botón lleno de borde. */
-.v7-hero-cta-primary { display:inline-flex; align-items:center; justify-content:center; gap:.9rem; min-height:3.5rem; border-radius:6px; padding:0 1.85rem; background:var(--color-action); color:#fff; font-weight:600; letter-spacing:.01em; text-decoration:none; transition:background .2s ease; }
+/* Primaria: píldora sólida. Secundaria: la misma forma en contorno, sin
+   relleno — comparten peso visual y forma, la diferencia (lleno vs. hueco)
+   ya basta para marcar cuál es la acción principal. */
+.v7-hero-cta-primary { display:inline-flex; align-items:center; justify-content:center; min-height:3.5rem; border-radius:9999px; padding:0 2.1rem; background:var(--color-action); color:#fff; font-weight:600; letter-spacing:.01em; text-decoration:none; transition:background .2s ease, transform .15s ease; }
 .v7-hero-cta-primary:hover { background:var(--color-action-hover); }
-.v7-hero-cta-primary:active { background:var(--color-action-active); }
-.v7-hero-cta-secondary { display:inline-flex; align-items:center; gap:.6rem; min-height:3.5rem; border-bottom:1px solid rgb(252 250 246 / 45%); color:var(--color-bone); font-weight:600; text-decoration:none; transition:border-color .2s ease; }
-.v7-hero-cta-secondary span { transition:transform .2s ease; }
-.v7-hero-cta-secondary:hover { border-color:var(--color-bone); }
-.v7-hero-cta-secondary:hover span { transform:translate(3px,-3px); }
+.v7-hero-cta-primary:active { background:var(--color-action-active); transform:scale(.97); }
+.v7-hero-cta-secondary { display:inline-flex; align-items:center; justify-content:center; min-height:3.5rem; border-radius:9999px; padding:0 2.1rem; border:1.5px solid rgb(252 250 246 / 45%); color:var(--color-bone); font-weight:600; text-decoration:none; transition:border-color .2s ease, background-color .2s ease, transform .15s ease; }
+.v7-hero-cta-secondary:hover { border-color:var(--color-bone); background-color:rgb(252 250 246 / 10%); }
+.v7-hero-cta-secondary:active { transform:scale(.97); }
 .v7-hero-cta-primary:focus-visible,.v7-hero-cta-secondary:focus-visible { outline:2px solid var(--color-action); outline-offset:3px; }
 .v7-hero :focus-visible { outline-color:var(--color-action); }
 .v7-carousel-controls { display:flex; align-items:center; gap:.2rem; }
@@ -181,7 +185,46 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 .v7-library-controls svg { width:18px; }
 .v7-progress { height: 2px; margin-top:.5rem; background: rgb(252 250 246 / 14%); overflow: hidden; }
 .v7-progress-fill { display: block; height: 100%; background: var(--color-action); transform-origin: left; animation: v7-progress linear forwards; }
+
+/* Hilo de progreso de scroll (ScrollProgress.tsx) — detalle de marca de
+   PLAN_MICROANIMACIONES.md, sección 3. Encima del header (z-index:50), así
+   que siempre se ve el filo rojo contra cualquier fondo. */
+.v7-scroll-progress { position: fixed; inset: 0 0 auto 0; height: 3px; z-index: 60; pointer-events: none; }
+.v7-scroll-progress-bar { height: 100%; width: 100%; background: var(--color-brand); transform-origin: left; transform: scaleX(var(--v7-scroll-progress, 0)); transition: transform .12s linear; }
+
+/* Formulario de cotización enviando (QuoteShell.tsx): un segmento que viaja
+   de un lado a otro — a propósito NO es una barra que se llena, porque eso
+   prometería un progreso que no se está midiendo. */
+.v7-sending-bar { height: 3px; margin-top: .9rem; border-radius: 9999px; background: var(--color-line); overflow: hidden; }
+.v7-sending-bar span { display: block; height: 100%; width: 40%; border-radius: 9999px; background: var(--color-action); }
+@media (prefers-reduced-motion: no-preference) {
+  .v7-sending-bar span { animation: v7-sending-sweep 1.1s ease-in-out infinite; }
+}
+@keyframes v7-sending-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(250%); }
+}
 .v7-reveal-in { animation: v7-rise .7s ease both; }
+
+/* Aparecer al entrar en viewport, sin JavaScript: `animation-timeline: view()`
+   ata la animación al progreso de scroll DEL PROPIO elemento — el navegador
+   la calcula desde el layout, así que no hay parpadeo de hidratación ni
+   estado que gestionar en React (el problema clásico de un
+   IntersectionObserver: el contenido nace visible en el primer render del
+   servidor y desaparece de golpe cuando el cliente arma el observer).
+   Sin soporte (Safari/Firefox actuales), `@supports` no entra y el contenido
+   simplemente se muestra normal, igual que las View Transitions de
+   PLAN_MICROANIMACIONES.md 1.1 — mismo criterio de degradación en todo el
+   proyecto. Ver PLAN_MICROANIMACIONES.md 2.1. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .v7-scroll-reveal {
+      animation: v7-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 35%;
+    }
+  }
+}
 
 /* Projects — portfolio editorial en rail horizontal */
 .v7-projects { overflow: hidden; background: var(--color-paper); padding-top: clamp(4rem, 6vw, 5rem); }
@@ -204,32 +247,52 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 .v7-library-controls button:hover { border-color: var(--color-ink); background: rgb(32 28 24 / 5%); }
 .v7-library-controls svg { width: 17px; }
 
-/* `proximity`, no `mandatory`: con las tarjetas casi a ancho de pantalla,
-   `mandatory` rechazaba un deslizar corto o suave — el navegador lo
-   interpretaba como "no llegó al siguiente punto de ajuste" y lo regresaba
-   de un salto a donde empezó, sintiéndose como si el dedo no hiciera nada.
-   `proximity` solo ajusta cuando el gesto ya casi llegó por su cuenta: deja
-   que cualquier arrastre, corto o largo, mueva el carril con naturalidad. */
-.v7-project-viewport { margin-top: clamp(1.75rem, 2.5vw, 2.5rem); overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: none; scroll-snap-type: x proximity; scroll-padding-left: 0; }
-.v7-project-viewport::-webkit-scrollbar { display: none; }
-.v7-project-track { display: flex; gap: clamp(1rem, 2vw, 1.65rem); width: max-content; margin: 0; padding: 0 0 .25rem; list-style: none; }
-.v7-project-slide { width: min(72vw, 23rem); scroll-snap-align: start; }
+/*
+ * Riel de tarjetas que se desliza a los lados, a pedido explícito del
+ * cliente sobre una referencia visual (mensaje del 2026-09-14): NO apiladas
+ * una encima de otra — tarjetas completas, una junto a otra, con la
+ * siguiente asomándose por el borde.
+ *
+ * El deslizar es scroll NATIVO del navegador, no arrastre reimplementado a
+ * mano con Pointer Events. Se probó la versión con Pointer Events primero
+ * (mismo patrón que `BeforeAfter.tsx`) y falló en dos frentes: capturar el
+ * puntero para animar la tarjeta atrapaba también el clic normal, y en
+ * pruebas automatizadas reales el navegador cancelaba el gesto a mitad de
+ * camino en vez de completarlo — confirmado además por el cliente probando
+ * en su propio teléfono. El scroll nativo no tiene ninguno de esos
+ * problemas: es el mismo gesto que ya usa cualquier carrusel del sistema.
+ * `scroll-snap-type: x proximity` es la misma solución que ya se usó en
+ * esta sesión para el riel de Inicio (ver la nota histórica más abajo,
+ * junto a `.v7-project-viewport`... con ese nombre en versiones previas).
+ * `scrollTo({behavior:"smooth"})` en el componente es lo que le da su
+ * animación de desplazamiento a los botones ‹ › y al teclado.
+ */
+.v7-stack { position: relative; margin-top: clamp(1.75rem, 2.5vw, 2.5rem); overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: none; scroll-snap-type: x proximity; scroll-padding-left: 0; }
+.v7-stack::-webkit-scrollbar { display: none; }
+.v7-stack-track { display: flex; gap: clamp(1rem, 2vw, 1.65rem); width: max-content; height: min(84vw, 32rem); max-height: 34rem; margin: 0; padding: 0; }
+.v7-stack-item { width: min(78vw, 26rem); flex: none; scroll-snap-align: start; height: 100%; }
 .v7-project-article { position: relative; height: 100%; }
-.v7-project-card { height: 100%; display: flex; flex-direction: column; color: inherit; text-decoration: none; }
-.v7-project-media { position: relative; aspect-ratio: 4/5; border-radius: 12px; overflow: hidden; background: var(--color-line); }
+.v7-project-card { height: 100%; display: block; color: inherit; text-decoration: none; transition: transform .25s ease; }
+.v7-project-card:hover,
+.v7-project-card:focus-visible { transform: translateY(-4px); }
+.v7-project-card:active { transform: translateY(-1px) scale(.985); }
+.v7-project-media { position: absolute; inset: 0; border-radius: 20px; overflow: hidden; background: var(--color-line); }
 .v7-project-media img { transition: transform .7s cubic-bezier(.2,.7,.2,1); }
 .v7-project-card:hover .v7-project-media img,
 .v7-project-card:focus-visible .v7-project-media img { transform: scale(1.045); }
+.v7-stack-scrim { position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(0deg, rgb(15 13 11 / 85%) 0%, rgb(15 13 11 / 0%) 48%); pointer-events: none; }
 .v7-project-index { position: absolute; top: .85rem; left: .85rem; z-index: 2; background: rgb(23 21 18 / 82%); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); color: var(--color-bone); padding: .36rem .6rem; border-radius: 4px; font-family: var(--font-mono); font-size: .66rem; letter-spacing: .12em; }
 .v7-project-cta { position: absolute; right: .85rem; bottom: .85rem; z-index: 2; width: 2.75rem; height: 2.75rem; display: grid; place-items: center; border-radius: 50%; background: var(--color-brand); color: #fff; opacity: 0; transform: translateY(6px); transition: opacity .25s ease, transform .25s ease; }
 .v7-project-cta svg { width: 16px; }
 .v7-project-card:hover .v7-project-cta,
 .v7-project-card:focus-visible .v7-project-cta { opacity: 1; transform: none; }
 .v7-project-zoom { position: absolute; top: .85rem; right: .85rem; z-index: 3; }
-.v7-project-info { padding: 1rem 0 0; display: flex; flex-direction: column; gap: .3rem; }
-.v7-project-info .v7-meta { color: var(--color-muted); font-size: .68rem; }
-.v7-project-info h3 { margin: .1rem 0 0; font-family: var(--font-newsreader), serif; font-size: clamp(1.3rem, 1.9vw, 1.7rem); font-weight: 400; line-height: 1.15; letter-spacing: -.01em; color: var(--color-ink); }
-.v7-project-line { margin: .1rem 0 0; color: var(--color-muted); font-size: .85rem; }
+/* Info encima de la foto, no debajo: así se lee de un vistazo con la
+   tarjeta a pantalla parcial, como en la referencia. */
+.v7-stack-info { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 1.5rem 1.35rem 1.6rem; }
+.v7-stack-info .v7-meta { display: inline-block; color: rgb(252 250 246 / 80%); font-family: var(--font-mono); font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.v7-stack-info h3 { margin: .4rem 0 0; font-family: var(--font-newsreader), serif; font-size: clamp(1.5rem, 3.4vw, 2.1rem); font-weight: 500; line-height: 1.08; letter-spacing: -.01em; color: #fff; }
+.v7-project-line { margin: .35rem 0 0; color: rgb(252 250 246 / 78%); font-size: .85rem; }
 
 .v7-rail-footer { display: flex; align-items: center; gap: 1.5rem; margin-top: clamp(1.5rem, 2.5vw, 2.25rem); }
 @media (min-width: 1024px) { .v7-rail-footer { padding-right: 10rem; } }
@@ -617,7 +680,7 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 .v7-form-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.1rem; }.v7-field { display:grid; align-content:start; gap:.45rem; }.v7-field-full { grid-column:1/-1; }
 .v7-field label { font-size:.86rem; font-weight:650; }.v7-field-control { width:100%; min-height:3.2rem; border:1px solid rgb(32 28 24 / 18%); border-radius:8px; padding:.75rem .85rem; background:#fffdf9; color:var(--color-ink); outline:0; transition:border-color .2s,box-shadow .2s; }.v7-field textarea.v7-field-control { min-height:8rem; resize:vertical; }.v7-field-control:focus { border-color:var(--color-brand); box-shadow:0 0 0 3px rgb(205 44 59 / 14%); }.v7-field-control.is-error { border-color:var(--color-error); }
 .v7-field-error { margin:0; color:var(--color-error); font-size:.78rem; }.v7-consent { display:flex; align-items:flex-start; gap:.7rem; color:var(--color-muted); font-weight:400!important; line-height:1.5; }.v7-consent input { width:1.2rem; height:1.2rem; flex:none; margin-top:.1rem; accent-color:var(--color-brand); }
-.v7-quote-actions { display:flex; align-items:center; justify-content:space-between; gap:1.5rem; margin-top:1.4rem; }.v7-quote-actions > p { max-width:25rem; margin:0; color:var(--color-muted); font-size:.8rem; line-height:1.5; }.v7-quote-actions button { min-height:3.25rem; display:flex; align-items:center; justify-content:center; gap:1rem; border:0; border-radius:9px; padding:.75rem 1.25rem; background:var(--color-action); color:#fff; cursor:pointer; font-weight:700; transition:transform .2s,background .2s; }.v7-quote-actions button:hover { transform:translateY(-2px); background:var(--color-action-hover); }.v7-quote-actions button:active { background:var(--color-action-active); }
+.v7-quote-actions { display:flex; align-items:center; justify-content:space-between; gap:1.5rem; margin-top:1.4rem; }.v7-quote-actions > p { max-width:25rem; margin:0; color:var(--color-muted); font-size:.8rem; line-height:1.5; }.v7-quote-actions button { min-height:3.25rem; display:flex; align-items:center; justify-content:center; gap:1rem; border:0; border-radius:9px; padding:.75rem 1.25rem; background:var(--color-action); color:#fff; cursor:pointer; font-weight:700; transition:transform .2s,background .2s; }.v7-quote-actions button:hover { transform:translateY(-2px); background:var(--color-action-hover); }.v7-quote-actions button:active { background:var(--color-action-active); transform:translateY(-2px) scale(.98); }
 .v7-handoff { margin-top:1.2rem; border-left:3px solid var(--color-success); border-radius:8px; padding:1rem; background:#fffdf9; }.v7-handoff p { margin:.35rem 0; color:var(--color-muted); line-height:1.5; }.v7-handoff a { color:var(--color-brand-dark); font-weight:700; }
 .v7-quote-card { min-height:100%; display:flex; flex-direction:column; justify-content:space-between; border:1px solid rgb(255 255 255 / 15%); border-radius:10px; padding:clamp(1.6rem,3vw,2.3rem); background:linear-gradient(145deg,#211e1a,#181614); }
 .v7-quote-card-top { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:1.5rem; }.v7-quote-card-top .v7-meta { color:rgb(252 250 246 / 48%); }.v7-quote-card-top b { border:1px solid rgb(205 44 59 / 40%); border-radius:5px; padding:.45rem .55rem; color:var(--color-bone); font:600 .68rem/1 var(--font-mono); letter-spacing:.14em; }
@@ -737,6 +800,23 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 @keyframes v7-progress { from { transform:scaleX(0); } to { transform:scaleX(1); } }
 @keyframes v7-faq-open { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:none; } }
 
+/* Transición entre páginas (PageTransition.tsx, ViewTransition de React).
+   Ver PLAN_MICROANIMACIONES.md 1.1 — una sola dirección consistente, sin
+   distinguir "adelante/atrás" todavía. */
+@keyframes v7-page-out { from { opacity:1; transform:translateY(0); } to { opacity:0; transform:translateY(-10px); } }
+@keyframes v7-page-in { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+::view-transition-old(.v7-page-out) { animation:150ms ease-in both v7-page-out; }
+::view-transition-new(.v7-page-in) { animation:280ms ease-out 90ms both v7-page-in; }
+/* Un clic durante la animación no debe perderse — sin esto, la capa de
+   transición del navegador se traga los eventos de puntero. */
+::view-transition { pointer-events:none; }
+/* El header no forma parte del viaje: se ancla para que no parpadee ni se
+   desplace mientras el resto de la página entra/sale (Header.tsx le da
+   viewTransitionName:"site-header"). */
+::view-transition-group(site-header) { animation:none; z-index:100; }
+::view-transition-old(site-header) { display:none; }
+::view-transition-new(site-header) { animation:none; }
+
 @media (max-width: 1180px) {
   .v7-desktop-nav { display:none; }
   .v7-menu-trigger { display:flex; }
@@ -813,8 +893,11 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
   .v7-button { min-height:3.5rem; padding:.7rem .8rem; font-size:.88rem; }
   .v7-hero-grid { gap:1.25rem; }
   .v7-progress { margin-top:.3rem; }
-  .v7-project-viewport { margin-inline: -1.5rem; padding-inline: 1.5rem; scroll-padding-inline: 1.5rem; }
-  .v7-project-slide { width: min(85vw, 20rem); }
+  /* El riel de proyectos respira hasta el borde de la pantalla en vez de
+     quedar encajonado en el padding del contenedor — mismo criterio que ya
+     tenía antes de este rediseño. */
+  .v7-stack { margin-inline: -1.5rem; padding-inline: 1.5rem; scroll-padding-inline: 1.5rem; }
+  .v7-stack-item { width: min(85vw, 20rem); }
 
   /* Craft — tarjetas a una columna y bullets en franja compacta envuelta;
      el resto (orden, tipografía base) ya lo resuelve el corte de 820px. */
@@ -843,6 +926,11 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior:auto; }
   *,*::before,*::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }
+  /* Las pseudo-clases de View Transitions viven fuera del árbol normal del
+     documento — el `*` de arriba no las alcanza, hay que apagarlas aparte. */
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) { animation-duration:.01ms !important; animation-delay:0s !important; }
 }
 
 /* PREMIUM IMMERSIVE REDESIGN */
@@ -1941,7 +2029,8 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 .v8-editorial-footer-bottom-right { display:flex; align-items:center; gap:2rem; }
 .v8-editorial-footer-slogan { margin:0; color:rgb(252 250 246 / 60%); font-family:var(--font-mono); font-size:.7rem; font-weight:700; letter-spacing:.12em; }
 .v8-editorial-footer-socials { display:flex; gap:1rem; }
-.v8-editorial-footer-social-icon { color:rgb(252 250 246 / 50%); }
+.v8-editorial-footer-social-icon { color:rgb(252 250 246 / 50%); transition:color .2s; }
+a.v8-editorial-footer-social-icon:hover { color:var(--color-brand); }
 
 /* Editorial Featured Projects (V8) */
 .v8-editorial-featured { padding-block:clamp(5rem,8vw,8rem); background:var(--color-surface); }

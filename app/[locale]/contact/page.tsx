@@ -9,6 +9,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { V7Contact } from "@/components/home/V7EditorialSections";
 import { getV7EditorialCopy } from "@/lib/v7-editorial-copy";
+import PageTransition from "@/components/PageTransition";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -46,13 +47,13 @@ export default async function ContactPage({ params }: PageProps<"/[locale]/conta
   const tc = await getTranslations("Contact");
 
   return (
-    <>
+    <PageTransition>
       <Header />
       <main id="contenido" tabIndex={-1}>
         <V7Contact copy={editorialCopy} microcopy={tc("heroMicrocopy")} />
         <ServiceArea />
       </main>
       <Footer />
-    </>
+    </PageTransition>
   );
 }

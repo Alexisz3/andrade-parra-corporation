@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, ViewTransition } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
@@ -38,12 +38,22 @@ export default function Lightbox({
   alt,
   orientation,
   onClose,
+  viewTransitionName,
 }: {
   src: string;
   alt: string;
   orientation: "vertical" | "horizontal";
   /** Cierra el visor. Quien lo abrió es responsable de recuperar el foco. */
   onClose: () => void;
+  /**
+   * Mismo nombre que llevaba la miniatura que abrió el visor: la foto se
+   * "entrega" del disparador al visor en vez de cortar de una a otra.
+   * Quien lo pasa (ZoomableImage.tsx) es responsable de que la miniatura
+   * DEJE de llevar ese nombre mientras el visor está abierto — dos
+   * elementos con el mismo nombre a la vez rompe la transición. Ver
+   * PLAN_MICROANIMACIONES.md 1.3.
+   */
+  viewTransitionName?: string;
 }) {
   const t = useTranslations("Projects");
   const panelRef = useRef<HTMLDivElement>(null);
@@ -133,16 +143,25 @@ export default function Lightbox({
           }}
         >
           <div className={`relative w-full ${vertical ? "aspect-[3/4]" : "aspect-[4/3]"}`}>
-            <Image
-              src={src}
-              alt={alt}
-              fill
-              // Mismo pipeline que el resto del sitio: AVIF/WebP negociados y
-              // sin ampliar por encima del original.
-              sizes={`(max-width: ${MAX_PHOTO_PX}px) 100vw, ${MAX_PHOTO_PX}px`}
-              className="object-contain"
-              priority
-            />
+            {(() => {
+              const image = (
+                <Image
+                  src={src}
+                  alt={alt}
+                  fill
+                  // Mismo pipeline que el resto del sitio: AVIF/WebP negociados y
+                  // sin ampliar por encima del original.
+                  sizes={`(max-width: ${MAX_PHOTO_PX}px) 100vw, ${MAX_PHOTO_PX}px`}
+                  className="object-contain"
+                  priority
+                />
+              );
+              return viewTransitionName ? (
+                <ViewTransition name={viewTransitionName}>{image}</ViewTransition>
+              ) : (
+                image
+              );
+            })()}
           </div>
         </figure>
 

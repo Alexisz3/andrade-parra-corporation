@@ -9,6 +9,7 @@ import { SITE_URL, INDEXABLE, BRAND, OG_IMAGE } from "@/lib/site";
 import SkipLink from "@/components/SkipLink";
 import Analytics from "@/components/Analytics";
 import MobileContactBar from "@/components/MobileContactBar";
+import ScrollProgress from "@/components/ScrollProgress";
 import "../globals.css";
 
 const sourceSans = Source_Sans_3({
@@ -133,6 +134,9 @@ export default async function LocaleLayout({ children, params }: Props) {
       className={`${sourceSans.variable} ${newsreader.variable} ${barlowCondensed.variable}`}
     >
       <body>
+        {/* Puramente visual (aria-hidden) y sin texto que traducir: vive
+            fuera del proveedor de i18n a propósito. */}
+        <ScrollProgress />
         <NextIntlClientProvider messages={clientMessages}>
           <SkipLink />
           {children}

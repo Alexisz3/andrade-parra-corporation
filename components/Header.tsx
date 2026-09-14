@@ -41,7 +41,10 @@ export default function Header() {
 
   return (
     <>
-      <header className={headerClass}>
+      {/* viewTransitionName ancla el header: no debe moverse ni parpadear
+          durante la transición entre páginas (globals.css, sección
+          site-header). Ver PLAN_MICROANIMACIONES.md 1.1. */}
+      <header className={headerClass} style={{ viewTransitionName: "site-header" }}>
         <div className="v7-container v7-header-inner">
           <Link href="/" className="v7-brand-link" aria-label={`${BRAND.name} — ${t("home")}`}>
             <BrandLogo variant="approved" decorative className="v7-header-logo" />

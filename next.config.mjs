@@ -80,6 +80,10 @@ const nextConfig = {
               "img-src 'self' data: blob: https://www.google-analytics.com",
               "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com",
               "form-action 'self'",
+              // Sin esto el iframe del mapa de Contacto (ServiceArea.tsx) lo
+              // bloquea `default-src 'self'` en silencio: el navegador no
+              // muestra ningún error visible, solo un recuadro vacío.
+              "frame-src https://www.google.com",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "object-src 'none'",

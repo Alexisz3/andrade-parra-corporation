@@ -30,6 +30,17 @@ const KEYBOARD_STEP = 5;
  * focusable (Tab no depende de `pointer-events`) y accesible por lectores de
  * pantalla, pero `pointer-events:none` en su CSS le quita el manejo del
  * puntero — así nunca compite con el `onPointerDown` de aquí abajo.
+ *
+ * `draggable={false}` en las dos `<Image>` (mensaje del 2026-09-15): sin
+ * esto, arrastrar con RATÓN en escritorio interrumpía el gesto a mitad de
+ * camino — un `<img>` es arrastrable por defecto en el navegador (el gesto
+ * de "arrastrar esta foto a otra pestaña"), y en cuanto ese arrastre nativo
+ * arranca, el navegador cancela el seguimiento del puntero
+ * (`pointercancel`) a la mitad del recorrido. Confirmado simulando un
+ * arrastre de ratón real y viendo el `dragstart` disparar justo antes del
+ * `pointercancel` — no fue una corazonada. El táctil no tiene ese problema
+ * (no existe un "arrastrar la foto" nativo al tocar), por eso solo fallaba
+ * con ratón.
  */
 export default function BeforeAfter({
   pair,
@@ -96,6 +107,7 @@ export default function BeforeAfter({
         alt={pair.afterAlt}
         fill
         priority
+        draggable={false}
         className="v7-compare-image"
         sizes="(min-width: 1024px) 62vw, 100vw"
       />
@@ -110,6 +122,7 @@ export default function BeforeAfter({
           alt={pair.beforeAlt}
           fill
           priority
+          draggable={false}
           className="v7-compare-image"
           sizes="(min-width: 1024px) 62vw, 100vw"
         />

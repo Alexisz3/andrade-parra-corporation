@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import V7EditorialCover from "@/components/home/V7EditorialCover";
 import GlobalCta from "@/components/GlobalCta";
 import V7ServicesAccordion from "@/components/home/V7ServicesAccordion";
+import PageTransition from "@/components/PageTransition";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -44,7 +45,7 @@ export default async function ServicesPage({ params }: PageProps<"/[locale]/serv
   const services = getPublishedServices();
 
   return (
-    <>
+    <PageTransition>
       <Header />
       <main id="contenido" tabIndex={-1}>
         <V7EditorialCover
@@ -82,6 +83,6 @@ export default async function ServicesPage({ params }: PageProps<"/[locale]/serv
         <GlobalCta eyebrow={tv7("ctaServicesEyebrow")} title={tv7("ctaServicesTitle")} />
       </main>
       <Footer />
-    </>
+    </PageTransition>
   );
 }

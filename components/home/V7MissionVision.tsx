@@ -22,7 +22,7 @@ export default function V7MissionVision({ copy, locale }: { copy: MissionVisionC
   if (!MISSION_VISION) return null;
 
   return (
-    <section className="v8-mission" aria-labelledby="mission-vision-title">
+    <section className="v8-mission v7-scroll-reveal" aria-labelledby="mission-vision-title">
       <div className="v7-container">
         <p className="v8-mission-eyebrow" id="mission-vision-title">
           {copy.eyebrow}

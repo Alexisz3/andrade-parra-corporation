@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import QuoteShell from "@/components/quote/QuoteShell";
 import { BRAND, WHATSAPP_CONTACTS, BUSINESS_EMAIL, OG_IMAGE } from "@/lib/site";
 import { EMAIL_ENABLED } from "@/lib/mail";
+import PageTransition from "@/components/PageTransition";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -76,7 +77,7 @@ export default async function QuotePage({ params, searchParams }: PageProps<"/[l
   const quoteMessages = { Quote: messages.Quote, Services: messages.Services };
 
   return (
-    <>
+    <PageTransition>
       <Header />
       <main id="contenido" tabIndex={-1}>
         {/* Cabecera oscura compacta: la cotización no necesita hero fotográfico
@@ -109,6 +110,6 @@ export default async function QuotePage({ params, searchParams }: PageProps<"/[l
         </NextIntlClientProvider>
       </main>
       <Footer />
-    </>
+    </PageTransition>
   );
 }

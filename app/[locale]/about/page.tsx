@@ -10,6 +10,7 @@ import GlobalCta from "@/components/GlobalCta";
 import { V7About, V7Craft, V7Team } from "@/components/home/V7EditorialSections";
 import { getV7EditorialCopy } from "@/lib/v7-editorial-copy";
 import { BRAND } from "@/lib/site";
+import PageTransition from "@/components/PageTransition";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -49,7 +50,7 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
   const editorialCopy = await getV7EditorialCopy();
 
   return (
-    <>
+    <PageTransition>
       <Header />
       <main id="contenido" tabIndex={-1}>
         <V7EditorialCover
@@ -76,6 +77,6 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
         <GlobalCta eyebrow={tv7("ctaAboutEyebrow")} title={tv7("ctaAboutTitle")} />
       </main>
       <Footer />
-    </>
+    </PageTransition>
   );
 }

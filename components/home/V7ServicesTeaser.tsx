@@ -37,7 +37,7 @@ const ROW_ICONS = [
  */
 export default function V7ServicesTeaser({ copy }: { copy: ServicesTeaserCopy }) {
   return (
-    <section className="v8-svc-teaser" aria-labelledby="services-teaser-title">
+    <section className="v8-svc-teaser v7-scroll-reveal" aria-labelledby="services-teaser-title">
       <div className="v7-container">
         <p className="v8-svc-teaser-eyebrow">
           {copy.eyebrow}

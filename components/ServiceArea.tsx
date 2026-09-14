@@ -94,20 +94,33 @@ export default async function ServiceArea() {
           ) : null}
         </div>
 
-        <div className="mt-10 border-t border-line pt-10">
-          <h2 className="font-mono text-xs uppercase tracking-[0.14em] text-accent">
-            {tc("mapLabel")}
-          </h2>
-          <div className="mt-4 aspect-[16/9] w-full overflow-hidden rounded-md border border-line sm:aspect-[21/9]">
-            <iframe
-              src="https://www.google.com/maps?q=Houston,Texas&z=10&output=embed"
-              title={tc("mapTitle")}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="h-full w-full border-0"
-            />
+        <div className="mt-10 grid gap-8 border-t border-line pt-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center">
+          <div>
+            <h2 className="font-mono text-xs uppercase tracking-[0.14em] text-accent">
+              {tc("mapLabel")}
+            </h2>
+            <p className="mt-4 text-balance font-display text-2xl font-semibold leading-tight text-ink">
+              {tc("mapHeading")}
+            </p>
+            <p className="mt-3 max-w-md text-pretty leading-relaxed text-muted">
+              {tc("mapBody")}
+            </p>
           </div>
-          <p className="mt-3 text-sm text-muted">{tc("mapCaption")}</p>
+
+          {/* Más chico y a la derecha: es una referencia visual de la zona,
+              no el protagonista de la sección — el texto ya cubre lo esencial. */}
+          <div className="lg:ml-auto lg:w-full lg:max-w-[420px]">
+            <div className="aspect-[4/3] w-full overflow-hidden rounded-md border border-line">
+              <iframe
+                src="https://www.google.com/maps?q=Houston,Texas&z=10&output=embed"
+                title={tc("mapTitle")}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="h-full w-full border-0"
+              />
+            </div>
+            <p className="mt-3 text-sm text-muted">{tc("mapCaption")}</p>
+          </div>
         </div>
       </div>
     </section>

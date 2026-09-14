@@ -5,6 +5,7 @@ import { routing, type AppLocale } from "@/i18n/routing";
 import { TERMS_OF_SERVICE } from "@/content/legal";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import PageTransition from "@/components/PageTransition";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -38,7 +39,7 @@ export default async function Page({ params }: PageProps<"/[locale]/terms">) {
   const t = await getTranslations("Footer");
 
   return (
-    <>
+    <PageTransition>
       <Header />
       <main id="contenido" tabIndex={-1} className="bg-paper">
         <div className="mx-auto max-w-3xl px-6 pb-24 pt-36 lg:pt-44">
@@ -58,6 +59,6 @@ export default async function Page({ params }: PageProps<"/[locale]/terms">) {
         </div>
       </main>
       <Footer />
-    </>
+    </PageTransition>
   );
 }
