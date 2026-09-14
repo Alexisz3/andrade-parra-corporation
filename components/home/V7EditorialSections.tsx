@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { BUSINESS_EMAIL, WHATSAPP_CONTACTS } from "@/lib/site";
+import { BUSINESS_EMAIL, BUSINESS_FACEBOOK, WHATSAPP_CONTACTS } from "@/lib/site";
 import TrackedContactLink from "@/components/TrackedContactLink";
 
 export interface V7EditorialCopy {
@@ -30,6 +30,7 @@ export interface V7EditorialCopy {
   teamGalleryBody: string;
   teamCall: string;
   teamWhatsapp: string;
+  teamFacebook: string;
   faqEyebrow: string;
   faqTitle: string;
   faqPrompt: string;
@@ -41,6 +42,7 @@ export interface V7EditorialCopy {
   contactBody: string;
   contactArea: string;
   contactEmailLabel: string;
+  contactFacebookLabel: string;
   contactSign: string;
   quote: string;
   call: string;
@@ -71,7 +73,7 @@ export function V7Craft({ copy }: { copy: V7EditorialCopy }) {
   const lastCardSpansFull = cards.length % 2 === 1;
 
   return (
-    <section className="v7-section v7-craft" aria-labelledby="craft-title">
+    <section className="v7-section v7-craft v7-scroll-reveal" aria-labelledby="craft-title">
       <div className="v7-container v7-craft-grid">
         <div className="v7-craft-head">
           <p className="v7-eyebrow">{copy.craftEyebrow}</p>
@@ -138,7 +140,7 @@ export function V7Craft({ copy }: { copy: V7EditorialCopy }) {
 
 export function V7About({ copy }: { copy: V7EditorialCopy }) {
   return (
-    <section id="nosotros" className="v7-section v7-about" aria-labelledby="about-title">
+    <section id="nosotros" className="v7-section v7-about v7-scroll-reveal" aria-labelledby="about-title">
       <div className="v7-container v7-about-grid">
         <div>
           <p className="v7-eyebrow v7-eyebrow-light">{copy.aboutEyebrow}</p>
@@ -171,7 +173,7 @@ export function V7About({ copy }: { copy: V7EditorialCopy }) {
 
 export function V7Team({ copy }: { copy: V7EditorialCopy }) {
   return (
-    <section className="v7-section v7-team" aria-labelledby="team-title">
+    <section className="v7-section v7-team v7-scroll-reveal" aria-labelledby="team-title">
       <div className="v7-container">
         <div className="v7-team-head">
           <div>
@@ -186,11 +188,30 @@ export function V7Team({ copy }: { copy: V7EditorialCopy }) {
             const initials = contact.name.split(" ").map((part) => part[0]).join("");
             return (
               <article className="v7-person-card" key={contact.id}>
-                <div className="v7-person-photo" aria-label={`${copy.teamPhotoPending}: ${contact.name}`}>
-                  <span aria-hidden="true">{initials}</span>
-                  <small>{copy.teamPhotoPending}</small>
-                  <i aria-hidden="true">0{index + 1}</i>
-                </div>
+                {/* `Boolean(...)`, no el valor crudo: con los dos contactos
+                    ya teniendo foto, TypeScript infiere `photo` como un
+                    literal siempre verdadero y da por "never" (inalcanzable)
+                    la rama sin foto — con `Boolean` deja de estrechar el
+                    tipo y las dos ramas quedan escribibles, lista para si
+                    algún día se agrega un contacto sin foto todavía. */}
+                {Boolean(contact.photo) ? (
+                  <div className="v7-person-photo has-image">
+                    <Image
+                      src={contact.photo}
+                      alt={contact.name}
+                      fill
+                      sizes="(min-width: 1024px) 22vw, 45vw"
+                      className="object-cover"
+                    />
+                    <i aria-hidden="true">0{index + 1}</i>
+                  </div>
+                ) : (
+                  <div className="v7-person-photo" aria-label={`${copy.teamPhotoPending}: ${contact.name}`}>
+                    <span aria-hidden="true">{initials}</span>
+                    <small>{copy.teamPhotoPending}</small>
+                    <i aria-hidden="true">0{index + 1}</i>
+                  </div>
+                )}
                 <div className="v7-person-info">
                   <p className="v7-meta">{copy.teamContact}</p>
                   <h3>{contact.name}</h3>
@@ -211,6 +232,16 @@ export function V7Team({ copy }: { copy: V7EditorialCopy }) {
                     >
                       {copy.teamWhatsapp}<span aria-hidden="true">↗</span>
                     </TrackedContactLink>
+                    {contact.facebook ? (
+                      <TrackedContactLink
+                        href={contact.facebook}
+                        event="facebook_clicked"
+                        params={{ contact: contact.id, source: "about_team" }}
+                        external
+                      >
+                        {copy.teamFacebook}<span aria-hidden="true">↗</span>
+                      </TrackedContactLink>
+                    ) : null}
                   </div>
                 </div>
               </article>
@@ -285,6 +316,14 @@ function MailIcon() {
     <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
       <rect x="3" y="5.5" width="18" height="13" rx="2" />
       <path d="m3.8 7 8.2 6 8.2-6" />
+    </svg>
+  );
+}
+
+function FacebookIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M15.5 8.5h-2a1.5 1.5 0 0 0-1.5 1.5v2h3.3l-.4 3H12v7.5H9V15H7v-3h2v-2.3C9 7.5 10.5 6 13 6h2.5v2.5Z" />
     </svg>
   );
 }
@@ -367,6 +406,22 @@ export function V7Contact({ copy, microcopy }: { copy: V7EditorialCopy; microcop
                 {copy.contactEmailLabel}
               </span>
               <span className="v7-contact-value">{BUSINESS_EMAIL}</span>
+            </TrackedContactLink>
+          ) : null}
+
+          {BUSINESS_FACEBOOK ? (
+            <TrackedContactLink
+              href={BUSINESS_FACEBOOK}
+              event="facebook_clicked"
+              params={{ source: "contact_page" }}
+              external
+              className="v7-contact-row"
+            >
+              <span className="v7-contact-who">
+                <span className="v7-contact-icon" aria-hidden="true"><FacebookIcon /></span>
+                {copy.contactFacebookLabel}
+              </span>
+              <span className="v7-contact-value" aria-hidden="true">↗</span>
             </TrackedContactLink>
           ) : null}
 

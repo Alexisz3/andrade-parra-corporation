@@ -127,6 +127,7 @@
     "teamGalleryBody": "An editorial space ready to document the people who make each project possible.",
     "teamCall": "Call",
     "teamWhatsapp": "WhatsApp",
+    "teamFacebook": "Facebook",
     "faqEyebrow": "FREQUENTLY ASKED QUESTIONS",
     "faqTitle": "What matters, before you begin.",
     "faqQ1": "Do you work outside Houston?",
@@ -214,6 +215,7 @@
     "statusCompleted": "Completed",
     "statusInProgress": "In progress",
     "contactEmailLabel": "Email",
+    "contactFacebookLabel": "Facebook",
     "contactSign": "Let's build something together."
   },
   "Services": {
@@ -328,7 +330,7 @@
     "next": "Next project",
     "filterInteriors": "Interiors",
     "counter": "Project {n} of {total}",
-    "theProject": "The project",
+    "theProject": "About this project",
     "detailsHeading": "Project details",
     "detailService": "Service",
     "detailLocation": "Location",
@@ -368,6 +370,8 @@
     "visitNote": "Please call ahead so we can make time for you.",
     "areaAsk": "Do not see your area? Ask us — we may still be able to help.",
     "mapLabel": "SERVICE AREA",
+    "mapHeading": "Houston and surrounding areas",
+    "mapBody": "We serve the greater Houston metro area and nearby communities. This map is a general reference of the area, not the exact address of our offices.",
     "mapTitle": "Map of Houston and surrounding areas, TX",
     "mapCaption": "General area reference — not an exact address.",
     "metaDescription": "Call us, message us on WhatsApp or send your project details. Andrade Parra Corporation serves Houston and surrounding areas.",

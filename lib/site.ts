@@ -130,8 +130,35 @@ export const BUSINESS = {
  * número en un idioma y olvida el otro, el CTA principal queda roto a medias.
  */
 export const WHATSAPP_CONTACTS = [
-  { id: "jose-andrade", name: "Jose Andrade", phone: "18327940720", phoneDisplay: "(832) 794-0720" },
-  { id: "mario-parra", name: "Mario Parra", phone: "18326524660", phoneDisplay: "(832) 652-4660" },
+  {
+    id: "jose-andrade",
+    name: "Jose Andrade",
+    phone: "18327940720",
+    phoneDisplay: "(832) 794-0720",
+    // `null` mientras no exista foto real — mismo criterio de
+    // "dato ausente → función ausente" que COMPANY_STORY/MISSION_VISION
+    // en content/company.ts. Recibida del cliente el 2026-09-15.
+    //
+    // Nombre de archivo con sufijo "-v2": el cliente confirmó por fin cuál
+    // foto es cuál después de varias vueltas, y la caché del navegador (la
+    // suya y la del optimizador de imágenes de Next) se negaba a soltar la
+    // versión anterior aunque el archivo en el servidor ya estuviera bien.
+    // Un nombre nuevo obliga a pedirlo de cero — no hay caché que pueda
+    // tener guardada una URL que nunca existió.
+    photo: "/images/equipo/jose-andrade-v2.png",
+    // Perfil personal, recibido del cliente el 2026-09-14. Mario no tiene
+    // uno todavía — `null`, mismo criterio de "dato ausente → función
+    // ausente" que `photo` arriba.
+    facebook: "https://www.facebook.com/share/1BvNApBCwy/?mibextid=wwXIfr" as string | null,
+  },
+  {
+    id: "mario-parra",
+    name: "Mario Parra",
+    phone: "18326524660",
+    phoneDisplay: "(832) 652-4660",
+    photo: "/images/equipo/mario-parra-v2.png",
+    facebook: null as string | null,
+  },
 ] as const;
 
 /**
@@ -156,3 +183,10 @@ export const OG_IMAGE = {
  * el 3 de septiembre de 2026.
  */
 export const BUSINESS_EMAIL: string | null = "contacto@ampargo.com";
+
+/**
+ * Página de Facebook de la empresa. Recibida del cliente el 2026-09-14.
+ * Mismo criterio nullable que `BUSINESS_EMAIL`: hoy tiene valor, pero el
+ * tipo deja constancia de que el dato puede faltar.
+ */
+export const BUSINESS_FACEBOOK: string | null = "https://www.facebook.com/share/1EZedSTGww/?mibextid=wwXIfr";

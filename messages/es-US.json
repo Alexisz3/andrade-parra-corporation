@@ -127,6 +127,7 @@
     "teamGalleryBody": "Un espacio editorial preparado para documentar a las personas que hacen posible cada proyecto.",
     "teamCall": "Llamar",
     "teamWhatsapp": "WhatsApp",
+    "teamFacebook": "Facebook",
     "faqEyebrow": "PREGUNTAS FRECUENTES",
     "faqTitle": "Lo esencial, antes de comenzar.",
     "faqQ1": "¿Trabajan fuera de Houston?",
@@ -214,6 +215,7 @@
     "statusCompleted": "Terminado",
     "statusInProgress": "En proceso",
     "contactEmailLabel": "Email",
+    "contactFacebookLabel": "Facebook",
     "contactSign": "Construyamos algo juntos."
   },
   "Services": {
@@ -328,7 +330,7 @@
     "next": "Proyecto siguiente",
     "filterInteriors": "Interiores",
     "counter": "Proyecto {n} de {total}",
-    "theProject": "El proyecto",
+    "theProject": "Sobre este proyecto",
     "detailsHeading": "Ficha del proyecto",
     "detailService": "Servicio",
     "detailLocation": "Ubicación",
@@ -368,6 +370,8 @@
     "visitNote": "Llame antes para que podamos atenderle con calma.",
     "areaAsk": "¿No ve su zona? Pregúntenos, es posible que igual podamos ayudarle.",
     "mapLabel": "ZONA DE COBERTURA",
+    "mapHeading": "Houston y alrededores",
+    "mapBody": "Atendemos toda el área metropolitana de Houston y las comunidades cercanas. Este mapa es una referencia general de la zona, no marca la dirección exacta de nuestras oficinas.",
     "mapTitle": "Mapa de Houston y alrededores, TX",
     "mapCaption": "Referencia general del área — no marca una dirección exacta.",
     "metaDescription": "Llámenos, escríbanos por WhatsApp o envíe los detalles de su proyecto. Andrade Parra Corporation trabaja en Houston y alrededores.",

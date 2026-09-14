@@ -30,6 +30,7 @@ export type AnalyticsEvent =
   | "whatsapp_clicked"
   | "phone_clicked"
   | "email_clicked"
+  | "facebook_clicked"
   | "project_viewed"
   | "service_viewed";
 

@@ -17,6 +17,15 @@ export interface Project {
   /** Título y extracto por locale. */
   title: Record<AppLocale, string>;
   excerpt: Record<AppLocale, string>;
+  /**
+   * Párrafo largo para "Sobre este proyecto". Describe lo que se ve en la
+   * foto de portada —colores, materiales, distribución— con más detalle que
+   * el extracto corto. Igual que `scope`, describe solo lo visible en la
+   * imagen; no afirma nada que la foto no pruebe (fechas, nombres de
+   * clientes, marcas de materiales). Opcional por si un proyecto futuro se
+   * publica antes de redactar este texto.
+   */
+  description?: Record<AppLocale, string>;
   location: string;
   coverPhoto: ProjectPhoto;
   gallery: ProjectPhoto[];
@@ -81,6 +90,12 @@ export const PROJECTS: Project[] = [
       "es-US": "Diseño y construcción de terraza con piscina y área de estar al aire libre.",
       "en-US": "Design and construction of a patio with pool and outdoor living area.",
     },
+    description: {
+      "es-US":
+        "Un patio de piedra natural en tono claro envuelve una piscina geométrica junto a un lago, con una cabaña de techo oscuro a dos aguas que integra chimenea de piedra y área de asador bajo el mismo techo. El vaso de la piscina, todavía sin agua, deja ver el azulejo azul de la línea de flotación y confirma que la obra sigue en la etapa de acabados finales antes de llenarla.",
+      "en-US":
+        "A light natural stone patio wraps a geometric pool right on the lake, anchored by a dark gable-roofed pavilion that houses a stone fireplace and outdoor kitchen under one roof. The pool shell, still empty, shows the blue waterline tile already set — a clear sign the project is in its final finishing stage before it's filled.",
+    },
     location: "Houston, TX",
     coverPhoto: { file: "exterior-lujo-01.jpeg", orientation: "horizontal" },
     gallery: [{ file: "exterior-lujo-01.jpeg", orientation: "horizontal" }],
@@ -114,6 +129,12 @@ export const PROJECTS: Project[] = [
     excerpt: {
       "es-US": "Estructura de cochera en madera con cubierta y soporte reforzado.",
       "en-US": "Wood-framed carport structure with roofing and reinforced support.",
+    },
+    description: {
+      "es-US":
+        "La cochera se levanta como una estructura independiente de madera junto a la fachada de ladrillo de la vivienda, con columnas y cerchas a la vista que definen ya la pendiente del techo a dos aguas. En esta etapa la madera queda expuesta, sin tejado ni acabado, mostrando el armazón que sostendrá la cubierta final.",
+      "en-US":
+        "The carport rises as a freestanding wood structure beside the home's brick facade, its posts and trusses already exposed and shaping the gable roofline. At this stage the framing is bare — no roofing or finish yet — showing the skeleton that will carry the final covering.",
     },
     location: "Houston, TX",
     coverPhoto: { file: "estructura-02.jpeg", orientation: "horizontal" },
@@ -157,6 +178,12 @@ export const PROJECTS: Project[] = [
     excerpt: {
       "es-US": "Actualización completa de cocina con nuevos gabinetes, encimera y salpicadero.",
       "en-US": "Full kitchen update with new cabinets, countertop, and backsplash.",
+    },
+    description: {
+      "es-US":
+        "Encimera de cuarzo blanco con vetas grises finas, terminada con un salpicadero a juego que sube directo hasta los gabinetes en madera clara. El fregadero de acero se integra bajo cubierta, con la instalación eléctrica reajustada para quedar al ras de la nueva superficie.",
+      "en-US":
+        "White quartz countertop with fine gray veining, finished with a matching backsplash that runs straight up to the light wood cabinetry. The stainless undermount sink sits flush with the new surface, with the outlets reset to line up cleanly against it.",
     },
     location: "Houston, TX",
     coverPhoto: { file: "cocina-cuarzo-05.jpeg", orientation: "horizontal" },
@@ -205,6 +232,12 @@ export const PROJECTS: Project[] = [
       "es-US": "Cocina terminada con encimera de granito e iluminación bajo gabinete.",
       "en-US": "Finished kitchen with granite countertop and under-cabinet lighting.",
     },
+    description: {
+      "es-US":
+        "Gabinetes en verde salvia contrastan con una encimera de granito oscuro de vetas grises y blancas, sobre un salpicadero en azulejo tipo madera. La iluminación bajo gabinete, ya instalada, ilumina el mostrador y resalta el veteado de la piedra.",
+      "en-US":
+        "Sage-green cabinetry contrasts with a dark granite countertop threaded with gray and white veining, set against a wood-look tile backsplash. Under-cabinet lighting, already wired in, washes over the counter and brings out the stone's veining.",
+    },
     location: "Houston, TX",
     coverPhoto: { file: "cocina-granito-01.jpeg", orientation: "horizontal" },
     gallery: [{ file: "cocina-granito-01.jpeg", orientation: "horizontal" }],
@@ -241,6 +274,12 @@ export const PROJECTS: Project[] = [
     excerpt: {
       "es-US": "Conversión de baño con ducha amplia y acabados en tonos grises.",
       "en-US": "Bathroom conversion with a spacious shower and gray-toned finishes.",
+    },
+    description: {
+      "es-US":
+        "La ducha queda revestida en mármol blanco y gris con vetas verticales, con un nicho empotrado en la pared para artículos de baño. El piso continúa en el mismo mármol, cortado en mosaico de patrón cestería, corriendo sin interrupción desde la ducha hasta el resto del baño.",
+      "en-US":
+        "The shower is tiled in white-and-gray marble with vertical veining, with a built-in wall niche for toiletries. The floor continues in the same marble, cut into a basketweave mosaic that runs unbroken from the shower into the rest of the bathroom.",
     },
     location: "Houston, TX",
     coverPhoto: { file: "bano-01.jpeg", orientation: "vertical" },
@@ -280,6 +319,12 @@ export const PROJECTS: Project[] = [
         "Remodelación en proceso con mobiliario azul, superficies claras y ducha revestida.",
       "en-US":
         "Remodel in progress with blue cabinetry, light surfaces, and a tiled shower.",
+    },
+    description: {
+      "es-US":
+        "Gabinetes en azul grisáceo enmarcan tanto el lavabo como la tina, ambos rematados en encimera de mármol blanco. Los muros de la tina están revestidos en el mismo mármol veteado que sube hasta la ducha, y el piso combina el mosaico de mármol tipo cestería con el molduraje azul a juego con los gabinetes.",
+      "en-US":
+        "Blue-gray cabinetry frames both the vanity and the tub, each topped in white marble. The tub surround is clad in the same veined marble that continues into the shower, and the basketweave marble mosaic floor ties the room together with paneling painted to match the cabinetry.",
     },
     location: "Houston, TX",
     coverPhoto: { file: "bano-azul-02-banera.jpeg", orientation: "vertical" },
@@ -323,6 +368,12 @@ export const PROJECTS: Project[] = [
         "Secuencia real de obra: instalaciones, muros, impermeabilización y revestimiento en proceso.",
       "en-US":
         "A real job sequence: systems, walls, waterproofing, and tile work in progress.",
+    },
+    description: {
+      "es-US":
+        "El baño se documentó desde los muros abiertos: instalación eléctrica y de plomería nueva antes de cerrar con aislamiento térmico. Ya con las paredes cerradas, el azulejo tipo metro blanco cubre la ducha y el piso se remata en mosaico hexagonal, con la impermeabilización de la zona húmeda hecha antes de colocar el enchape.",
+      "en-US":
+        "The bathroom was documented from the studs out: new electrical and plumbing rough-in before the walls were closed up with insulation. With the walls finished, white subway tile covers the shower and the floor is set in hexagonal mosaic, with the wet area waterproofed ahead of the tile work.",
     },
     location: "Houston, TX",
     coverPhoto: {
@@ -372,6 +423,12 @@ export const PROJECTS: Project[] = [
       "es-US": "Jardineras nuevas y mejoras de paisajismo junto al área de patio cubierta.",
       "en-US": "New planting beds and landscaping improvements next to the covered patio area.",
     },
+    description: {
+      "es-US":
+        "Junto al área de patio cubierta se instalaron jardineras nuevas, delimitadas con bloque de concreto, y se sembraron plantas ornamentales de hoja púrpura y amarilla contra la fachada de ladrillo. El resultado suaviza el volumen del porche con vegetación recién colocada, lista para crecer.",
+      "en-US":
+        "New planting beds, framed in concrete block, were added next to the covered patio area, with ornamental purple- and yellow-leafed plants set against the brick facade. The result softens the porch's brick volume with freshly placed greenery, left to fill in.",
+    },
     location: "Houston, TX",
     coverPhoto: { file: "exterior-jardin-01.jpeg", orientation: "vertical" },
     gallery: [{ file: "exterior-jardin-01.jpeg", orientation: "vertical" }],
@@ -405,6 +462,12 @@ export const PROJECTS: Project[] = [
     excerpt: {
       "es-US": "Reemplazo de encimera en isla de cocina, con salpicadero a juego hasta el techo.",
       "en-US": "Kitchen island countertop replacement, with a matching backsplash up to the ceiling.",
+    },
+    description: {
+      "es-US":
+        "La isla se cubrió con cuarzo blanco de veta continua, terminado en cascada por ambos costados hasta el piso, y el salpicadero detrás de la estufa sube en la misma piedra hasta el techo. La veta corre sin interrupción del mostrador al panel lateral, sin corte visible entre piezas.",
+      "en-US":
+        "The island was clad in continuous-veined white quartz, finished waterfall-style down both sides to the floor, with the backsplash behind the range running in the same stone all the way to the ceiling. The veining runs uninterrupted from the counter into the side panel, with no visible seam between pieces.",
     },
     location: "Houston, TX",
     coverPhoto: { file: "cocina-isla-cuarzo-despues.jpg", orientation: "horizontal" },
@@ -447,6 +510,12 @@ export const PROJECTS: Project[] = [
       "es-US": "Salpicadero de azulejo tipo metro y encimera de cuarzo blanco.",
       "en-US": "Subway tile backsplash and white quartz countertop.",
     },
+    description: {
+      "es-US":
+        "Azulejo blanco tipo metro cubre la pared de pared a pared, con la encimera de cuarzo blanco corriendo a lo largo de todo el mostrador en L. Los gabinetes y electrodomésticos en blanco, con el lavavajillas en acero inoxidable como único contraste, completan una cocina de líneas limpias y superficies claras.",
+      "en-US":
+        "White subway tile runs wall-to-wall, with the white quartz countertop stretching the full length of the L-shaped counter. White cabinetry and appliances, with the stainless dishwasher as the only contrast, round out a kitchen built on clean lines and light surfaces.",
+    },
     location: "Houston, TX",
     coverPhoto: { file: "cocina-metro-blanco-despues.jpg", orientation: "horizontal" },
     gallery: [
@@ -481,6 +550,12 @@ export const PROJECTS: Project[] = [
       "es-US": "Encimera de cuarzo en isla y salpicadero de mosaico hasta el techo.",
       "en-US": "Quartz island countertop with a mosaic backsplash up to the ceiling.",
     },
+    description: {
+      "es-US":
+        "La isla en forma de L se remató en cuarzo blanco con vetas grises suaves, y detrás de la estufa el salpicadero sube en mosaico gris de piso a techo, cubriendo toda la pared. El acabado pulido de la piedra refleja la luz de la cocina, ampliando visualmente el espacio.",
+      "en-US":
+        "The L-shaped island was finished in white quartz with soft gray veining, and behind the range the backsplash climbs floor-to-ceiling in gray mosaic, covering the full wall. The stone's polished finish reflects the kitchen's light, visually opening up the space.",
+    },
     location: "Houston, TX",
     coverPhoto: { file: "cocina-mosaico-gris-01.jpg", orientation: "vertical" },
     gallery: [{ file: "cocina-mosaico-gris-01.jpg", orientation: "vertical" }],
@@ -510,6 +585,12 @@ export const PROJECTS: Project[] = [
     excerpt: {
       "es-US": "Cambio de piso en sala junto a chimenea de ladrillo pintado de blanco.",
       "en-US": "New flooring in a living room next to a white-painted brick fireplace.",
+    },
+    description: {
+      "es-US":
+        "El piso de la sala se cambió a madera técnica en tono gris cálido, corriendo sin interrupción hasta la base de la chimenea de ladrillo pintado de blanco. El brillo satinado del piso nuevo contrasta con el mueble oscuro de la chimenea, dando a la sala una sensación más amplia y luminosa.",
+      "en-US":
+        "The living room floor was replaced with warm gray engineered wood, running unbroken up to the base of the white-painted brick fireplace. The floor's satin sheen contrasts with the fireplace's dark mantel, giving the room a brighter, more open feel.",
     },
     location: "Houston, TX",
     coverPhoto: { file: "sala-piso-chimenea-despues.jpg", orientation: "horizontal" },
@@ -542,6 +623,12 @@ export const PROJECTS: Project[] = [
       "es-US": "Piso nuevo y clóset abierto terminados en recámara principal.",
       "en-US": "New flooring and a finished open closet in a primary bedroom.",
     },
+    description: {
+      "es-US":
+        "La recámara principal recibió piso de madera técnica que continúa sin transición hacia el clóset abierto, integrando ambos espacios como uno solo. Un ventilador de techo y las dos ventanas laterales completan una habitación luminosa, ya lista para amueblar.",
+      "en-US":
+        "The primary bedroom received engineered wood flooring that continues without a transition into the open closet, tying both spaces together as one. A ceiling fan and the two side windows round out a bright room, ready to be furnished.",
+    },
     location: "Houston, TX",
     coverPhoto: { file: "interior-recamara-piso-madera.jpg", orientation: "horizontal" },
     gallery: [{ file: "interior-recamara-piso-madera.jpg", orientation: "horizontal" }],
@@ -568,6 +655,12 @@ export const PROJECTS: Project[] = [
     excerpt: {
       "es-US": "Interior terminado y amueblado con piso de madera y cielorraso de lambrín.",
       "en-US": "Finished, furnished interior with wood flooring and a shiplap ceiling.",
+    },
+    description: {
+      "es-US":
+        "El área social se resolvió con piso de madera continuo desde la sala hasta la cocina abierta, bajo un cielorraso de listones de madera con viga vista. Los gabinetes verde salvia de la cocina y los muebles ya colocados muestran el espacio terminado y en uso.",
+      "en-US":
+        "The social area was finished with continuous wood flooring running from the living room into the open kitchen, under a wood-slat ceiling with an exposed beam. The kitchen's sage-green cabinetry and the furniture already in place show the space finished and lived-in.",
     },
     location: "Houston, TX",
     coverPhoto: { file: "interior-01.jpeg", orientation: "vertical" },
@@ -604,6 +697,12 @@ export const PROJECTS: Project[] = [
       "es-US": "Encimera de cuarzo oscuro con veta en cascada, salpicadero en instalación.",
       "en-US": "Dark quartz countertop with waterfall veining, backsplash being installed.",
     },
+    description: {
+      "es-US":
+        "La encimera de cuarzo oscuro, con veta clara en cascada, ya está instalada sobre los gabinetes en madera clara. El salpicadero a juego, con el hueco reservado para la campana extractora, sigue en instalación — la cocina se documenta en plena etapa de acabados.",
+      "en-US":
+        "The dark quartz countertop, with light waterfall-style veining, is already set over the light wood cabinetry. The matching backsplash, with the niche left open for the range hood, is still being installed — the kitchen is documented mid-finish.",
+    },
     location: "Houston, TX",
     coverPhoto: { file: "cocina-cuarzo-oscuro-01.jpg", orientation: "horizontal" },
     gallery: [
@@ -631,6 +730,12 @@ export const PROJECTS: Project[] = [
     excerpt: {
       "es-US": "Encimera de granito negro con veta clara y gabinetes en madera clara.",
       "en-US": "Black granite countertop with light veining and light wood cabinetry.",
+    },
+    description: {
+      "es-US":
+        "La cocina en forma de U se remató en granito negro con vetas doradas y grises que recorren toda la superficie, incluida la isla central con fregadero doble. El contraste entre la piedra oscura y los gabinetes en madera clara define el carácter de este espacio, documentado en obra antes de cerrar la instalación eléctrica de pared.",
+      "en-US":
+        "The U-shaped kitchen was finished in black granite with gold and gray veining running across the full surface, including the central island with its double sink. The contrast between the dark stone and the light wood cabinetry defines the space, documented mid-project before the wall electrical was closed up.",
     },
     location: "Houston, TX",
     coverPhoto: { file: "cocina-granito-negro-01.jpg", orientation: "horizontal" },
@@ -662,6 +767,12 @@ export const PROJECTS: Project[] = [
       "es-US": "Salpicadero de azulejo tipo metro y encimera de cuarzo blanco sobre gabinetes en cerezo.",
       "en-US": "Subway tile backsplash and a white quartz countertop over cherry cabinetry.",
     },
+    description: {
+      "es-US":
+        "Sobre los gabinetes en madera de cerezo se instaló una encimera de cuarzo blanco, con salpicadero de azulejo tipo metro que cubre la pared completa hasta la campana extractora. La combinación de madera oscura y superficies claras mantiene la cocina luminosa sin perder calidez.",
+      "en-US":
+        "A white quartz countertop was set over the cherry wood cabinetry, with subway tile backsplash covering the full wall up to the range hood. The mix of dark wood and light surfaces keeps the kitchen bright without losing its warmth.",
+    },
     location: "Houston, TX",
     coverPhoto: { file: "cocina-cerezo-metro-01.jpg", orientation: "horizontal" },
     gallery: [{ file: "cocina-cerezo-metro-01.jpg", orientation: "horizontal" }],
@@ -689,6 +800,12 @@ export const PROJECTS: Project[] = [
       "es-US": "Gabinetes blancos con microondas empotrado, encimera en instalación.",
       "en-US": "White cabinetry with a built-in microwave, countertop being installed.",
     },
+    description: {
+      "es-US":
+        "Los gabinetes blancos nuevos ya están instalados, con el microondas empotrado sobre la estufa y la encimera clara colocada en la sección principal. La esquina en L, con la instalación de plomería aún a la vista, muestra la cocina en plena etapa de montaje antes del remate final.",
+      "en-US":
+        "The new white cabinetry is already in, with a built-in microwave over the range and the light countertop set on the main run. The L-shaped corner, with the plumbing rough-in still exposed, shows the kitchen mid-installation, ahead of the final finish.",
+    },
     location: "Houston, TX",
     coverPhoto: { file: "cocina-blanca-proceso-01.jpg", orientation: "vertical" },
     gallery: [{ file: "cocina-blanca-proceso-01.jpg", orientation: "vertical" }],
@@ -711,6 +828,12 @@ export const PROJECTS: Project[] = [
     excerpt: {
       "es-US": "Encimera de cuarzo blanco nueva sobre gabinetes en madera repintados.",
       "en-US": "New white quartz countertop over repainted wood cabinetry.",
+    },
+    description: {
+      "es-US":
+        "Los gabinetes originales en madera se conservaron y repintaron, y sobre ellos se instaló una encimera de cuarzo blanco nueva que reemplazó tanto el mostrador como el salpicadero anteriores. El resultado combina la estructura ya existente de la cocina con superficies completamente renovadas.",
+      "en-US":
+        "The original wood cabinetry was kept and repainted, and a new white quartz countertop was installed over it, replacing both the old counter and backsplash. The result pairs the kitchen's existing structure with fully renewed surfaces.",
     },
     location: "Houston, TX",
     coverPhoto: { file: "cocina-remodelacion-despues.jpg", orientation: "horizontal" },
@@ -746,6 +869,12 @@ export const PROJECTS: Project[] = [
       "es-US": "Piso en mármol tipo mosaico corriendo de la escalera al área de cocina abierta.",
       "en-US": "Marble mosaic-look flooring running from the staircase into the open kitchen area.",
     },
+    description: {
+      "es-US":
+        "El piso en mármol tipo mosaico corre desde la base de la escalera hasta el área de cocina abierta, sin corte entre ambos espacios. La isla de cocina, todavía protegida bajo plástico, se documenta en plena instalación junto al resto de la obra en proceso.",
+      "en-US":
+        "Marble mosaic-look flooring runs from the base of the staircase into the open kitchen area, with no break between the two spaces. The kitchen island, still wrapped in protective plastic, is documented mid-installation alongside the rest of the ongoing work.",
+    },
     location: "Houston, TX",
     coverPhoto: { file: "escalera-cocina-marmol-01.jpg", orientation: "horizontal" },
     gallery: [
@@ -779,6 +908,12 @@ export const PROJECTS: Project[] = [
       "es-US": "Salpicadero en patrón geométrico e isla con fregadero doble, abierta al comedor.",
       "en-US": "Geometric-pattern backsplash and an island with a double sink, open to the dining area.",
     },
+    description: {
+      "es-US":
+        "Un salpicadero en azulejo con patrón decorativo cubre la pared completa detrás de la estufa, aportando el único punto de color en una cocina blanca de líneas simples. La isla con fregadero doble se abre hacia el comedor, y las puertas francesas al fondo conectan la cocina directamente con el patio.",
+      "en-US":
+        "A decorative-pattern tile backsplash covers the full wall behind the range, giving the only pop of pattern in an otherwise all-white kitchen. The island with its double sink opens onto the dining area, and the French doors at the back connect the kitchen straight out to the patio.",
+    },
     location: "Houston, TX",
     coverPhoto: { file: "cocina-mosaico-decorativo-01.jpg", orientation: "horizontal" },
     gallery: [
@@ -808,6 +943,12 @@ export const PROJECTS: Project[] = [
     excerpt: {
       "es-US": "Encimera de cuarzo blanco en isla, con salpicadero en azulejo de patrón decorativo.",
       "en-US": "White quartz island countertop, with a decorative patterned tile backsplash.",
+    },
+    description: {
+      "es-US":
+        "El salpicadero en mosaico de patrón geométrico gris y azul cubre la pared detrás de la estufa, mientras que la isla se remató en cuarzo blanco con vetas suaves. Una ventana de vidrio en bloque deja pasar luz natural sin sacrificar privacidad, en una cocina con gabinetes blancos de línea shaker.",
+      "en-US":
+        "A gray-and-blue geometric patterned mosaic backsplash covers the wall behind the range, while the island was finished in white quartz with soft veining. A glass block window lets natural light in without giving up privacy, in a kitchen finished with white shaker cabinetry.",
     },
     location: "Houston, TX",
     coverPhoto: { file: "cocina-mosaico-patron-01.jpg", orientation: "horizontal" },
@@ -840,6 +981,12 @@ export const PROJECTS: Project[] = [
       "es-US": "Gabinetes estilo shaker en gris con encimera de cuarzo a juego.",
       "en-US": "Gray shaker-style cabinetry with a matching quartz countertop.",
     },
+    description: {
+      "es-US":
+        "Los gabinetes estilo shaker, en un tono claro, se combinan con una encimera de cuarzo gris y blanco que recorre toda la cocina en L. La obra se documenta con la instalación eléctrica de pared aún expuesta, antes del remate final de la pintura y los herrajes.",
+      "en-US":
+        "Shaker-style cabinetry in a light tone pairs with a gray-and-white quartz countertop running the full length of the L-shaped kitchen. The project is documented with the wall electrical still exposed, ahead of the final paint and hardware finish.",
+    },
     location: "Houston, TX",
     coverPhoto: { file: "cocina-shaker-gris-01.jpg", orientation: "horizontal" },
     gallery: [{ file: "cocina-shaker-gris-01.jpg", orientation: "horizontal" }],
@@ -866,6 +1013,12 @@ export const PROJECTS: Project[] = [
     excerpt: {
       "es-US": "Encimera e isla de cuarzo blanco con veta continua, terminada en cascada a ambos lados.",
       "en-US": "White quartz countertop and island with continuous veining, finished waterfall-style on both sides.",
+    },
+    description: {
+      "es-US":
+        "La misma veta de cuarzo blanco corre desde el salpicadero, que sube hasta el gabinete alto, hasta el panel lateral de la isla, terminado en cascada. Los gabinetes en madera clara y la iluminación bajo gabinete completan una cocina donde la piedra es la protagonista.",
+      "en-US":
+        "The same white quartz veining runs from the backsplash — which climbs up to the upper cabinet — down the island's waterfall side panel. Light wood cabinetry and under-cabinet lighting round out a kitchen where the stone does the talking.",
     },
     location: "Houston, TX",
     coverPhoto: { file: "cocina-cascada-cuarzo-01.jpg", orientation: "horizontal" },
@@ -900,6 +1053,12 @@ export const PROJECTS: Project[] = [
       "es-US": "Encimera de piedra oscura con veta clara, salpicadero en madera y gabinetes verde salvia, abierta a la sala.",
       "en-US": "Dark stone countertop with light veining, wood-look backsplash and sage cabinetry, open to the living area.",
     },
+    description: {
+      "es-US":
+        "Gabinetes en verde salvia con grifería en negro mate se combinan con una encimera de piedra oscura de veta clara y un salpicadero en azulejo tipo madera. El fregadero doble en acero y la iluminación bajo gabinete completan una cocina abierta hacia la sala, en tonos cálidos y naturales.",
+      "en-US":
+        "Sage-green cabinetry with matte black fixtures pairs with a dark stone countertop threaded with light veining and a wood-look tile backsplash. A stainless double sink and under-cabinet lighting complete a kitchen that opens onto the living area, in warm, natural tones.",
+    },
     location: "Houston, TX",
     coverPhoto: { file: "cocina-granito-salvia-01.jpg", orientation: "horizontal" },
     gallery: [
@@ -930,6 +1089,12 @@ export const PROJECTS: Project[] = [
       "es-US": "Cochera independiente en estructura de madera, con techo a dos aguas y tejas asfálticas.",
       "en-US": "Freestanding wood-frame carport, with a gable roof and asphalt shingles.",
     },
+    description: {
+      "es-US":
+        "La cochera se construyó como estructura independiente de madera, con el techo a dos aguas ya cerrado en teja asfáltica que combina con el tejado de la casa. Se ve terminada y despejada, ubicada sobre la entrada de concreto, junto al buzón de la vivienda.",
+      "en-US":
+        "The carport was built as a freestanding wood structure, its gable roof already closed in with asphalt shingles matching the house's own roofline. It's shown finished and clear, set over the concrete driveway right next to the home's mailbox.",
+    },
     location: "Houston, TX",
     coverPhoto: { file: "cochera-nueva-01.jpg", orientation: "vertical" },
     gallery: [
@@ -959,6 +1124,12 @@ export const PROJECTS: Project[] = [
     excerpt: {
       "es-US": "Cochera de madera con techo a dos aguas junto a fachada de ladrillo con ventanas en arco.",
       "en-US": "Wood-frame gable-roof carport beside a brick facade with arched windows.",
+    },
+    description: {
+      "es-US":
+        "Junto a una fachada de ladrillo con ventana en arco, se levantó una cochera de madera con techo a dos aguas y teja asfáltica ya terminada. El área bajo cubierta, ya en uso con plantas del propietario, muestra la estructura integrada a la entrada de la vivienda.",
+      "en-US":
+        "Beside a brick facade with an arched window, a wood-frame carport went up with a finished gable roof and asphalt shingles. The covered area, already put to use with the owner's plants, shows the structure folded right into the home's entrance.",
     },
     location: "Houston, TX",
     coverPhoto: { file: "cochera-arcos-01.jpg", orientation: "vertical" },
@@ -993,6 +1164,12 @@ export const PROJECTS: Project[] = [
     excerpt: {
       "es-US": "Mostrador de recepción en cuarzo con veta y panel lateral dorado, para un local comercial.",
       "en-US": "Veined quartz reception desk with a gold side panel, for a commercial space.",
+    },
+    description: {
+      "es-US":
+        "El mostrador de recepción se fabricó en cuarzo blanco con veta continua, sobre una base recta rematada con un panel lateral en acabado dorado. Se instaló frente al rótulo iluminado del local, en un espacio comercial pintado en tono rosa palo.",
+      "en-US":
+        "The reception desk was built in continuous-veined white quartz, on a straight base finished with a gold side panel. It sits facing the shop's lit-up sign, in a commercial space painted in a soft blush pink.",
     },
     location: "Houston, TX",
     coverPhoto: { file: "aloha-recepcion-despues.jpg", orientation: "horizontal" },
