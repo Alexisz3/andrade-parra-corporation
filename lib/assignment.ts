@@ -1,9 +1,10 @@
 /**
  * Reparto interno entre los contactos de WhatsApp.
  *
- * Los dos números son igualmente principales y el visitante no elige persona:
+ * Los números son igualmente principales y el visitante no elige persona:
  * la asignación se calcula aquí. Es determinista (una misma solicitud siempre
- * va al mismo contacto, también al reintentar) y reparte ~50/50 en el agregado.
+ * va al mismo contacto, también al reintentar) y reparte equitativamente en
+ * el agregado entre cuantos contactos haya en `WHATSAPP_CONTACTS`.
  *
  * Nota de alcance: hoy la semilla se deriva de los datos de la solicitud porque
  * no existe todavía persistencia con identificador propio. Cuando exista el

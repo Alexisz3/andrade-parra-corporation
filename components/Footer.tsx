@@ -3,7 +3,7 @@ import { Link } from "@/i18n/navigation";
 import type { StaticPathname, AppLocale } from "@/i18n/routing";
 import { SERVICES } from "@/content/services";
 
-import { BRAND, BUSINESS_FACEBOOK } from "@/lib/site";
+import { BRAND, BUSINESS_FACEBOOK, WHATSAPP_CONTACTS } from "@/lib/site";
 import BrandLogo from "./BrandLogo";
 
 const COMPANY_LINKS: {
@@ -92,22 +92,16 @@ export default async function Footer() {
           <div className="v8-editorial-footer-column v8-editorial-footer-contact">
             <h2>{t("contactHeading")}</h2>
             <ul>
-              <li>
-                <a href="tel:+18327940720" className="v8-editorial-footer-link">
-                  <span className="v8-editorial-footer-icon" aria-hidden="true">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                  </span>
-                  (832) 794-0720 <span className="v8-editorial-footer-contact-name">Jose</span>
-                </a>
-              </li>
-              <li>
-                <a href="tel:+18326524660" className="v8-editorial-footer-link">
-                  <span className="v8-editorial-footer-icon" aria-hidden="true">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                  </span>
-                  (832) 652-4660 <span className="v8-editorial-footer-contact-name">Mario</span>
-                </a>
-              </li>
+              {WHATSAPP_CONTACTS.map((contact) => (
+                <li key={contact.id}>
+                  <a href={`tel:+${contact.phone}`} className="v8-editorial-footer-link">
+                    <span className="v8-editorial-footer-icon" aria-hidden="true">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    </span>
+                    {contact.phoneDisplay} <span className="v8-editorial-footer-contact-name">{contact.name.split(" ")[0]}</span>
+                  </a>
+                </li>
+              ))}
               <li>
                 <a href="mailto:contacto@ampargo.com" className="v8-editorial-footer-link">
                   <span className="v8-editorial-footer-icon" aria-hidden="true">

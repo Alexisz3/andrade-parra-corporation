@@ -34,7 +34,6 @@ export async function getV7EditorialCopy(): Promise<V7EditorialCopy> {
     teamBody: t("teamBody"),
     teamContact: t("teamContact"),
     teamSupervisorRole: t("teamSupervisorRole"),
-    teamPhonePending: t("teamPhonePending"),
     teamPhotoPending: t("teamPhotoPending"),
     teamGalleryTitle: t("teamGalleryTitle"),
     teamGalleryBody: t("teamGalleryBody"),

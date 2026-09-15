@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { BUSINESS_EMAIL, BUSINESS_FACEBOOK, TEAM_SUPERVISOR, WHATSAPP_CONTACTS } from "@/lib/site";
+import { BUSINESS_EMAIL, BUSINESS_FACEBOOK, WHATSAPP_CONTACTS } from "@/lib/site";
 import TrackedContactLink from "@/components/TrackedContactLink";
 
 export interface V7EditorialCopy {
@@ -26,7 +26,6 @@ export interface V7EditorialCopy {
   teamBody: string;
   teamContact: string;
   teamSupervisorRole: string;
-  teamPhonePending: string;
   teamPhotoPending: string;
   teamGalleryTitle: string;
   teamGalleryBody: string;
@@ -186,10 +185,9 @@ export function V7Team({ copy }: { copy: V7EditorialCopy }) {
         </div>
 
         <div className="v7-team-grid">
-          {/* Orden pedido por el cliente: José, Ramón (supervisor), Mario —
-              mensaje del 2026-09-15. Ramón vive fuera de `WHATSAPP_CONTACTS`
-              (ver comentario en lib/site.ts) así que se intercala aquí. */}
-          {[WHATSAPP_CONTACTS[0], TEAM_SUPERVISOR, WHATSAPP_CONTACTS[1]].map((contact, index) => {
+          {/* Orden ya es José, Ramón (supervisor), Mario en `WHATSAPP_CONTACTS`
+              — ver comentario ahí sobre por qué Ramón se unió a esa lista. */}
+          {WHATSAPP_CONTACTS.map((contact, index) => {
             const initials = contact.name.split(" ").map((part) => part[0]).join("");
             return (
               <article className="v7-person-card" key={contact.id}>
@@ -216,61 +214,38 @@ export function V7Team({ copy }: { copy: V7EditorialCopy }) {
                   </div>
                 )}
                 <div className="v7-person-info">
-                  {contact.phone ? (
-                    <>
-                      <p className="v7-meta">{copy.teamContact}</p>
-                      <h3>{contact.name}</h3>
-                      <strong>{contact.phoneDisplay}</strong>
-                      <div>
-                        <TrackedContactLink
-                          href={`tel:+${contact.phone}`}
-                          event="phone_clicked"
-                          params={{ contact: contact.id, source: "about_team" }}
-                        >
-                          {copy.teamCall}
-                        </TrackedContactLink>
-                        <TrackedContactLink
-                          href={`https://wa.me/${contact.phone}`}
-                          event="whatsapp_clicked"
-                          params={{ contact: contact.id, source: "about_team" }}
-                          external
-                        >
-                          {copy.teamWhatsapp}
-                        </TrackedContactLink>
-                        {contact.facebook ? (
-                          <TrackedContactLink
-                            href={contact.facebook}
-                            event="facebook_clicked"
-                            params={{ contact: contact.id, source: "about_team" }}
-                            external
-                          >
-                            {copy.teamFacebook}
-                          </TrackedContactLink>
-                        ) : null}
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      {/* Sin teléfono todavía (dato ausente → función
-                          ausente): sólo nombre y rol, nada de Llamar/WhatsApp
-                          — mensaje del cliente, 2026-09-15. */}
-                      <p className="v7-meta">{copy.teamSupervisorRole}</p>
-                      <h3>{contact.name}</h3>
-                      <strong>{copy.teamPhonePending}</strong>
-                      {contact.facebook ? (
-                        <div>
-                          <TrackedContactLink
-                            href={contact.facebook}
-                            event="facebook_clicked"
-                            params={{ contact: contact.id, source: "about_team" }}
-                            external
-                          >
-                            {copy.teamFacebook}
-                          </TrackedContactLink>
-                        </div>
-                      ) : null}
-                    </>
-                  )}
+                  <p className="v7-meta">
+                    {contact.role === "supervisor" ? copy.teamSupervisorRole : copy.teamContact}
+                  </p>
+                  <h3>{contact.name}</h3>
+                  <strong>{contact.phoneDisplay}</strong>
+                  <div>
+                    <TrackedContactLink
+                      href={`tel:+${contact.phone}`}
+                      event="phone_clicked"
+                      params={{ contact: contact.id, source: "about_team" }}
+                    >
+                      {copy.teamCall}
+                    </TrackedContactLink>
+                    <TrackedContactLink
+                      href={`https://wa.me/${contact.phone}`}
+                      event="whatsapp_clicked"
+                      params={{ contact: contact.id, source: "about_team" }}
+                      external
+                    >
+                      {copy.teamWhatsapp}
+                    </TrackedContactLink>
+                    {contact.facebook ? (
+                      <TrackedContactLink
+                        href={contact.facebook}
+                        event="facebook_clicked"
+                        params={{ contact: contact.id, source: "about_team" }}
+                        external
+                      >
+                        {copy.teamFacebook}
+                      </TrackedContactLink>
+                    ) : null}
+                  </div>
                 </div>
               </article>
             );

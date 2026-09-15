@@ -1,20 +1,20 @@
 /**
- * Reparto de solicitudes entre los dos contactos de WhatsApp.
+ * Reparto de solicitudes entre los contactos de WhatsApp.
  * Sin runner externo: node puro.
  * Uso: npm run check:assignment
  *
  * Esta prueba existe por un fallo medido en producción: `lib/assignment.ts`
  * implementaba el reparto determinista y NO lo llamaba nadie. El formulario
  * hacía `whatsappTargets[0]`, así que el 100 % de las cotizaciones llegaba a
- * Jose Andrade y Mario Parra no recibía ninguna. Un módulo correcto y
- * huérfano no falla en ninguna prueba, por eso hace falta una que compruebe
+ * Jose Andrade y los demás contactos no recibían ninguna. Un módulo correcto
+ * y huérfano no falla en ninguna prueba, por eso hace falta una que compruebe
  * el reparto de verdad y no solo la función aislada.
  */
 import assert from "node:assert/strict";
 import { pickContactIndex, quoteSeed } from "../lib/assignment.ts";
 
-/** Los dos contactos reales, tal como los declara `lib/site.ts`. */
-const CONTACTS = ["Jose Andrade", "Mario Parra"];
+/** Los contactos reales, tal como los declara `lib/site.ts`. */
+const CONTACTS = ["Jose Andrade", "Ramon Andrade", "Mario Parra"];
 
 /* ─── Lote de solicitudes variadas ───────────────────────────────────────
  * Nombres, teléfonos y descripciones distintos, en los dos idiomas del
@@ -50,8 +50,8 @@ const fail = (msg) => {
   console.log("FALLA " + msg);
 };
 
-/* ─── 1. Ambos contactos reciben solicitudes ─────────────────────────── */
-const counts = [0, 0];
+/* ─── 1. Todos los contactos reciben solicitudes ──────────────────────── */
+const counts = CONTACTS.map(() => 0);
 for (const [name, phone, description] of REQUESTS) {
   const seed = quoteSeed([name, phone, description]);
   counts[pickContactIndex(seed, CONTACTS.length)]++;
@@ -60,19 +60,21 @@ for (const [name, phone, description] of REQUESTS) {
 console.log(`Lote de ${REQUESTS.length} solicitudes:`);
 CONTACTS.forEach((c, i) => console.log(`  ${c}: ${counts[i]}`));
 
-if (counts[0] === 0 || counts[1] === 0) {
+if (counts.some((n) => n === 0)) {
   fail(`un contacto se queda sin ninguna solicitud (${counts.join(" / ")})`);
 } else {
-  console.log("OK    ambos contactos reciben solicitudes");
+  console.log("OK    todos los contactos reciben solicitudes");
 }
 
 /*
- * Equilibrio. No se exige 50/50 exacto —sería casualidad, no corrección—,
- * pero un reparto que deja a un contacto por debajo del 25 % del lote ya no
- * es "los dos números son igualmente principales".
+ * Equilibrio. No se exige un reparto exacto a partes iguales —sería
+ * casualidad, no corrección—, pero un contacto muy por debajo de su parte
+ * proporcional (la mitad de "1 / cuántos contactos haya") ya no es "los
+ * contactos son igualmente principales".
  */
 const min = Math.min(...counts);
-if (min < REQUESTS.length * 0.25) {
+const fairShareFloor = (REQUESTS.length / CONTACTS.length) * 0.5;
+if (min < fairShareFloor) {
   fail(`reparto desequilibrado: ${counts.join(" / ")} sobre ${REQUESTS.length}`);
 } else {
   console.log(`OK    reparto equilibrado (${counts.join(" / ")})`);
@@ -97,7 +99,7 @@ if (min < REQUESTS.length * 0.25) {
  *
  * Reintentar tras corregir un espacio, una mayúscula o el formato del
  * teléfono NO debe cambiar de destinatario: si cambiara, la misma solicitud
- * llegaría a los dos teléfonos y ambos llamarían al mismo cliente.
+ * llegaría a más de un teléfono y varios contactos llamarían al mismo cliente.
  */
 {
   const canonical = quoteSeed(["María Fernández", "8325550101", "Remodelación de cocina con isla"]);

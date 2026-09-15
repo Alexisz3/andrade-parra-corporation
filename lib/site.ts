@@ -99,6 +99,71 @@ export const BRAND = {
   initials: "AP",
 } as const;
 
+/**
+ * Fuente única de los tres contactos de WhatsApp — igualmente principales
+ * en cuanto a atención (los tres reciben solicitudes por igual, ver
+ * `lib/assignment.ts`), aunque `role` distingue el título de Ramón
+ * ("Supervisor") del de José y Mario ("Contacto principal") en la tarjeta
+ * de equipo de "Nosotros". Vive fuera de los diccionarios de idioma a
+ * propósito: un nombre o un teléfono no se traducen, y tenerlos por
+ * duplicado en es-US.json y en-US.json es exactamente el defecto que se
+ * encontró en la versión anterior del sitio (ver AUDITORIA_Y_PLAN_AMPARGO.md,
+ * hallazgo P2-3): si alguien actualiza un número en un idioma y olvida el
+ * otro, el CTA principal queda roto a medias. Declarada antes que `BUSINESS`
+ * porque `BUSINESS.phones` deriva de aquí por el mismo motivo.
+ *
+ * Ramón Andrade se sumó el 2026-09-15: el cliente avisó ese mismo día que
+ * habría un tercer contacto ("en total son 3 contactos pero de momento no
+ * me dan el número") y confirmó su teléfono más tarde — hasta entonces vivió
+ * aparte, como `TEAM_SUPERVISOR`, solo visible en "Nosotros" sin botones de
+ * Llamar/WhatsApp. Con el número ya confirmado, el cliente pidió tratarlo
+ * como contacto completo en todo el sitio (reparto de cotizaciones, pie de
+ * página, barra de contacto móvil, panel de Cotización, ficha estructurada),
+ * así que ahora vive aquí igual que José y Mario.
+ */
+export const WHATSAPP_CONTACTS = [
+  {
+    id: "jose-andrade",
+    name: "Jose Andrade",
+    role: "contact" as const,
+    phone: "18327940720",
+    phoneDisplay: "(832) 794-0720",
+    // `null`: el cliente pidió quitar la foto de José de la tarjeta de
+    // equipo (mensaje del 2026-09-15) — mismo criterio de "dato ausente →
+    // función ausente" que COMPANY_STORY/MISSION_VISION en
+    // content/company.ts. El archivo `jose-andrade-v2.png` se conserva en
+    // `public/images/equipo/` por si se retoma más adelante.
+    photo: null as string | null,
+    // Perfil personal, recibido del cliente el 2026-09-14.
+    facebook: "https://www.facebook.com/share/1BvNApBCwy/?mibextid=wwXIfr" as string | null,
+  },
+  {
+    id: "ramon-andrade",
+    name: "Ramon Andrade",
+    role: "supervisor" as const,
+    // Confirmado por el cliente el 2026-09-15.
+    phone: "19178602074",
+    phoneDisplay: "(917) 860-2074",
+    // Misma fotografía que antes mostraba la tarjeta de Mario Parra — el
+    // cliente pidió reasignarla, no una foto nueva.
+    photo: "/images/equipo/ramon-andrade.png" as string | null,
+    facebook: null as string | null,
+  },
+  {
+    id: "mario-parra",
+    name: "Mario Parra",
+    role: "contact" as const,
+    phone: "18326524660",
+    phoneDisplay: "(832) 652-4660",
+    // `null`: la foto que tenía Mario (`mario-parra-v2.png`) pasa a ser la
+    // de Ramón Andrade — mensaje del cliente, 2026-09-15. El archivo
+    // original se conserva en el mismo motivo que el de José: no se borra
+    // un activo real del cliente sin que lo pida.
+    photo: null as string | null,
+    facebook: null as string | null,
+  },
+] as const;
+
 export const BUSINESS = {
   name: BRAND.name,
   /**
@@ -115,70 +180,12 @@ export const BUSINESS = {
   postalCode: "77075",
   country: "US",
   /**
-   * Teléfonos en E.164. Ambos contactos son igualmente principales;
-   * el primero se usa como teléfono de ficha para los datos estructurados.
+   * Teléfonos en E.164, derivados de `WHATSAPP_CONTACTS` — una sola fuente,
+   * para no repetir el defecto P2-3 (un número que se actualiza en un sitio
+   * y queda desactualizado en otro). El primero se usa como teléfono de
+   * ficha para los datos estructurados.
    */
-  phones: ["+18327940720", "+18326524660"],
-} as const;
-
-/**
- * Fuente única de los dos contactos de WhatsApp — igualmente principales.
- * Vive fuera de los diccionarios de idioma a propósito: un nombre o un
- * teléfono no se traducen, y tenerlos por duplicado en es-US.json y en-US.json
- * es exactamente el defecto que se encontró en la versión anterior del sitio
- * (ver AUDITORIA_Y_PLAN_AMPARGO.md, hallazgo P2-3): si alguien actualiza un
- * número en un idioma y olvida el otro, el CTA principal queda roto a medias.
- */
-export const WHATSAPP_CONTACTS = [
-  {
-    id: "jose-andrade",
-    name: "Jose Andrade",
-    phone: "18327940720",
-    phoneDisplay: "(832) 794-0720",
-    // `null`: el cliente pidió quitar la foto de José de la tarjeta de
-    // equipo (mensaje del 2026-09-15) — mismo criterio de "dato ausente →
-    // función ausente" que COMPANY_STORY/MISSION_VISION en
-    // content/company.ts. El archivo `jose-andrade-v2.png` se conserva en
-    // `public/images/equipo/` por si se retoma más adelante.
-    photo: null as string | null,
-    // Perfil personal, recibido del cliente el 2026-09-14.
-    facebook: "https://www.facebook.com/share/1BvNApBCwy/?mibextid=wwXIfr" as string | null,
-  },
-  {
-    id: "mario-parra",
-    name: "Mario Parra",
-    phone: "18326524660",
-    phoneDisplay: "(832) 652-4660",
-    // `null`: la foto que tenía Mario (`mario-parra-v2.png`) pasa a ser la
-    // de Ramón Andrade (ver `TEAM_SUPERVISOR` abajo) — mensaje del cliente,
-    // 2026-09-15. El archivo original se conserva en el mismo motivo que
-    // el de José: no se borra un activo real del cliente sin que lo pida.
-    photo: null as string | null,
-    facebook: null as string | null,
-  },
-] as const;
-
-/**
- * Tercer integrante del equipo, mostrado en la sección "Nosotros" —
- * mensaje del cliente, 2026-09-15: "en total son 3 contactos pero de
- * momento no me dan el número". Vive FUERA de `WHATSAPP_CONTACTS` a
- * propósito: esa lista es la fuente para el reparto de WhatsApp
- * (`lib/assignment.ts`), la barra de contacto móvil, el pie de página y
- * el panel "contacto directo" de Cotización — todos sitios que necesitan
- * un teléfono real para funcionar. Ramón todavía no tiene uno, así que
- * `phone` es `null` y su tarjeta en Nosotros no ofrece Llamar/WhatsApp
- * (sí foto y nombre) hasta que el cliente lo confirme — mismo criterio de
- * "dato ausente → función ausente".
- */
-export const TEAM_SUPERVISOR = {
-  id: "ramon-andrade",
-  name: "Ramon Andrade",
-  phone: null as string | null,
-  phoneDisplay: null as string | null,
-  // Misma fotografía que antes mostraba la tarjeta de Mario Parra —el
-  // cliente pidió reasignarla, no una foto nueva.
-  photo: "/images/equipo/ramon-andrade.png" as string | null,
-  facebook: null as string | null,
+  phones: WHATSAPP_CONTACTS.map((c) => `+${c.phone}`),
 } as const;
 
 /**

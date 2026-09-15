@@ -448,9 +448,9 @@ if (process.env.QA_LEGACY_QUOTE_FLOW === "1") {
     /adjúntelas a este mismo mensaje/i.test(primera.confirmation));
 
   /*
-   * Reparto entre los dos contactos. `lib/assignment.ts` existía y no lo
-   * llamaba nadie: el formulario mandaba siempre al primer número y el
-   * segundo contacto no recibía ninguna solicitud. Se comprueba de punta a
+   * Reparto entre los contactos. `lib/assignment.ts` existía y no lo
+   * llamaba nadie: el formulario mandaba siempre al primer número y los
+   * demás contactos no recibían ninguna solicitud. Se comprueba de punta a
    * punta —no solo la función— porque el defecto estaba justo en el cable.
    */
   const targets = new Set();
@@ -467,7 +467,7 @@ if (process.env.QA_LEGACY_QUOTE_FLOW === "1") {
     const { url: u } = await sendOne(req);
     targets.add((u ?? "").match(/wa\.me\/(\d+)/)?.[1]);
   }
-  check("Reparto: un lote variado llega a AMBOS contactos", targets.size === 2,
+  check("Reparto: un lote variado llega a TODOS los contactos", targets.size === 3,
     [...targets].join(" y "));
 
   const repeat = await sendOne(first);
@@ -609,8 +609,8 @@ if (process.env.QA_LEGACY_QUOTE_FLOW === "1") {
   check("Cotización V7: no conserva stepper ni carga ficticia de fotos",
     (await p.locator('[aria-current="step"]').count()) === 0 &&
     !/arrastre sus archivos|drag your files/i.test(await p.locator("main").innerText()));
-  check("Cotización V7: ofrece contacto directo con Jose y Mario",
-    (await p.locator('.v7-quote-contact-lines a[href^="tel:"]').count()) === 2);
+  check("Cotización V7: ofrece contacto directo con los 3 contactos",
+    (await p.locator('.v7-quote-contact-lines a[href^="tel:"]').count()) === 3);
 
   await p.locator(".v7-quote-form").evaluate((form) => form.requestSubmit());
   await p.locator("#description[aria-invalid='true']").waitFor({ state: "visible" });
@@ -647,7 +647,7 @@ if (process.env.QA_LEGACY_QUOTE_FLOW === "1") {
     const result = item === request ? first : await sendOne(item);
     targets.add((result.url ?? "").match(/wa\.me\/(\d+)/)?.[1]);
   }
-  check("Cotización V7: distribuye solicitudes entre ambos contactos", targets.size === 2,
+  check("Cotización V7: distribuye solicitudes entre los 3 contactos", targets.size === 3,
     [...targets].join(" y "));
 
   const repeat = await sendOne(request);
