@@ -54,8 +54,10 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
       <Header />
       <main id="contenido" tabIndex={-1}>
         <V7EditorialCover
-          imageSrc="/images/heroes/hero-nosotros-fachada.jpg"
+          imageSrc="/images/heroes/hero-nosotros-moodboard.png"
           imageAlt={ta("heroCoverImageAlt")}
+          imagePosition="88% 50%"
+          imagePositionMobile="100% 60%"
           scrollHref="#nosotros"
           // Titular en frase, no una palabra en versales: aquí la portada
           // presenta a dos personas, no a un catálogo.

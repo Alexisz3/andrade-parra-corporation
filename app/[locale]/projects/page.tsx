@@ -61,8 +61,10 @@ export default async function ProjectsPage({ params }: PageProps<"/[locale]/proj
       <main id="contenido" tabIndex={-1}>
         <V7EditorialCover
           count={PROJECTS.length}
-          imageSrc="/images/heroes/hero-proyectos-patio.jpg"
+          imageSrc="/images/heroes/hero-proyectos-moodboard.png"
           imageAlt={t("heroCoverImageAlt")}
+          imagePosition="72% 55%"
+          imagePositionMobile="82% 65%"
           scrollHref="#proyectos"
           copy={{
             kicker: t("heroCoverKicker"),

@@ -56,8 +56,10 @@ export default async function FaqPage({ params }: PageProps<"/[locale]/faq">) {
             titular y frase de instrucción): ahí abajo sólo queda la lista,
             para no repetir los mismos tres textos en pantalla y media. */}
         <V7EditorialCover
-          imageSrc="/images/heroes/hero-preguntas-escritorio.jpg"
+          imageSrc="/images/heroes/hero-preguntas-moodboard.png"
           imageAlt={tf("heroCoverImageAlt")}
+          imagePosition="30% 55%"
+          imagePositionMobile="0% 65%"
           scrollHref="#faq"
           phrasing="phrase"
           // Líneas cortas: aquí el titular aguanta el cuerpo mayor.

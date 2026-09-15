@@ -60,6 +60,8 @@ export default function V7EditorialCover({
   count,
   imageSrc,
   imageAlt,
+  imagePosition,
+  imagePositionMobile,
   scrollHref,
   phrasing = "word",
   titleScale = "regular",
@@ -69,6 +71,18 @@ export default function V7EditorialCover({
   count?: number;
   imageSrc: string;
   imageAlt: string;
+  /**
+   * `object-position` de la foto de fondo, tipo CSS ("80% 50%"). Cada foto
+   * tiene su propio punto de interés —no todas están centradas—, así que el
+   * valor por defecto (centro) no sirve para todas. Opcional: sin esto,
+   * queda en el centro, que es lo que ya tenían las portadas anteriores.
+   */
+  imagePosition?: string;
+  /** Igual que `imagePosition`, pero sólo bajo 700px. El recorte en móvil
+   *  es por ALTURA (la sección suele quedar más alta que ancha) así que el
+   *  punto de interés horizontal que funciona en escritorio casi nunca
+   *  sirve igual en el celular — normalmente hace falta uno propio. */
+  imagePositionMobile?: string;
   /** Ancla de la sección siguiente, p. ej. "#nosotros". */
   scrollHref: string;
   phrasing?: "word" | "phrase";
@@ -85,7 +99,15 @@ export default function V7EditorialCover({
 
   return (
     <section className="v7-cover" aria-label={copy.title}>
-      <div className="v7-cover-bg">
+      <div
+        className="v7-cover-bg"
+        style={
+          {
+            "--cover-position": imagePosition,
+            "--cover-position-mobile": imagePositionMobile,
+          } as React.CSSProperties
+        }
+      >
         {/* `250vw` en móvil, no `100vw`: con `object-cover` en una portada que
             en celular queda más alta que ancha, el alto manda sobre el ancho
             del viewport y "100% del ancho" se queda corto — Next servía una

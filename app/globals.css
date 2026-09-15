@@ -59,6 +59,14 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
    `.v7-about`, verificado con axe) mantiene contraste tanto sobre fondos
    oscuros planos como sobre las zonas claras de las fotos del hero. */
 .v7-eyebrow-light { color: #f2647d; text-shadow: 0 1px 3px rgb(0 0 0 / 55%), 0 0 10px rgb(0 0 0 / 35%); }
+/* Sólo en el hero de Inicio: desde que la portada pasó a la foto tipo
+   moodboard (pared clara, madera, terracota), el rosa de `.v7-eyebrow-light`
+   —pensado para leerse sobre una foto nocturna— desentonaba con la paleta
+   cálida nueva. Mismo nivel de claridad que el rosa (mismo contraste sobre
+   el scrim oscuro y sobre las zonas claras de la foto, verificado con axe:
+   npm run qa:axe), sólo cambia el matiz hacia la terracota de la propia
+   fotografía. Mensaje del cliente, 2026-09-15. */
+.v7-hero .v7-eyebrow-light { color: #e2603f; }
 .pb-safe { padding-bottom: max(var(--pb, 4rem), calc(env(safe-area-inset-bottom, 0px) + 3rem)); }
 .v7-container { width: min(100% - 3rem, 88rem); margin-inline: auto; }
 .v7-section { padding-block: clamp(5rem, 9vw, 9rem); }
@@ -1578,7 +1586,14 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
   isolation: isolate;
 }
 .v7-cover-bg { position: absolute; inset: 0; z-index: 0; }
-.v7-cover-bg img { object-fit: cover; object-position: 50% 50%; }
+/* `--cover-position*`: cada portada pasa la suya (V7EditorialCover, prop
+   `imagePosition`/`imagePositionMobile`) porque el punto de interés varía
+   foto a foto — sin esto, el 50% 50% por defecto cae sobre pared vacía en
+   varias de las fotos tipo moodboard nuevas. */
+.v7-cover-bg img { object-fit: cover; object-position: var(--cover-position, 50% 50%); }
+@media (max-width: 700px) {
+  .v7-cover-bg img { object-position: var(--cover-position-mobile, var(--cover-position, 50% 50%)); }
+}
 .v7-cover-overlay {
   position: absolute;
   inset: 0;

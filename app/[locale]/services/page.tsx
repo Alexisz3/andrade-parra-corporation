@@ -50,8 +50,10 @@ export default async function ServicesPage({ params }: PageProps<"/[locale]/serv
       <main id="contenido" tabIndex={-1}>
         <V7EditorialCover
           count={services.length}
-          imageSrc="/images/heroes/hero-servicios-cocina.jpg"
+          imageSrc="/images/heroes/hero-servicios-moodboard.png"
           imageAlt={ts("heroCoverImageAlt")}
+          imagePosition="90% 55%"
+          imagePositionMobile="100% 75%"
           scrollHref="#servicios"
           copy={{
             kicker: ts("heroCoverKicker"),
