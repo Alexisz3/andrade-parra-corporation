@@ -1780,7 +1780,12 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
   font-weight: 600;
   letter-spacing: .24em;
   text-transform: uppercase;
-  color: rgb(252 250 246 / 62%);
+  color: rgb(252 250 246 / 78%);
+  /* El degradado de `.v7-cover-overlay` se desvanece hacia la derecha —
+     ahí es donde vive este texto—, así que sobre fotos claras (cielo,
+     patio al sol) podía perderse. Una sombra propia garantiza contraste
+     sin depender de qué tan clara sea cada foto de portada. */
+  text-shadow: 0 1px 16px rgb(10 9 8 / 75%), 0 1px 3px rgb(10 9 8 / 90%);
 }
 .v7-cover-tagline-rule {
   width: 2.75rem;
