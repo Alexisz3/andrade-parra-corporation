@@ -66,14 +66,16 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
    `.v7-about`, verificado con axe) mantiene contraste tanto sobre fondos
    oscuros planos como sobre las zonas claras de las fotos del hero. */
 .v7-eyebrow-light { color: #f2647d; text-shadow: 0 1px 3px rgb(0 0 0 / 55%), 0 0 10px rgb(0 0 0 / 35%); }
-/* Sólo en el hero de Inicio: desde que la portada pasó a la foto tipo
-   moodboard (pared clara, madera, terracota), el rosa de `.v7-eyebrow-light`
-   —pensado para leerse sobre una foto nocturna— desentonaba con la paleta
-   cálida nueva. Mismo nivel de claridad que el rosa (mismo contraste sobre
-   el scrim oscuro y sobre las zonas claras de la foto, verificado con axe:
-   npm run qa:axe), sólo cambia el matiz hacia la terracota de la propia
-   fotografía. Mensaje del cliente, 2026-09-15. */
-.v7-hero .v7-eyebrow-light { color: #e2603f; }
+/* Sólo en el hero de Inicio — mensaje del cliente, 2026-09-15: pidió blanco
+   en vez del rosa/terracota de `.v7-eyebrow-light` (usados en el resto del
+   sitio porque un blanco liso se perdía sobre las zonas claras de las fotos
+   de hero). La sombra se refuerza aquí, respecto a la base, precisamente
+   para que el blanco aguante sobre esas mismas zonas claras sin repetir ese
+   problema — verificado a ojo sobre la foto actual del hero de Inicio. */
+.v7-hero .v7-eyebrow-light {
+  color: var(--color-bone);
+  text-shadow: 0 1px 4px rgb(0 0 0 / 75%), 0 0 14px rgb(0 0 0 / 55%);
+}
 .pb-safe { padding-bottom: max(var(--pb, 4rem), calc(env(safe-area-inset-bottom, 0px) + 3rem)); }
 .v7-container { width: min(100% - 3rem, 88rem); margin-inline: auto; }
 .v7-section { padding-block: clamp(5rem, 9vw, 9rem); }
