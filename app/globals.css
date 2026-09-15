@@ -379,11 +379,12 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 .v7-team-head > p { margin:0; color:var(--color-muted); font-size:1.05rem; line-height:1.7; }
 .v7-team-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.15rem; margin-top:3.25rem; }
 .v7-person-card { display:grid; grid-template-columns:minmax(10rem,.72fr) minmax(0,1fr); overflow:hidden; min-height:24rem; border:1px solid var(--color-line); border-radius:var(--v7-radius); background:var(--color-surface); box-shadow:0 18px 48px rgb(32 28 24 / 7%); }
+/* Sin foto: Jose y Mario decidieron no publicar la suya (no es que falte
+   por ahora) — una sola columna, sin el panel oscuro que sugeriría una
+   foto pendiente. Ver comentario en V7Team, components/home/V7EditorialSections.tsx. */
+.v7-person-card.is-photoless { grid-template-columns:1fr; min-height:0; }
 .v7-person-photo { position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.75rem; overflow:hidden; min-height:24rem; background:linear-gradient(145deg,#29251f,#171512); color:var(--color-bone); isolation:isolate; }
 .v7-person-photo::before { content:""; position:absolute; inset:0; z-index:-1; opacity:.18; background-image:linear-gradient(rgb(255 255 255 / 10%) 1px,transparent 1px),linear-gradient(90deg,rgb(255 255 255 / 10%) 1px,transparent 1px); background-size:42px 42px; mask-image:linear-gradient(135deg,#000,transparent); }
-.v7-person-photo > span { width:6.5rem; height:6.5rem; display:grid; place-items:center; border:1px solid rgb(252 250 246 / 34%); border-radius:50%; font:600 1.2rem/1 var(--font-mono); letter-spacing:.18em; }
-.v7-person-photo small { max-width:10rem; color:rgb(252 250 246 / 55%); font:600 .7rem/1.3 var(--font-mono); letter-spacing:.12em; text-align:center; text-transform:uppercase; }
-.v7-person-photo i { position:absolute; right:1rem; bottom:.8rem; color:rgb(252 250 246 / 15%); font:600 5rem/1 var(--font-mono); font-style:normal; }
 .v7-person-info { display:flex; flex-direction:column; justify-content:center; padding:clamp(1.4rem,3vw,2.25rem); }
 .v7-person-info .v7-meta { color:var(--color-brand-dark); }.v7-person-info h3 { margin:.55rem 0 .2rem; font-size:clamp(2rem,3vw,3rem); line-height:.95; letter-spacing:-.04em; }.v7-person-info > strong { color:var(--color-muted); font:600 1rem/1.3 var(--font-mono); }
 .v7-person-info > div { display:grid; margin-top:1.8rem; border-top:1px solid var(--color-line); }.v7-person-info a { min-height:3.25rem; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--color-line); color:inherit; font-weight:650; text-decoration:none; transition:padding .2s,color .2s; }.v7-person-info a:hover { padding-inline:.5rem; color:var(--color-brand-dark); }

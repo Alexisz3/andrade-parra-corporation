@@ -26,7 +26,6 @@ export interface V7EditorialCopy {
   teamBody: string;
   teamContact: string;
   teamSupervisorRole: string;
-  teamPhotoPending: string;
   teamGalleryTitle: string;
   teamGalleryBody: string;
   teamCall: string;
@@ -187,11 +186,14 @@ export function V7Team({ copy }: { copy: V7EditorialCopy }) {
         <div className="v7-team-grid">
           {/* Orden ya es José, Ramón (supervisor), Mario en `WHATSAPP_CONTACTS`
               — ver comentario ahí sobre por qué Ramón se unió a esa lista. */}
-          {WHATSAPP_CONTACTS.map((contact, index) => {
-            const initials = contact.name.split(" ").map((part) => part[0]).join("");
+          {WHATSAPP_CONTACTS.map((contact) => {
+            const hasPhoto = Boolean(contact.photo);
             return (
-              <article className="v7-person-card" key={contact.id}>
-                {Boolean(contact.photo) ? (
+              <article
+                className={`v7-person-card${hasPhoto ? "" : " is-photoless"}`}
+                key={contact.id}
+              >
+                {hasPhoto ? (
                   <div className="v7-person-photo has-image">
                     <Image
                       src={contact.photo as string}
@@ -204,15 +206,18 @@ export function V7Team({ copy }: { copy: V7EditorialCopy }) {
                       // desde abajo la cara queda siempre completa.
                       className="object-cover object-top"
                     />
-                    <i aria-hidden="true">0{index + 1}</i>
                   </div>
-                ) : (
-                  <div className="v7-person-photo" aria-label={`${copy.teamPhotoPending}: ${contact.name}`}>
-                    <span aria-hidden="true">{initials}</span>
-                    <small>{copy.teamPhotoPending}</small>
-                    <i aria-hidden="true">0{index + 1}</i>
-                  </div>
-                )}
+                ) : null}
+                {/*
+                 * Sin recuadro de foto ni iniciales cuando no hay imagen:
+                 * Jose y Mario decidieron (no "aún no", decidieron) no
+                 * publicar la suya — mensaje del cliente, 2026-09-15
+                 * ("jose y mario no quieren colocar sus fotos entonces solo
+                 * sera el nombre"). Un recuadro con iniciales sugeriría una
+                 * foto pendiente que nunca llega. Mismo criterio de "dato
+                 * ausente → función ausente" que en el resto del sitio,
+                 * llevado también a lo visual.
+                 */}
                 <div className="v7-person-info">
                   <p className="v7-meta">
                     {contact.role === "supervisor" ? copy.teamSupervisorRole : copy.teamContact}

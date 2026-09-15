@@ -128,14 +128,18 @@ export const WHATSAPP_CONTACTS = [
     role: "contact" as const,
     phone: "18327940720",
     phoneDisplay: "(832) 794-0720",
-    // `null`: el cliente pidió quitar la foto de José de la tarjeta de
-    // equipo (mensaje del 2026-09-15) — mismo criterio de "dato ausente →
-    // función ausente" que COMPANY_STORY/MISSION_VISION en
-    // content/company.ts. El archivo `jose-andrade-v2.png` se conserva en
-    // `public/images/equipo/` por si se retoma más adelante.
+    // `null`: José decidió no publicar su foto en la tarjeta de equipo —no
+    // es que falte, es que no la quiere ahí (mensaje del cliente,
+    // 2026-09-15: "jose y mario no quieren colocar sus fotos"). Mismo
+    // criterio de "dato ausente → función ausente" que COMPANY_STORY/
+    // MISSION_VISION en content/company.ts. El archivo `jose-andrade-v2.png`
+    // se conserva en `public/images/equipo/` por si algún día cambia de
+    // opinión.
     photo: null as string | null,
-    // Perfil personal, recibido del cliente el 2026-09-14.
-    facebook: "https://www.facebook.com/share/1BvNApBCwy/?mibextid=wwXIfr" as string | null,
+    // `null`: José pidió no publicar su Facebook personal (mensaje del
+    // cliente, 2026-09-15). Antes tenía
+    // "https://www.facebook.com/share/1BvNApBCwy/?mibextid=wwXIfr".
+    facebook: null as string | null,
   },
   {
     id: "ramon-andrade",
