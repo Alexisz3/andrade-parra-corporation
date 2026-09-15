@@ -2470,7 +2470,7 @@ a.v8-editorial-footer-social-icon:hover { color:var(--color-brand); }
       al mismo ancho y centrados la pila se lee intencionada, y la
       jerarquía la sigue marcando el relleno rojo frente al enlace. */
 @media (max-width: 700px) {
-  .v7-hero-image { object-position: 55% 50%; }
+  .v7-hero-image { object-position: 85% 55%; }
   .v7-hero-title { text-wrap: pretty; }
   .v7-hero-ctas { display: grid; grid-template-columns: 1fr; gap: 1.1rem; }
   .v7-hero-cta-primary { width: 100%; }

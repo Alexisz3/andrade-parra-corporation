@@ -7,14 +7,19 @@ import { Link } from "@/i18n/navigation";
  * de portadas del sitio.
  *
  * El scrim NO oscurece la foto entera: pesa a la izquierda —donde va el
- * copy— y se disuelve antes de la mitad para que el patio, la piscina y los
- * árboles de la derecha se sigan leyendo. La franja superior la aporta el
+ * copy— y se disuelve antes de la mitad. La franja superior la aporta el
  * propio Header (`.v7-header::after`), así que aquí no se repite.
+ *
+ * `hero-home-moodboard.png` (mensaje del cliente, 2026-09-15): imagen tipo
+ * moodboard/mesa de trabajo, no una foto de una obra real de la empresa —a
+ * diferencia del resto de fotografías del sitio, que documentan proyectos
+ * reales. Se usa aquí específicamente porque el cliente la pidió como
+ * portada; el resto del sitio sigue mostrando solo trabajo real.
  *
  * Sin estado ni efectos: es un componente de servidor.
  */
 
-const HERO_IMAGE = "/images/heroes/hero-home-patio.jpg";
+const HERO_IMAGE = "/images/heroes/hero-home-moodboard.png";
 
 export interface V7HeroCopy {
   eyebrow: string;
