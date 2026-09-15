@@ -135,20 +135,13 @@ export const WHATSAPP_CONTACTS = [
     name: "Jose Andrade",
     phone: "18327940720",
     phoneDisplay: "(832) 794-0720",
-    // `null` mientras no exista foto real — mismo criterio de
-    // "dato ausente → función ausente" que COMPANY_STORY/MISSION_VISION
-    // en content/company.ts. Recibida del cliente el 2026-09-15.
-    //
-    // Nombre de archivo con sufijo "-v2": el cliente confirmó por fin cuál
-    // foto es cuál después de varias vueltas, y la caché del navegador (la
-    // suya y la del optimizador de imágenes de Next) se negaba a soltar la
-    // versión anterior aunque el archivo en el servidor ya estuviera bien.
-    // Un nombre nuevo obliga a pedirlo de cero — no hay caché que pueda
-    // tener guardada una URL que nunca existió.
-    photo: "/images/equipo/jose-andrade-v2.png",
-    // Perfil personal, recibido del cliente el 2026-09-14. Mario no tiene
-    // uno todavía — `null`, mismo criterio de "dato ausente → función
-    // ausente" que `photo` arriba.
+    // `null`: el cliente pidió quitar la foto de José de la tarjeta de
+    // equipo (mensaje del 2026-09-15) — mismo criterio de "dato ausente →
+    // función ausente" que COMPANY_STORY/MISSION_VISION en
+    // content/company.ts. El archivo `jose-andrade-v2.png` se conserva en
+    // `public/images/equipo/` por si se retoma más adelante.
+    photo: null as string | null,
+    // Perfil personal, recibido del cliente el 2026-09-14.
     facebook: "https://www.facebook.com/share/1BvNApBCwy/?mibextid=wwXIfr" as string | null,
   },
   {
@@ -156,10 +149,37 @@ export const WHATSAPP_CONTACTS = [
     name: "Mario Parra",
     phone: "18326524660",
     phoneDisplay: "(832) 652-4660",
-    photo: "/images/equipo/mario-parra-v2.png",
+    // `null`: la foto que tenía Mario (`mario-parra-v2.png`) pasa a ser la
+    // de Ramón Andrade (ver `TEAM_SUPERVISOR` abajo) — mensaje del cliente,
+    // 2026-09-15. El archivo original se conserva en el mismo motivo que
+    // el de José: no se borra un activo real del cliente sin que lo pida.
+    photo: null as string | null,
     facebook: null as string | null,
   },
 ] as const;
+
+/**
+ * Tercer integrante del equipo, mostrado en la sección "Nosotros" —
+ * mensaje del cliente, 2026-09-15: "en total son 3 contactos pero de
+ * momento no me dan el número". Vive FUERA de `WHATSAPP_CONTACTS` a
+ * propósito: esa lista es la fuente para el reparto de WhatsApp
+ * (`lib/assignment.ts`), la barra de contacto móvil, el pie de página y
+ * el panel "contacto directo" de Cotización — todos sitios que necesitan
+ * un teléfono real para funcionar. Ramón todavía no tiene uno, así que
+ * `phone` es `null` y su tarjeta en Nosotros no ofrece Llamar/WhatsApp
+ * (sí foto y nombre) hasta que el cliente lo confirme — mismo criterio de
+ * "dato ausente → función ausente".
+ */
+export const TEAM_SUPERVISOR = {
+  id: "ramon-andrade",
+  name: "Ramon Andrade",
+  phone: null as string | null,
+  phoneDisplay: null as string | null,
+  // Misma fotografía que antes mostraba la tarjeta de Mario Parra —el
+  // cliente pidió reasignarla, no una foto nueva.
+  photo: "/images/equipo/ramon-andrade.png" as string | null,
+  facebook: null as string | null,
+} as const;
 
 /**
  * Tarjetas Open Graph, 1200 × 630.

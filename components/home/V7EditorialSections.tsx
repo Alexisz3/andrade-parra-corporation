@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { BUSINESS_EMAIL, BUSINESS_FACEBOOK, WHATSAPP_CONTACTS } from "@/lib/site";
+import { BUSINESS_EMAIL, BUSINESS_FACEBOOK, TEAM_SUPERVISOR, WHATSAPP_CONTACTS } from "@/lib/site";
 import TrackedContactLink from "@/components/TrackedContactLink";
 
 export interface V7EditorialCopy {
@@ -25,6 +25,8 @@ export interface V7EditorialCopy {
   teamTitle: string;
   teamBody: string;
   teamContact: string;
+  teamSupervisorRole: string;
+  teamPhonePending: string;
   teamPhotoPending: string;
   teamGalleryTitle: string;
   teamGalleryBody: string;
@@ -184,20 +186,17 @@ export function V7Team({ copy }: { copy: V7EditorialCopy }) {
         </div>
 
         <div className="v7-team-grid">
-          {WHATSAPP_CONTACTS.map((contact, index) => {
+          {/* Orden pedido por el cliente: José, Ramón (supervisor), Mario —
+              mensaje del 2026-09-15. Ramón vive fuera de `WHATSAPP_CONTACTS`
+              (ver comentario en lib/site.ts) así que se intercala aquí. */}
+          {[WHATSAPP_CONTACTS[0], TEAM_SUPERVISOR, WHATSAPP_CONTACTS[1]].map((contact, index) => {
             const initials = contact.name.split(" ").map((part) => part[0]).join("");
             return (
               <article className="v7-person-card" key={contact.id}>
-                {/* `Boolean(...)`, no el valor crudo: con los dos contactos
-                    ya teniendo foto, TypeScript infiere `photo` como un
-                    literal siempre verdadero y da por "never" (inalcanzable)
-                    la rama sin foto — con `Boolean` deja de estrechar el
-                    tipo y las dos ramas quedan escribibles, lista para si
-                    algún día se agrega un contacto sin foto todavía. */}
                 {Boolean(contact.photo) ? (
                   <div className="v7-person-photo has-image">
                     <Image
-                      src={contact.photo}
+                      src={contact.photo as string}
                       alt={contact.name}
                       fill
                       sizes="(min-width: 1024px) 22vw, 45vw"
@@ -217,36 +216,61 @@ export function V7Team({ copy }: { copy: V7EditorialCopy }) {
                   </div>
                 )}
                 <div className="v7-person-info">
-                  <p className="v7-meta">{copy.teamContact}</p>
-                  <h3>{contact.name}</h3>
-                  <strong>{contact.phoneDisplay}</strong>
-                  <div>
-                    <TrackedContactLink
-                      href={`tel:+${contact.phone}`}
-                      event="phone_clicked"
-                      params={{ contact: contact.id, source: "about_team" }}
-                    >
-                      {copy.teamCall}
-                    </TrackedContactLink>
-                    <TrackedContactLink
-                      href={`https://wa.me/${contact.phone}`}
-                      event="whatsapp_clicked"
-                      params={{ contact: contact.id, source: "about_team" }}
-                      external
-                    >
-                      {copy.teamWhatsapp}
-                    </TrackedContactLink>
-                    {contact.facebook ? (
-                      <TrackedContactLink
-                        href={contact.facebook}
-                        event="facebook_clicked"
-                        params={{ contact: contact.id, source: "about_team" }}
-                        external
-                      >
-                        {copy.teamFacebook}
-                      </TrackedContactLink>
-                    ) : null}
-                  </div>
+                  {contact.phone ? (
+                    <>
+                      <p className="v7-meta">{copy.teamContact}</p>
+                      <h3>{contact.name}</h3>
+                      <strong>{contact.phoneDisplay}</strong>
+                      <div>
+                        <TrackedContactLink
+                          href={`tel:+${contact.phone}`}
+                          event="phone_clicked"
+                          params={{ contact: contact.id, source: "about_team" }}
+                        >
+                          {copy.teamCall}
+                        </TrackedContactLink>
+                        <TrackedContactLink
+                          href={`https://wa.me/${contact.phone}`}
+                          event="whatsapp_clicked"
+                          params={{ contact: contact.id, source: "about_team" }}
+                          external
+                        >
+                          {copy.teamWhatsapp}
+                        </TrackedContactLink>
+                        {contact.facebook ? (
+                          <TrackedContactLink
+                            href={contact.facebook}
+                            event="facebook_clicked"
+                            params={{ contact: contact.id, source: "about_team" }}
+                            external
+                          >
+                            {copy.teamFacebook}
+                          </TrackedContactLink>
+                        ) : null}
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      {/* Sin teléfono todavía (dato ausente → función
+                          ausente): sólo nombre y rol, nada de Llamar/WhatsApp
+                          — mensaje del cliente, 2026-09-15. */}
+                      <p className="v7-meta">{copy.teamSupervisorRole}</p>
+                      <h3>{contact.name}</h3>
+                      <strong>{copy.teamPhonePending}</strong>
+                      {contact.facebook ? (
+                        <div>
+                          <TrackedContactLink
+                            href={contact.facebook}
+                            event="facebook_clicked"
+                            params={{ contact: contact.id, source: "about_team" }}
+                            external
+                          >
+                            {copy.teamFacebook}
+                          </TrackedContactLink>
+                        </div>
+                      ) : null}
+                    </>
+                  )}
                 </div>
               </article>
             );
