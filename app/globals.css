@@ -9,15 +9,22 @@
   --color-muted: #665f58;
   --color-line: rgb(32 28 24 / 16%);
   --color-bone: #fcfaf6;
+  /* `--color-accent` (no `--color-brand`/`--color-action`) es el que Tailwind
+     expone como `text-accent`, usado como TEXTO sobre el fondo papel
+     (`--color-paper`, #f4f0e8) en varios componentes — ahí el rojo de marca
+     ya sólo daba 4.60:1 de por sí; aclararlo lo hunde bajo 4.5:1 (verificado
+     con axe en /servicios/[slug]: "01"–"04" y el eyebrow "PROYECTOS"). Se
+     queda en el rojo original mientras `--color-brand`/`--color-action` sí
+     se aclaran para botones y acentos, que no tienen ese límite tan ajustado. */
   --color-accent: #cd2c3b;
   --color-accent-hover: #b62434;
   --color-accent-ink: #f7f5f1;
-  --color-action: #cd2c3b;
-  --color-action-hover: #b62434;
-  --color-action-active: #9c1f2d;
-  --color-brand: #cd2c3b;
-  --color-brand-dark: #9c1f2d;
-  --color-redline: #cd2c3b;
+  --color-action: #d63447;
+  --color-action-hover: #c4273a;
+  --color-action-active: #aa2232;
+  --color-brand: #d63447;
+  --color-brand-dark: #aa2232;
+  --color-redline: #d63447;
   --color-steel: #b8aa99;
   --color-graphite: #665f58;
   --color-success: #2f6b50;
