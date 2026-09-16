@@ -91,11 +91,24 @@ export interface V7ProjectLibraryCopy {
   completed: string;
   inProgress: string;
   viewProject: string;
-  previous: string;
-  next: string;
+  previousGroup: string;
+  nextGroup: string;
+  groupStatus: string;
   regionLabel: string;
   footerNote: string;
 }
+
+/**
+ * Cuántas tarjetas avanzan los botones ‹ › y las flechas de teclado por
+ * pulsación — a petición del cliente, 2026-09-16: con 28 proyectos, avanzar
+ * de una tarjeta en una se sentía interminable. Las tarjetas SIGUEN una
+ * junto a otra sin apilarse (eso sí seguía siendo un requisito, mensaje del
+ * mismo día) — lo único que cambia es de cuánto en cuánto salta el control
+ * explícito. El deslizar táctil libre no se toca: sigue moviendo tarjeta por
+ * tarjeta, solo que ahora hace falta muchas menos veces pulsar ‹ › para
+ * recorrer toda la lista.
+ */
+const GROUP_SIZE = 4;
 
 function Arrow({ left = false }: { left?: boolean }) {
   return (
@@ -197,6 +210,23 @@ export default function V7ProjectLibrary({
     [motionAllowed, visible.length]
   );
 
+  /**
+   * Salta un GRUPO completo (`GROUP_SIZE` tarjetas) en vez de una sola —
+   * mismo control de antes (‹ › y flechas de teclado), pero con menos
+   * pulsaciones para recorrer las 28. El deslizar táctil libre sigue tarjeta
+   * por tarjeta; esto solo cambia el paso del control explícito.
+   */
+  const goToGroup = useCallback(
+    (direction: 1 | -1) => {
+      if (visible.length === 0) return;
+      const groupCount = Math.ceil(visible.length / GROUP_SIZE);
+      const currentGroup = Math.floor(active / GROUP_SIZE);
+      const nextGroup = ((currentGroup + direction) % groupCount + groupCount) % groupCount;
+      scrollTo(nextGroup * GROUP_SIZE);
+    },
+    [active, scrollTo, visible.length]
+  );
+
   // El proyecto "activo" (para el contador) es la tarjeta más cercana al
   // borde izquierdo del viewport mientras el usuario desliza el riel.
   useEffect(() => {
@@ -262,6 +292,11 @@ export default function V7ProjectLibrary({
   const count = visible.length;
   const position = Math.min(active + 1, count);
   const progress = count > 1 ? (active / (count - 1)) * 100 : 100;
+  // Rango del grupo visible actual (para el contador "01–04 / 28"), no la
+  // tarjeta individual — ver `GROUP_SIZE` arriba.
+  const groupStart = Math.floor(active / GROUP_SIZE) * GROUP_SIZE;
+  const groupFrom = count === 0 ? 0 : groupStart + 1;
+  const groupTo = Math.min(groupStart + GROUP_SIZE, count);
 
   return (
     <section id="proyectos" className="v7-section v7-projects" aria-labelledby="home-projects-title">
@@ -298,17 +333,31 @@ export default function V7ProjectLibrary({
           </div>
 
           <div className="v7-library-controls">
-            <output aria-live="polite">
-              {String(position).padStart(2, "0")} <i aria-hidden="true">/</i> {String(count).padStart(2, "0")}
+            {/* Visual: rango numérico del grupo, decorativo. El anuncio real
+                para lectores de pantalla es el párrafo aria-live de abajo,
+                que sí dice "proyectos X a Y de Z" en vez de solo cifras. */}
+            <output aria-hidden="true">
+              {String(groupFrom).padStart(2, "0")}
+              <i aria-hidden="true">–</i>
+              {String(groupTo).padStart(2, "0")} <i aria-hidden="true">/</i> {String(count).padStart(2, "0")}
             </output>
-            <button type="button" onClick={() => scrollTo(active - 1)} aria-label={copy.previous}>
+            <button type="button" onClick={() => goToGroup(-1)} aria-label={copy.previousGroup}>
               <Arrow left />
             </button>
-            <button type="button" onClick={() => scrollTo(active + 1)} aria-label={copy.next}>
+            <button type="button" onClick={() => goToGroup(1)} aria-label={copy.nextGroup}>
               <Arrow />
             </button>
           </div>
         </div>
+
+        {/* Anuncio real para lectores de pantalla — ver comentario junto al
+            `<output>` de arriba. */}
+        <p aria-live="polite" className="sr-only">
+          {copy.groupStatus
+            .replace("{from}", String(groupFrom))
+            .replace("{to}", String(groupTo))
+            .replace("{total}", String(count))}
+        </p>
 
         {/* Cambiar de filtro no navega a otra página, así que sin esto se
             vería un corte seco entre una lista de tarjetas y la otra — un
@@ -325,11 +374,11 @@ export default function V7ProjectLibrary({
             onKeyDown={(event) => {
               if (event.key === "ArrowLeft") {
                 event.preventDefault();
-                scrollTo(active - 1);
+                goToGroup(-1);
               }
               if (event.key === "ArrowRight") {
                 event.preventDefault();
-                scrollTo(active + 1);
+                goToGroup(1);
               }
             }}
           >

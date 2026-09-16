@@ -89,8 +89,13 @@ export default async function ProjectsPage({ params }: PageProps<"/[locale]/proj
             completed: tv7("statusCompleted"),
             inProgress: tv7("statusInProgress"),
             viewProject: tv7("viewProject"),
-            previous: tv7("previous"),
-            next: tv7("next"),
+            previousGroup: tv7("previousGroup"),
+            nextGroup: tv7("nextGroup"),
+            // `.raw()`, no `tv7()`: lleva "{from}"/"{to}"/"{total}" literales
+            // que V7ProjectLibrary sustituye a mano una vez conoce el grupo
+            // visible — mismo motivo y mismo patrón que `counter` más abajo,
+            // en V7BeforeAfterSection.
+            groupStatus: tv7.raw("groupStatus"),
             regionLabel: tv7("carouselRegion"),
             footerNote: tv7("featuredPreviewFooter"),
           }}
