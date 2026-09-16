@@ -99,16 +99,24 @@ export interface V7ProjectLibraryCopy {
 }
 
 /**
- * Cuántas tarjetas avanzan los botones ‹ › y las flechas de teclado por
- * pulsación — a petición del cliente, 2026-09-16: con 28 proyectos, avanzar
- * de una tarjeta en una se sentía interminable. Las tarjetas SIGUEN una
- * junto a otra sin apilarse (eso sí seguía siendo un requisito, mensaje del
- * mismo día) — lo único que cambia es de cuánto en cuánto salta el control
- * explícito. El deslizar táctil libre no se toca: sigue moviendo tarjeta por
- * tarjeta, solo que ahora hace falta muchas menos veces pulsar ‹ › para
- * recorrer toda la lista.
+ * Cuántas tarjetas forman un "slide" — y por lo tanto cuánto avanza el
+ * deslizar táctil, los botones ‹ › y las flechas de teclado, todos a una.
+ * Pedido del cliente, 2026-09-16: con 28 proyectos, deslizar tarjeta por
+ * tarjeta se sentía interminable, y quería grupos visualmente completos
+ * (no un asomo parcial de la siguiente) que deslizar revela de golpe.
+ * Las tarjetas SIGUEN una junto a otra sin apilarse (requisito del
+ * 2026-09-14, sin cambios) — cambia el TAMAÑO del paso, no el gesto.
+ *
+ * El número de tarjetas por slide es responsivo (móvil: 2, tablet/escritorio
+ * desde 768px: 3, mismo corte que `SLIDE_BREAKPOINT` abajo y que la media
+ * query gemela en globals.css que fija el ancho de `.v7-stack-item`) — un
+ * slide de 3 completas en un teléfono angosto deja cada tarjeta con apenas
+ * ~110px, demasiado estrecha para apreciar el detalle de azulejo o
+ * encimera que es el punto fuerte de estas fotos.
  */
-const GROUP_SIZE = 4;
+const SLIDE_SIZE_MOBILE = 2;
+const SLIDE_SIZE_DESKTOP = 3;
+const SLIDE_BREAKPOINT = "(min-width: 768px)";
 
 function Arrow({ left = false }: { left?: boolean }) {
   return (
@@ -148,6 +156,10 @@ export default function V7ProjectLibrary({
   const filter = filterOverride ?? restoredFilter;
   const [active, setActive] = useState(0);
   const [motionAllowed, setMotionAllowed] = useState(false);
+  // Arranca en el tamaño de móvil porque es también el valor por defecto
+  // (sin media query) de `.v7-stack-item` en globals.css — coincide con lo
+  // que el servidor ya envió antes de que este efecto pueda correr.
+  const [slideSize, setSlideSize] = useState(SLIDE_SIZE_MOBILE);
   const restoredScrollRef = useRef(false);
 
   const counts = useMemo(() => {
@@ -173,6 +185,16 @@ export default function V7ProjectLibrary({
   useEffect(() => {
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
     const sync = () => setMotionAllowed(!query.matches);
+    sync();
+    query.addEventListener("change", sync);
+    return () => query.removeEventListener("change", sync);
+  }, []);
+
+  // Mismo corte que la media query gemela en globals.css — ver el
+  // comentario de `SLIDE_BREAKPOINT` arriba.
+  useEffect(() => {
+    const query = window.matchMedia(SLIDE_BREAKPOINT);
+    const sync = () => setSlideSize(query.matches ? SLIDE_SIZE_DESKTOP : SLIDE_SIZE_MOBILE);
     sync();
     query.addEventListener("change", sync);
     return () => query.removeEventListener("change", sync);
@@ -211,20 +233,21 @@ export default function V7ProjectLibrary({
   );
 
   /**
-   * Salta un GRUPO completo (`GROUP_SIZE` tarjetas) en vez de una sola —
-   * mismo control de antes (‹ › y flechas de teclado), pero con menos
-   * pulsaciones para recorrer las 28. El deslizar táctil libre sigue tarjeta
-   * por tarjeta; esto solo cambia el paso del control explícito.
+   * Salta un SLIDE completo (`slideSize` tarjetas) en vez de una sola —
+   * botones ‹ › y flechas de teclado. El deslizar táctil ya llega al mismo
+   * sitio por su cuenta: cada slide ocupa exactamente el ancho del riel
+   * (ver `.v7-stack-item` en globals.css), así que un solo gesto de
+   * deslizar ya revela el siguiente grupo completo sin asomo parcial.
    */
   const goToGroup = useCallback(
     (direction: 1 | -1) => {
       if (visible.length === 0) return;
-      const groupCount = Math.ceil(visible.length / GROUP_SIZE);
-      const currentGroup = Math.floor(active / GROUP_SIZE);
+      const groupCount = Math.ceil(visible.length / slideSize);
+      const currentGroup = Math.floor(active / slideSize);
       const nextGroup = ((currentGroup + direction) % groupCount + groupCount) % groupCount;
-      scrollTo(nextGroup * GROUP_SIZE);
+      scrollTo(nextGroup * slideSize);
     },
-    [active, scrollTo, visible.length]
+    [active, scrollTo, slideSize, visible.length]
   );
 
   // El proyecto "activo" (para el contador) es la tarjeta más cercana al
@@ -292,11 +315,12 @@ export default function V7ProjectLibrary({
   const count = visible.length;
   const position = Math.min(active + 1, count);
   const progress = count > 1 ? (active / (count - 1)) * 100 : 100;
-  // Rango del grupo visible actual (para el contador "01–04 / 28"), no la
-  // tarjeta individual — ver `GROUP_SIZE` arriba.
-  const groupStart = Math.floor(active / GROUP_SIZE) * GROUP_SIZE;
+  // Rango del slide visible actual (para el contador "01–02 / 28" en
+  // móvil, "01–03 / 28" en escritorio), no la tarjeta individual — ver
+  // `slideSize` arriba.
+  const groupStart = Math.floor(active / slideSize) * slideSize;
   const groupFrom = count === 0 ? 0 : groupStart + 1;
-  const groupTo = Math.min(groupStart + GROUP_SIZE, count);
+  const groupTo = Math.min(groupStart + slideSize, count);
 
   return (
     <section id="proyectos" className="v7-section v7-projects" aria-labelledby="home-projects-title">
