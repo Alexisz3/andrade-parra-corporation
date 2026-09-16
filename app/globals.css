@@ -286,33 +286,27 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
  */
 .v7-stack { position: relative; margin-top: clamp(1.75rem, 2.5vw, 2.5rem); overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: none; scroll-snap-type: x mandatory; scroll-padding-left: 0; }
 .v7-stack::-webkit-scrollbar { display: none; }
-/* Ancho por slide: en vez de una anchura fija por tarjeta (que dejaba
-   asomar la siguiente a medias), cada tarjeta ocupa una fracción exacta
-   del riel — 1/2 en móvil, 1/3 desde 768px (ver `SLIDE_SIZE_MOBILE` /
-   `SLIDE_SIZE_DESKTOP` / `SLIDE_BREAKPOINT` en V7ProjectLibrary.tsx, que
-   usa este mismo corte de 768px). Un slide siempre llena el riel entero,
-   así que deslizar revela el siguiente grupo completo de una vez —
-   pedido del cliente, 2026-09-16. Necesita que `.v7-stack-track` tenga un
-   ancho DEFINIDO (100%, no `max-content`) para que el porcentaje de cada
-   tarjeta se resuelva contra el riel y no contra sí misma; el track sigue
-   desbordando horizontalmente sin problema porque `flex-wrap` es `nowrap`
-   por defecto, que es lo que habilita el scroll. */
-/* Espacio fijo (no `clamp(...vw...)`) a propósito: el ancho de cada
-   tarjeta depende de este mismo valor (ver `.v7-stack-item` abajo), y una
-   unidad `vw` ahí quedaba a merced de cómo cada motor/emulador resuelve
-   `vw` bajo emulación de dispositivo — verificado que no siempre coincide
-   con el viewport real. Un valor fijo por punto de corte no tiene esa
-   ambigüedad. */
-.v7-stack-track { display: flex; gap: 1rem; width: 100%; height: min(84vw, 32rem); max-height: 34rem; margin: 0; padding: 0; }
-.v7-stack-item { width: calc((100% - 1rem) / 2); flex: none; scroll-snap-align: none; height: 100%; }
-.v7-stack-item:nth-child(odd) { scroll-snap-align: start; }
+/* Cada slide es una cuadrícula COMPLETA (2×2 en móvil, 3×2 en escritorio —
+   ver `SLIDE_COLS_MOBILE`/`SLIDE_COLS_DESKTOP`/`SLIDE_ROWS`/
+   `SLIDE_BREAKPOINT` en V7ProjectLibrary.tsx, mismo corte de 768px), no una
+   tarjeta suelta — pedido del cliente, 2026-09-16, con una imagen de
+   referencia tipo moodboard 2×2. Cada slide ocupa el riel entero (`width:
+   100%` en `.v7-stack-track`, no `max-content`, para que ese 100% se
+   resuelva contra el riel) y no hay `gap` entre slides, así que deslizar
+   revela el siguiente bloque de golpe, sin asomo parcial. Espacio fijo
+   (no `clamp(...vw...)`) dentro de cada cuadrícula a propósito: una unidad
+   `vw` ahí quedaba a merced de cómo cada motor/emulador resuelve `vw` bajo
+   emulación de dispositivo — verificado que no siempre coincide con el
+   viewport real. */
+.v7-stack-track { display: flex; width: 100%; margin: 0; padding: 0; }
+.v7-stack-slide { flex: none; width: 100%; scroll-snap-align: start; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: 1rem; }
 @media (min-width: 768px) {
-  .v7-stack-track { gap: 1.65rem; }
-  .v7-stack-item { width: calc((100% - 2 * 1.65rem) / 3); }
-  .v7-stack-item:nth-child(odd) { scroll-snap-align: none; }
-  .v7-stack-item:nth-child(3n + 1) { scroll-snap-align: start; }
+  .v7-stack-slide { grid-template-columns: repeat(3, 1fr); gap: 1.65rem; }
 }
-.v7-project-article { position: relative; height: 100%; }
+/* `aspect-ratio`, no una altura heredada de un riel de fila única: con 2
+   filas por slide, cada tarjeta necesita su propia proporción para que las
+   dos filas se vean parejas sin depender del alto total del riel. */
+.v7-project-article { position: relative; aspect-ratio: 3 / 4; }
 .v7-project-card { height: 100%; display: block; color: inherit; text-decoration: none; transition: transform .25s ease; }
 .v7-project-card:hover,
 .v7-project-card:focus-visible { transform: translateY(-4px); }
@@ -329,11 +323,15 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 .v7-project-card:focus-visible .v7-project-cta { opacity: 1; transform: none; }
 .v7-project-zoom { position: absolute; top: .85rem; right: .85rem; z-index: 3; }
 /* Info encima de la foto, no debajo: así se lee de un vistazo con la
-   tarjeta a pantalla parcial, como en la referencia. */
-.v7-stack-info { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 1.5rem 1.35rem 1.6rem; }
-.v7-stack-info .v7-meta { display: inline-block; color: rgb(252 250 246 / 80%); font-family: var(--font-mono); font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
-.v7-stack-info h3 { margin: .4rem 0 0; font-family: var(--font-newsreader), serif; font-size: clamp(1.5rem, 3.4vw, 2.1rem); font-weight: 500; line-height: 1.08; letter-spacing: -.01em; color: #fff; }
-.v7-project-line { margin: .35rem 0 0; color: rgb(252 250 246 / 78%); font-size: .85rem; }
+   tarjeta a pantalla parcial, como en la referencia. Recortada a solo
+   categoría + título (sin la línea de ubicación/estado de antes): con 4-6
+   tarjetas por slide cada celda es mucho más chica que la fila única
+   anterior, y esa tercera línea ya no cabía sin verse apretada — el
+   detalle completo sigue disponible en la ficha del proyecto. `-webkit-
+   line-clamp` corta el título a 2 líneas en vez de desbordar la celda. */
+.v7-stack-info { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: .85rem .9rem 1rem; }
+.v7-stack-info .v7-meta { display: inline-block; color: rgb(252 250 246 / 80%); font-family: var(--font-mono); font-size: .62rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.v7-stack-info h3 { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; margin: .3rem 0 0; font-family: var(--font-newsreader), serif; font-size: clamp(.95rem, 2vw, 1.35rem); font-weight: 500; line-height: 1.15; letter-spacing: -.01em; color: #fff; }
 
 .v7-rail-footer { display: flex; align-items: center; gap: 1.5rem; margin-top: clamp(1.5rem, 2.5vw, 2.25rem); }
 @media (min-width: 1024px) { .v7-rail-footer { padding-right: 10rem; } }
@@ -937,10 +935,10 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
   .v7-progress { margin-top:.3rem; }
   /* El riel de proyectos respira hasta el borde de la pantalla en vez de
      quedar encajonado en el padding del contenedor — mismo criterio que ya
-     tenía antes de este rediseño. El ancho de `.v7-stack-item` NO se toca
-     aquí: la regla base (2 tarjetas por slide) ya cubre este ancho, y
-     redeclararlo aquí como valor fijo volvería a romper el encaje exacto
-     de dos tarjetas por pantalla. */
+     tenía antes de este rediseño. La cuadrícula de `.v7-stack-slide` NO se
+     toca aquí: la regla base (2×2 en móvil) ya cubre este ancho, y
+     redeclararla aquí volvería a romper el encaje exacto de la cuadrícula
+     en pantalla. */
   .v7-stack { margin-inline: -1.5rem; padding-inline: 1.5rem; scroll-padding-inline: 1.5rem; }
 
   /* Craft — tarjetas a una columna y bullets en franja compacta envuelta;

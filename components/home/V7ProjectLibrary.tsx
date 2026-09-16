@@ -88,8 +88,6 @@ export interface V7ProjectLibraryCopy {
   intro: string;
   all: string;
   category: Record<ProjectCategory, string>;
-  completed: string;
-  inProgress: string;
   viewProject: string;
   previousGroup: string;
   nextGroup: string;
@@ -99,23 +97,25 @@ export interface V7ProjectLibraryCopy {
 }
 
 /**
- * Cuántas tarjetas forman un "slide" — y por lo tanto cuánto avanza el
- * deslizar táctil, los botones ‹ › y las flechas de teclado, todos a una.
- * Pedido del cliente, 2026-09-16: con 28 proyectos, deslizar tarjeta por
+ * Cada "slide" es una cuadrícula de `slideCols` columnas × `SLIDE_ROWS`
+ * filas — no una fila única. Pedido del cliente, 2026-09-16 (con imagen de
+ * referencia tipo moodboard 2×2): con 28 proyectos, deslizar tarjeta por
  * tarjeta se sentía interminable, y quería grupos visualmente completos
- * (no un asomo parcial de la siguiente) que deslizar revela de golpe.
- * Las tarjetas SIGUEN una junto a otra sin apilarse (requisito del
- * 2026-09-14, sin cambios) — cambia el TAMAÑO del paso, no el gesto.
+ * que quepan enteros en pantalla — deslizar revela el siguiente bloque de
+ * golpe, sin asomo parcial. Las tarjetas siguen sin apilarse verticalmente
+ * de forma indefinida (requisito del 2026-09-14): la cuadrícula tiene un
+ * número FIJO de filas, no una lista larga.
  *
- * El número de tarjetas por slide es responsivo (móvil: 2, tablet/escritorio
- * desde 768px: 3, mismo corte que `SLIDE_BREAKPOINT` abajo y que la media
- * query gemela en globals.css que fija el ancho de `.v7-stack-item`) — un
- * slide de 3 completas en un teléfono angosto deja cada tarjeta con apenas
- * ~110px, demasiado estrecha para apreciar el detalle de azulejo o
- * encimera que es el punto fuerte de estas fotos.
+ * Columnas por slide, responsivo (móvil: 2, escritorio desde 768px: 3 —
+ * mismo corte que `SLIDE_BREAKPOINT` abajo y su gemela en globals.css): 3
+ * columnas en un teléfono angosto dejaría cada tarjeta en ~110px, demasiado
+ * estrecha para el detalle de azulejo o encimera que es el punto fuerte de
+ * estas fotos. Filas por slide NO es responsivo — 2 en ambos casos — así
+ * que un slide muestra 4 tarjetas en móvil (2×2) y 6 en escritorio (3×2).
  */
-const SLIDE_SIZE_MOBILE = 2;
-const SLIDE_SIZE_DESKTOP = 3;
+const SLIDE_COLS_MOBILE = 2;
+const SLIDE_COLS_DESKTOP = 3;
+const SLIDE_ROWS = 2;
 const SLIDE_BREAKPOINT = "(min-width: 768px)";
 
 function Arrow({ left = false }: { left?: boolean }) {
@@ -154,12 +154,13 @@ export default function V7ProjectLibrary({
   // restaurado — null significa "todavía no ha elegido nada esta visita".
   const [filterOverride, setFilterOverride] = useState<Filter | null>(null);
   const filter = filterOverride ?? restoredFilter;
-  const [active, setActive] = useState(0);
+  const [activeSlide, setActiveSlide] = useState(0);
   const [motionAllowed, setMotionAllowed] = useState(false);
-  // Arranca en el tamaño de móvil porque es también el valor por defecto
-  // (sin media query) de `.v7-stack-item` en globals.css — coincide con lo
-  // que el servidor ya envió antes de que este efecto pueda correr.
-  const [slideSize, setSlideSize] = useState(SLIDE_SIZE_MOBILE);
+  // Arranca en el valor de móvil porque es también el valor por defecto
+  // (sin media query) de `.v7-stack-slide` en globals.css — coincide con
+  // lo que el servidor ya envió antes de que este efecto pueda correr.
+  const [slideCols, setSlideCols] = useState(SLIDE_COLS_MOBILE);
+  const slideSize = slideCols * SLIDE_ROWS;
   const restoredScrollRef = useRef(false);
 
   const counts = useMemo(() => {
@@ -181,6 +182,16 @@ export default function V7ProjectLibrary({
     () => (filter === "all" ? projects : projects.filter((project) => project.category === filter)),
     [filter, projects]
   );
+  // Agrupa en bloques de `slideSize` — cada bloque es un slide (cuadrícula
+  // completa), no una tarjeta suelta. Recalcula si cambia el filtro o el
+  // punto de corte responsivo.
+  const slides = useMemo(() => {
+    const groups: Project[][] = [];
+    for (let i = 0; i < visible.length; i += slideSize) {
+      groups.push(visible.slice(i, i + slideSize));
+    }
+    return groups;
+  }, [visible, slideSize]);
 
   useEffect(() => {
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -194,7 +205,7 @@ export default function V7ProjectLibrary({
   // comentario de `SLIDE_BREAKPOINT` arriba.
   useEffect(() => {
     const query = window.matchMedia(SLIDE_BREAKPOINT);
-    const sync = () => setSlideSize(query.matches ? SLIDE_SIZE_DESKTOP : SLIDE_SIZE_MOBILE);
+    const sync = () => setSlideCols(query.matches ? SLIDE_COLS_DESKTOP : SLIDE_COLS_MOBILE);
     sync();
     query.addEventListener("change", sync);
     return () => query.removeEventListener("change", sync);
@@ -219,39 +230,34 @@ export default function V7ProjectLibrary({
    * `scrollTo` con `behavior: "smooth"` es lo que le da su animación de
    * desplazamiento a los botones ‹ › y al teclado.
    */
-  const scrollTo = useCallback(
+  const scrollToSlide = useCallback(
     (index: number) => {
       const viewport = viewportRef.current;
-      if (!viewport || visible.length === 0) return;
-      const next = ((index % visible.length) + visible.length) % visible.length;
-      const item = viewport.querySelector<HTMLElement>(`[data-project-index="${next}"]`);
-      if (!item) return;
-      setActive(next);
-      viewport.scrollTo({ left: item.offsetLeft, behavior: motionAllowed ? "smooth" : "auto" });
+      if (!viewport || slides.length === 0) return;
+      const next = ((index % slides.length) + slides.length) % slides.length;
+      const slideEl = viewport.querySelector<HTMLElement>(`[data-slide-index="${next}"]`);
+      if (!slideEl) return;
+      setActiveSlide(next);
+      viewport.scrollTo({ left: slideEl.offsetLeft, behavior: motionAllowed ? "smooth" : "auto" });
     },
-    [motionAllowed, visible.length]
+    [motionAllowed, slides.length]
   );
 
   /**
-   * Salta un SLIDE completo (`slideSize` tarjetas) en vez de una sola —
-   * botones ‹ › y flechas de teclado. El deslizar táctil ya llega al mismo
+   * Botones ‹ ›, flechas de teclado — el deslizar táctil ya llega al mismo
    * sitio por su cuenta: cada slide ocupa exactamente el ancho del riel
-   * (ver `.v7-stack-item` en globals.css), así que un solo gesto de
-   * deslizar ya revela el siguiente grupo completo sin asomo parcial.
+   * (ver `.v7-stack-slide` en globals.css), así que un solo gesto de
+   * deslizar ya revela el siguiente bloque completo sin asomo parcial.
    */
   const goToGroup = useCallback(
     (direction: 1 | -1) => {
-      if (visible.length === 0) return;
-      const groupCount = Math.ceil(visible.length / slideSize);
-      const currentGroup = Math.floor(active / slideSize);
-      const nextGroup = ((currentGroup + direction) % groupCount + groupCount) % groupCount;
-      scrollTo(nextGroup * slideSize);
+      scrollToSlide(activeSlide + direction);
     },
-    [active, scrollTo, slideSize, visible.length]
+    [activeSlide, scrollToSlide]
   );
 
-  // El proyecto "activo" (para el contador) es la tarjeta más cercana al
-  // borde izquierdo del viewport mientras el usuario desliza el riel.
+  // El slide "activo" (para el contador) es el bloque más cercano al borde
+  // izquierdo del viewport mientras el usuario desliza el riel.
   useEffect(() => {
     const viewport = viewportRef.current;
     if (!viewport) return;
@@ -275,18 +281,18 @@ export default function V7ProjectLibrary({
     const sync = () => {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
-        const cards = Array.from(viewport.querySelectorAll<HTMLElement>("[data-project-index]"));
-        if (!cards.length) return;
+        const slideEls = Array.from(viewport.querySelectorAll<HTMLElement>("[data-slide-index]"));
+        if (!slideEls.length) return;
         let closest = 0;
         let distance = Number.POSITIVE_INFINITY;
-        cards.forEach((card, index) => {
-          const nextDistance = Math.abs(card.offsetLeft - viewport.scrollLeft);
+        slideEls.forEach((slideEl, index) => {
+          const nextDistance = Math.abs(slideEl.offsetLeft - viewport.scrollLeft);
           if (nextDistance < distance) {
             closest = index;
             distance = nextDistance;
           }
         });
-        setActive(closest);
+        setActiveSlide(closest);
         writeStoredState({ filter, scrollLeft: viewport.scrollLeft });
       });
     };
@@ -295,14 +301,14 @@ export default function V7ProjectLibrary({
       cancelAnimationFrame(frame);
       viewport.removeEventListener("scroll", sync);
     };
-  }, [visible.length, filter]);
+  }, [slides.length, filter]);
 
   const chooseFilter = (next: Filter) => {
     // `startTransition` es lo que activa el crossfade: un `setState` normal
     // no dispara `<ViewTransition>` (ver PLAN_MICROANIMACIONES.md 1.2 y la
     // guía de Next citada ahí — "Regular setState calls do not trigger them").
     startTransition(() => {
-      setActive(0);
+      setActiveSlide(0);
       setFilterOverride(next);
     });
     viewportRef.current?.scrollTo({ left: 0, behavior: "auto" });
@@ -313,12 +319,11 @@ export default function V7ProjectLibrary({
   };
 
   const count = visible.length;
-  const position = Math.min(active + 1, count);
-  const progress = count > 1 ? (active / (count - 1)) * 100 : 100;
-  // Rango del slide visible actual (para el contador "01–02 / 28" en
-  // móvil, "01–03 / 28" en escritorio), no la tarjeta individual — ver
-  // `slideSize` arriba.
-  const groupStart = Math.floor(active / slideSize) * slideSize;
+  const slideCount = slides.length;
+  const progress = slideCount > 1 ? (activeSlide / (slideCount - 1)) * 100 : 100;
+  // Rango de proyectos que muestra el slide activo (para el contador
+  // "01–04 / 28" en móvil, "01–06 / 28" en escritorio).
+  const groupStart = activeSlide * slideSize;
   const groupFrom = count === 0 ? 0 : groupStart + 1;
   const groupTo = Math.min(groupStart + slideSize, count);
 
@@ -407,57 +412,57 @@ export default function V7ProjectLibrary({
             }}
           >
             <div className="v7-stack-track">
-              {visible.map((project, index) => (
-                <div key={project.id} data-project-index={index} className="v7-stack-item">
-                  <article className="v7-project-article">
-                    <Link
-                      href={{ pathname: "/projects/[slug]", params: { slug: project.slugs[locale] } }}
-                      className="v7-project-card"
-                      aria-label={`${copy.category[project.category]}: ${project.title[locale]}`}
-                    >
-                      <div className="v7-project-media">
-                        {/* Mismo nombre que la portada de la ficha del
-                            proyecto (projects/[slug]/page.tsx): la
-                            tarjeta se transforma en la foto grande en vez
-                            de cortar en seco. Ver
-                            PLAN_MICROANIMACIONES.md 1.3. */}
-                        <ViewTransition name={`project-photo-${project.id}`}>
-                          <Image
-                            src={`/images/proyectos/${project.coverPhoto.file}`}
-                            alt={project.title[locale]}
-                            fill
-                            loading={index < 3 ? "eager" : "lazy"}
-                            sizes="(min-width: 700px) 26rem, 88vw"
-                            className="object-cover"
-                          />
-                        </ViewTransition>
-                        <span className="v7-project-index">
-                          APC · {String(projects.indexOf(project) + 1).padStart(2, "0")}
-                        </span>
-                        <div className="v7-stack-scrim" aria-hidden="true" />
-                        <div className="v7-stack-info">
-                          <span className="v7-meta">{copy.category[project.category]}</span>
-                          <h3>{project.title[locale]}</h3>
-                          <p className="v7-project-line">
-                            {project.location}
-                            <span aria-hidden="true"> · </span>
-                            {project.status === "completed" ? copy.completed : copy.inProgress}
-                          </p>
-                        </div>
-                        <span className="v7-project-cta" aria-hidden="true">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                            <path d="m9 18 6-6-6-6" />
-                          </svg>
-                        </span>
-                      </div>
-                    </Link>
-                    <ZoomButton
-                      src={`/images/proyectos/${project.coverPhoto.file}`}
-                      alt={project.title[locale]}
-                      orientation={project.coverPhoto.orientation}
-                      className="v7-project-zoom"
-                    />
-                  </article>
+              {slides.map((slide, slideIndex) => (
+                <div key={slideIndex} data-slide-index={slideIndex} className="v7-stack-slide">
+                  {slide.map((project, itemIndex) => {
+                    const globalIndex = slideIndex * slideSize + itemIndex;
+                    return (
+                      <article className="v7-project-article" key={project.id}>
+                        <Link
+                          href={{ pathname: "/projects/[slug]", params: { slug: project.slugs[locale] } }}
+                          className="v7-project-card"
+                          aria-label={`${copy.category[project.category]}: ${project.title[locale]}`}
+                        >
+                          <div className="v7-project-media">
+                            {/* Mismo nombre que la portada de la ficha del
+                                proyecto (projects/[slug]/page.tsx): la
+                                tarjeta se transforma en la foto grande en vez
+                                de cortar en seco. Ver
+                                PLAN_MICROANIMACIONES.md 1.3. */}
+                            <ViewTransition name={`project-photo-${project.id}`}>
+                              <Image
+                                src={`/images/proyectos/${project.coverPhoto.file}`}
+                                alt={project.title[locale]}
+                                fill
+                                loading={globalIndex < 6 ? "eager" : "lazy"}
+                                sizes="(min-width: 700px) 26rem, 45vw"
+                                className="object-cover"
+                              />
+                            </ViewTransition>
+                            <span className="v7-project-index">
+                              APC · {String(globalIndex + 1).padStart(2, "0")}
+                            </span>
+                            <div className="v7-stack-scrim" aria-hidden="true" />
+                            <div className="v7-stack-info">
+                              <span className="v7-meta">{copy.category[project.category]}</span>
+                              <h3>{project.title[locale]}</h3>
+                            </div>
+                            <span className="v7-project-cta" aria-hidden="true">
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                                <path d="m9 18 6-6-6-6" />
+                              </svg>
+                            </span>
+                          </div>
+                        </Link>
+                        <ZoomButton
+                          src={`/images/proyectos/${project.coverPhoto.file}`}
+                          alt={project.title[locale]}
+                          orientation={project.coverPhoto.orientation}
+                          className="v7-project-zoom"
+                        />
+                      </article>
+                    );
+                  })}
                 </div>
               ))}
             </div>
@@ -468,7 +473,7 @@ export default function V7ProjectLibrary({
           <span className="v7-rail-track" aria-hidden="true">
             <span style={{ width: `${progress}%` }} />
           </span>
-          <span className="v7-rail-index" aria-hidden="true">{String(position).padStart(2, "0")}</span>
+          <span className="v7-rail-index" aria-hidden="true">{String(groupFrom).padStart(2, "0")}</span>
           <span className="v7-rail-note">{copy.footerNote}</span>
         </div>
       </div>

@@ -86,8 +86,6 @@ export default async function ProjectsPage({ params }: PageProps<"/[locale]/proj
             intro: tv7("projectsIntro"),
             all: tv7("allProjects"),
             category,
-            completed: tv7("statusCompleted"),
-            inProgress: tv7("statusInProgress"),
             viewProject: tv7("viewProject"),
             previousGroup: tv7("previousGroup"),
             nextGroup: tv7("nextGroup"),
