@@ -301,7 +301,7 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
 .v7-stack-track { display: flex; width: 100%; margin: 0; padding: 0; }
 .v7-stack-slide { flex: none; width: 100%; scroll-snap-align: start; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: 1rem; }
 @media (min-width: 768px) {
-  .v7-stack-slide { grid-template-columns: repeat(3, 1fr); gap: 1.65rem; }
+  .v7-stack-slide { grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
 }
 /* `aspect-ratio`, no una altura heredada de un riel de fila única: con 2
    filas por slide, cada tarjeta necesita su propia proporción para que las

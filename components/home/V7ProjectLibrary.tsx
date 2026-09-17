@@ -106,15 +106,15 @@ export interface V7ProjectLibraryCopy {
  * de forma indefinida (requisito del 2026-09-14): la cuadrícula tiene un
  * número FIJO de filas, no una lista larga.
  *
- * Columnas por slide, responsivo (móvil: 2, escritorio desde 768px: 3 —
+ * Columnas por slide, responsivo (móvil: 2, escritorio desde 768px: 4 —
  * mismo corte que `SLIDE_BREAKPOINT` abajo y su gemela en globals.css): 3
  * columnas en un teléfono angosto dejaría cada tarjeta en ~110px, demasiado
  * estrecha para el detalle de azulejo o encimera que es el punto fuerte de
  * estas fotos. Filas por slide NO es responsivo — 2 en ambos casos — así
- * que un slide muestra 4 tarjetas en móvil (2×2) y 6 en escritorio (3×2).
+ * que un slide muestra 4 tarjetas en móvil (2×2) y 8 en escritorio (4×2).
  */
 const SLIDE_COLS_MOBILE = 2;
-const SLIDE_COLS_DESKTOP = 3;
+const SLIDE_COLS_DESKTOP = 4;
 const SLIDE_ROWS = 2;
 const SLIDE_BREAKPOINT = "(min-width: 768px)";
 
@@ -435,7 +435,7 @@ export default function V7ProjectLibrary({
                                 alt={project.title[locale]}
                                 fill
                                 loading={globalIndex < 6 ? "eager" : "lazy"}
-                                sizes="(min-width: 700px) 26rem, 45vw"
+                                sizes="(min-width: 700px) 21rem, 45vw"
                                 className="object-cover"
                               />
                             </ViewTransition>
