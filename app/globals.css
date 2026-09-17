@@ -284,8 +284,25 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
  * `scrollTo({behavior:"smooth"})` en el componente es lo que le da su
  * animación de desplazamiento a los botones ‹ › y al teclado.
  */
+/* Envoltorio SIN scroll propio, a propósito: los degradados de aviso
+   ("aquí hay más para deslizar") van aquí, no dentro de `.v7-stack`. Un hijo
+   `position:absolute` de un contenedor que además tiene `overflow-x:auto`
+   se desplazaría junto con el contenido (es parte de lo que se hace scroll);
+   puesto en este envoltorio de afuera, en cambio, queda anclado al borde
+   visual de la pantalla pase lo que pase con `scrollLeft`. */
+.v7-stack-wrap { position: relative; }
 .v7-stack { position: relative; margin-top: clamp(1.75rem, 2.5vw, 2.5rem); overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: none; scroll-snap-type: x mandatory; scroll-padding-left: 0; }
 .v7-stack::-webkit-scrollbar { display: none; }
+/* Aviso visual de que hay más grupos a los lados — mismo color que el fondo
+   de la sección para que se lea como "la tarjeta se desvanece hacia la
+   página", no como una caja superpuesta. `pointer-events:none` para no
+   robarle el clic a la tarjeta que tapa parcialmente; se oculta con
+   `opacity` (JS decide cuándo, según `activeSlide`) en vez de con
+   `display`, para que el cambio sea una transición suave y no un salto. */
+.v7-stack-fade { position: absolute; top: 0; bottom: 0; width: clamp(2.5rem, 6vw, 5rem); pointer-events: none; opacity: 0; transition: opacity .3s ease; z-index: 4; }
+.v7-stack-fade[data-visible="true"] { opacity: 1; }
+.v7-stack-fade--start { left: 0; background: linear-gradient(to right, var(--color-paper), transparent); }
+.v7-stack-fade--end { right: 0; background: linear-gradient(to left, var(--color-paper), transparent); }
 /* Cada slide es una cuadrícula COMPLETA (2×2 en móvil, 3×2 en escritorio —
    ver `SLIDE_COLS_MOBILE`/`SLIDE_COLS_DESKTOP`/`SLIDE_ROWS`/
    `SLIDE_BREAKPOINT` en V7ProjectLibrary.tsx, mismo corte de 768px), no una
@@ -942,8 +959,12 @@ body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-
      tenía antes de este rediseño. La cuadrícula de `.v7-stack-slide` NO se
      toca aquí: la regla base (2×2 en móvil) ya cubre este ancho, y
      redeclararla aquí volvería a romper el encaje exacto de la cuadrícula
-     en pantalla. */
-  .v7-stack { margin-inline: -1.5rem; padding-inline: 1.5rem; scroll-padding-inline: 1.5rem; }
+     en pantalla. El sangrado (`margin-inline` negativo) vive en el
+     ENVOLTORIO, no en `.v7-stack`: así `.v7-stack-fade` (posicionado contra
+     el envoltorio) queda anclado al mismo borde real de la pantalla al que
+     ya llega la cuadrícula, en vez de quedarse corto por 1.5rem. */
+  .v7-stack-wrap { margin-inline: -1.5rem; }
+  .v7-stack { padding-inline: 1.5rem; scroll-padding-inline: 1.5rem; }
 
   /* Craft — tarjetas a una columna y bullets en franja compacta envuelta;
      el resto (orden, tipografía base) ya lo resuelve el corte de 820px. */

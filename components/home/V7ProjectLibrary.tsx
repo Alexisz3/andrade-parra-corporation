@@ -392,6 +392,7 @@ export default function V7ProjectLibrary({
             vería un corte seco entre una lista de tarjetas y la otra — un
             crossfade avisa "mismo lugar, contenido distinto" en vez de
             "algo se rompió". Ver PLAN_MICROANIMACIONES.md 1.2. */}
+        <div className="v7-stack-wrap">
         <ViewTransition key={filter} name="v7-project-library" share="auto" enter="auto" default="none">
           <div
             ref={viewportRef}
@@ -468,6 +469,19 @@ export default function V7ProjectLibrary({
             </div>
           </div>
         </ViewTransition>
+          {/* Aviso de que hay más grupos a los lados — el cliente pidió que
+              se note que se puede seguir deslizando. Fuera del
+              `<ViewTransition>` para que no parpadee con el crossfade del
+              filtro; su propia opacidad ya se anima aparte. Oculto en el
+              extremo correspondiente (primer/último slide) para no insinuar
+              que hay más cuando no lo hay. */}
+          <span className="v7-stack-fade v7-stack-fade--start" aria-hidden="true" data-visible={activeSlide > 0} />
+          <span
+            className="v7-stack-fade v7-stack-fade--end"
+            aria-hidden="true"
+            data-visible={activeSlide < slideCount - 1}
+          />
+        </div>
 
         <div className="v7-rail-footer">
           <span className="v7-rail-track" aria-hidden="true">
