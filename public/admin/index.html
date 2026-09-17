@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <!-- El rewrite de next.config.mjs sirve esto en `/admin` (sin barra final).
+       Sin este <base>, Decap resuelve "config.yml" contra `/` en vez de
+       `/admin/` y el fetch da 404 — este tag es lo que lo corrige. -->
+  <base href="/admin/" />
+  <title>Administrador de contenido — Andrade Parra Corporation</title>
+  <link href="/admin/decap-cms.css" rel="stylesheet" />
+</head>
+<body>
+  <script src="/admin/decap-cms.js"></script>
+</body>
+</html>

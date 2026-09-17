@@ -1,0 +1,23 @@
+backend:
+  name: github
+  repo: Alexisz3/andrade-parra-corporation
+  branch: main
+  base_url: https://ampargo.com
+  auth_endpoint: api/auth
+
+publish_mode: simple
+media_folder: "public/images"
+public_folder: "/images"
+
+# NOTA: colección de prueba temporal (Etapa 1 del CMS). Se reemplaza por las
+# colecciones reales (Proyectos, Servicios, Equipo, Textos) en las etapas
+# siguientes — ver el plan del CMS.
+collections:
+  - name: cms_test
+    label: "Prueba (temporal)"
+    files:
+      - name: test
+        label: "Prueba (temporal)"
+        file: content/data/_cms-test.json
+        fields:
+          - { label: Nota, name: note, widget: string }

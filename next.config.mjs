@@ -40,10 +40,61 @@ const nextConfig = {
     imageSizes: [256, 384, 512, 640],
   },
 
+  async rewrites() {
+    // `/admin` (sin archivo) -> el shell estático de Decap CMS en
+    // `public/admin/index.html`. `/admin/config.yml` y `/admin/decap-cms.js`
+    // ya resuelven solos como archivos estáticos de `public/`, sin reescritura.
+    return [{ source: "/admin", destination: "/admin/index.html" }];
+  },
+
   async headers() {
+    /*
+     * CSP aparte para `/admin` (el editor de contenido, Decap CMS).
+     *
+     * Dos cosas que la CSP estricta del resto del sitio (lib/csp.mjs) no
+     * permite y que Decap necesita de verdad, no por descuido: valida
+     * `config.yml` contra un esquema JSON compilándolo a una función con
+     * `new Function(...)` (ajv) — sin `'unsafe-eval'` esto lanza
+     * `EvalError` y el editor no carga nada; y su backend `github` llama a
+     * `api.github.com` directamente desde el navegador con el token del
+     * usuario (nuestro servidor solo hace el intercambio OAuth, no
+     * intermedia cada operación de guardado) — sin `connect-src
+     * api.github.com` esas llamadas quedan bloqueadas.
+     *
+     * Por eso esta política vive separada de `buildCspHeaderValue`, y por
+     * eso la regla general de abajo EXCLUYE `/admin` (`(?!admin)`) en vez de
+     * sumarse a esta: dos cabeceras `Content-Security-Policy` para la misma
+     * respuesta no se combinan, el navegador aplica la INTERSECCIÓN de
+     * ambas — agregar esta cabecera sin excluir la otra habría dejado todo
+     * igual de bloqueado.
+     */
+    const adminCsp = [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      "style-src 'self' 'unsafe-inline'",
+      "font-src 'self' data:",
+      "img-src 'self' data: blob: https://avatars.githubusercontent.com https://*.githubusercontent.com",
+      "connect-src 'self' https://api.github.com https://github.com",
+      "form-action 'self'",
+      "frame-ancestors 'none'",
+      "base-uri 'self'",
+      "object-src 'none'",
+    ].join("; ");
+    const adminHeaders = [
+      { key: "X-Content-Type-Options", value: "nosniff" },
+      { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+      { key: "X-Frame-Options", value: "SAMEORIGIN" },
+      { key: "Content-Security-Policy", value: adminCsp },
+    ];
+
     return [
+      // El shell HTML se pide como "/admin" literal (el rewrite de arriba
+      // es interno); los archivos que carga (`config.yml`, `decap-cms.js`,
+      // los `.wasm`) se piden como "/admin/<archivo>" — de ahí las dos reglas.
+      { source: "/admin", headers: adminHeaders },
+      { source: "/admin/:path*", headers: adminHeaders },
       {
-        source: "/:path*",
+        source: "/((?!admin).*)",
         headers: [
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },

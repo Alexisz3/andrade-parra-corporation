@@ -51,7 +51,10 @@ export default function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Excluye API, internals de Next, Vercel y cualquier archivo con extensión
-  // (favicon, robots.txt, sitemap.xml, imágenes servidas por next/image…).
-  matcher: "/((?!api|_next|_vercel|.*\\..*).*)",
+  // Excluye API, `/admin` (el shell de Decap CMS — sin esto, next-intl lo
+  // redirige a una ruta con prefijo de idioma antes de que aplique el
+  // rewrite de next.config.mjs), internals de Next, Vercel y cualquier
+  // archivo con extensión (favicon, robots.txt, sitemap.xml, imágenes
+  // servidas por next/image…).
+  matcher: "/((?!api|admin|_next|_vercel|.*\\..*).*)",
 };

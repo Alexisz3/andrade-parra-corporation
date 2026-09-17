@@ -7,7 +7,10 @@ const eslintConfig = [
   {
     // Herramientas locales pueden crear worktrees completos bajo `.claude`.
     // No forman parte de esta app y no deben entrar al lint del repositorio.
-    ignores: ["_fotos_originales/**", ".claude/**", ".next/**", "node_modules/**"],
+    // `public/admin/*.js` es el bundle de Decap CMS vendorizado tal cual
+    // (scripts/vendor-decap-cms.mjs) — código de terceros, no se edita ni se
+    // linta aquí.
+    ignores: ["_fotos_originales/**", ".claude/**", ".next/**", "node_modules/**", "public/admin/**"],
   },
 ];
 

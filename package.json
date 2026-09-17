@@ -21,7 +21,8 @@
     "sheet:brand": "node qa/brand-sheet.mjs",
     "export:brand": "node qa/export-brand-png.mjs",
     "build:og": "node qa/build-og.mjs",
-    "brand:options": "node qa/brand-type-options.mjs"
+    "brand:options": "node qa/brand-type-options.mjs",
+    "cms:vendor": "node scripts/vendor-decap-cms.mjs"
   },
   "dependencies": {
     "framer-motion": "^11.15.0",
@@ -38,6 +39,7 @@
     "@types/node": "^22.10.2",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
+    "decap-cms": "^3.16.2",
     "eslint": "^9.17.0",
     "eslint-config-next": "^16.3.2",
     "lighthouse": "^13.4.1",
