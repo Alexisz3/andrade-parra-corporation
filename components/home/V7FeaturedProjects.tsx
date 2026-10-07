@@ -79,7 +79,7 @@ export default function V7FeaturedProjects({
                     src={`/images/proyectos/${project.coverPhoto.file}`}
                     alt=""
                     fill
-                    sizes={idx === 0 ? "(min-width: 1101px) 620px, 100vw" : "(min-width: 1101px) 540px, 100vw"}
+                    sizes={idx === 0 ? "(min-width: 1200px) 700px, (min-width: 701px) 60vw, 100vw" : "(min-width: 1200px) 480px, (min-width: 701px) 40vw, 100vw"}
                     className="object-cover"
                   />
                   <span className="v8-featured-card-index" aria-hidden="true">

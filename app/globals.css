@@ -2124,15 +2124,8 @@ a.v8-editorial-footer-social-icon:hover { color:var(--color-brand); }
 .v8-featured-title { grid-column:1 / -1; grid-row:2; font-family:var(--font-newsreader),serif; font-size:clamp(3rem,5vw,4.5rem); font-weight:500; line-height:.95; letter-spacing:-.03em; margin:1rem 0; }
 .v8-featured-desc { grid-column:1 / -1; grid-row:3; font-size:1.05rem; color:var(--color-muted); line-height:1.6; max-width:34rem; margin:0 0 clamp(2.25rem,4vw,3rem); }
 
-/* Mosaico: la obra 01 ocupa el ancho completo con foto y ficha en paralelo;
-   02 y 03 van a la par debajo. Cada tarjeta enseña su foto de entrada, así
-   que las tres se ven de un vistazo sin abrir nada. */
-/* Un solo par —protagonista + secundaria—, nunca tres: el teaser del Home
-   siempre apila una debajo de otra, nunca las reparte en columnas. La
-   secundaria lleva `max-width` en escritorio para que se LEA más pequeña
-   —no solo "la misma tarjeta pero después"—, tal como pide "proyecto
-   secundario, más compacto"; en móvil ocupa el ancho completo igual que
-   la protagonista. */
+/* Un solo par —protagonista + secundaria—, nunca tres. En móvil se apilan;
+   desde 701px van a la par (ver el bloque `min-width: 701px` más abajo). */
 .v8-featured-grid { grid-column:1 / -1; grid-row:4; list-style:none; margin:0 0 clamp(2rem,3.5vw,2.75rem); padding:0; display:grid; grid-template-columns:1fr; gap:clamp(2rem,4vw,3rem); }
 .v8-featured-card { min-width:0; }
 .v8-featured-card:not(.is-lead) { max-width:28rem; }
@@ -2329,6 +2322,25 @@ a.v8-editorial-footer-social-icon:hover { color:var(--color-brand); }
   /* Footer */
   .v8-editorial-footer-grid { grid-template-columns: 1fr 1fr; gap: 3rem; }
   .v8-editorial-footer-brand { grid-column: 1 / -1; max-width: 24rem; margin-bottom: 0; }
+}
+
+/* Proyectos destacados, tableta y escritorio: las dos obras a la par, la
+   protagonista más ancha. Antes la 01 ponía foto y ficha en paralelo y la 02
+   caía debajo con `max-width`, dejando media sección vacía a la derecha y dos
+   tarjetas que no se alineaban entre sí. Ahora ambas son foto arriba + ficha
+   debajo, con la MISMA altura de foto (por eso `width` + `height` y no
+   `aspect-ratio`: con anchos distintos, una proporción fija daría alturas
+   distintas) y los títulos en la misma línea.
+   Va DESPUÉS del bloque `max-width: 1100px` a propósito, para mandar sobre
+   sus reglas de tableta (701–1100px). El móvil (`max-width: 700px`) no se
+   toca: los dos rangos no se solapan. */
+@media (min-width: 701px) {
+  .v8-featured-grid { grid-template-columns:minmax(0,1.45fr) minmax(0,1fr); align-items:start; column-gap:clamp(1.5rem,3vw,2.5rem); }
+  .v8-featured-card:not(.is-lead) { max-width:none; }
+  .v8-featured-card.is-lead .v8-featured-card-link { grid-template-columns:minmax(0,1fr); gap:1.15rem; align-items:start; }
+  .v8-featured-card-media,
+  .v8-featured-card.is-lead .v8-featured-card-media { aspect-ratio:auto; width:100%; height:clamp(17rem,32vw,28rem); }
+  .v8-featured-card.is-lead .v8-featured-card-name { font-size:clamp(1.45rem,2.4vw,2.15rem); }
 }
 
 @media (max-width: 700px) {
