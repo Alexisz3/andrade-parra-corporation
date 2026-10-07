@@ -220,4 +220,7 @@ export const BUSINESS_EMAIL: string | null = "contacto@ampargo.com";
  * Mismo criterio nullable que `BUSINESS_EMAIL`: hoy tiene valor, pero el
  * tipo deja constancia de que el dato puede faltar.
  */
-export const BUSINESS_FACEBOOK: string | null = "https://www.facebook.com/share/1EZedSTGww/?mibextid=wwXIfr";
+// URL canónica de la página: el enlace "share/1EZedSTGww" que envió el cliente
+// redirige aquí. Se usa la de destino porque `sameAs` (JSON-LD) necesita la
+// dirección estable del perfil, no un enlace de compartir con parámetros.
+export const BUSINESS_FACEBOOK: string | null = "https://www.facebook.com/profile.php?id=100077356923145";

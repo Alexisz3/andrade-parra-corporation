@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { SITE_URL, BUSINESS } from "@/lib/site";
+import { SITE_URL, BUSINESS, BUSINESS_EMAIL, BUSINESS_FACEBOOK, OG_IMAGE } from "@/lib/site";
 import { SERVICE_AREA } from "@/content/company";
 
 /**
@@ -35,6 +35,16 @@ export default async function StructuredData() {
     description: t("description"),
     url: SITE_URL,
     telephone: BUSINESS.phones,
+    /*
+     * Logo, imagen, correo y perfiles sociales: con ellos Google puede
+     * enlazar esta ficha con la página de Facebook y, cuando exista, con la
+     * de Google Business Profile (añadir su URL a `sameAs`). Son datos ya
+     * confirmados y publicados en el propio sitio.
+     */
+    logo: `${SITE_URL}/brand/png/mark-ap-512.png`,
+    image: `${SITE_URL}${OG_IMAGE.home}`,
+    ...(BUSINESS_EMAIL ? { email: BUSINESS_EMAIL } : {}),
+    ...(BUSINESS_FACEBOOK ? { sameAs: [BUSINESS_FACEBOOK] } : {}),
     /*
      * La dirección solo se publica con local visitable: `address` le dice a
      * Google "aquí se puede venir", y sobre un domicilio particular eso dirige

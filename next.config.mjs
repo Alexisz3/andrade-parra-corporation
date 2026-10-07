@@ -5,6 +5,27 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 const isDevelopment = process.env.NODE_ENV === "development";
 
 /**
+ * Host canónico, derivado de NEXT_PUBLIC_SITE_URL (p. ej. "ampargo.com").
+ *
+ * Hostinger sirve la misma app en `www.ampargo.com` con 200, no con
+ * redirección: dos copias del sitio. El canonical ya apunta al dominio sin
+ * www, pero la cabecera `Link` de next-intl anuncia hreflang con el host de
+ * la petición, así que en www el sitio se contradecía a sí mismo. Se redirige
+ * www → canónico con redirección permanente (308, que Google trata igual
+ * que un 301) para que Google consolide todo en una sola versión.
+ * Sin la variable (desarrollo, previews) no se añade ninguna redirección.
+ */
+function canonicalHost() {
+  try {
+    const host = new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "").hostname;
+    return host && !host.startsWith("www.") && host.includes(".") ? host : null;
+  } catch {
+    return null;
+  }
+}
+const CANONICAL_HOST = canonicalHost();
+
+/**
  * IMPORTANTE (Hostinger): este archivo debe exportar un OBJETO, no una función.
  * Hostinger genera su propia configuración y la fusiona con esta; una función
  * no se fusiona y el despliegue falla. Tampoco renombrar a `next.config.cjs`.
@@ -38,6 +59,18 @@ const nextConfig = {
     // pequeña, sin generar escalas superiores a la fuente real.
     deviceSizes: [640, 750, 828, 1080, 1200, 1600, 1920, 2048],
     imageSizes: [256, 384, 512, 640],
+  },
+
+  async redirects() {
+    if (!CANONICAL_HOST) return [];
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: `www.${CANONICAL_HOST}` }],
+        destination: `https://${CANONICAL_HOST}/:path*`,
+        permanent: true,
+      },
+    ];
   },
 
   async rewrites() {
