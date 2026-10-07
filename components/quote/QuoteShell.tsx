@@ -323,9 +323,9 @@ export default function QuoteShell({
             <div className="v7-quote-card-top"><span className="v7-meta">{t("directMeta")}</span><b>ES / EN</b></div>
             <h2>{t("directTitle")}</h2><p>{t("directBody")}</p>
             <div className="v7-quote-contact-lines">
-              {whatsappTargets.map((contact) => <a key={contact.phone} href={`tel:+${contact.phone}`}><span><small>{contact.name}</small><strong>{contact.phoneDisplay ?? contact.phone.replace(/^1?(\d{3})(\d{3})(\d{4})$/, "($1) $2-$3")}</strong></span></a>)}
-              {businessEmail ? <a href={`mailto:${businessEmail}`}><span><small>Email</small><strong>{businessEmail}</strong></span></a> : null}
-              {whatsappTargets[0] ? <a href={`https://wa.me/${whatsappTargets[0].phone}`} target="_blank" rel="noopener noreferrer" className="is-whatsapp"><span><small>WhatsApp</small><strong>{t("channelWhatsapp")}</strong></span></a> : null}
+              {whatsappTargets.map((contact) => <a key={contact.phone} href={`tel:+${contact.phone}`} onClick={() => track("phone_clicked", { contact: contact.name.toLowerCase().replace(/\s+/g, "-"), source: "quote_aside" })}><span><small>{contact.name}</small><strong>{contact.phoneDisplay ?? contact.phone.replace(/^1?(\d{3})(\d{3})(\d{4})$/, "($1) $2-$3")}</strong></span></a>)}
+              {businessEmail ? <a href={`mailto:${businessEmail}`} onClick={() => track("email_clicked", { source: "quote_aside" })}><span><small>Email</small><strong>{businessEmail}</strong></span></a> : null}
+              {whatsappTargets[0] ? <a href={`https://wa.me/${whatsappTargets[0].phone}`} onClick={() => track("whatsapp_clicked", { contact: whatsappTargets[0].name.toLowerCase().replace(/\s+/g, "-"), source: "quote_aside" })} target="_blank" rel="noopener noreferrer" className="is-whatsapp"><span><small>WhatsApp</small><strong>{t("channelWhatsapp")}</strong></span></a> : null}
             </div>
           </div>
           <div className="v7-quote-area"><strong>HOUSTON, TX</strong><span>{t("areaNote")}</span></div>

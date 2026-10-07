@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { WHATSAPP_CONTACTS } from "@/lib/site";
 import BrandLogo from "./BrandLogo";
+import TrackedContactLink from "./TrackedContactLink";
 import LocaleSwitcher from "./LocaleSwitcher";
 import type { HeaderNavItem } from "./Header";
 
@@ -184,13 +185,15 @@ export default function MobileMenu({ open, onClose, links, triggerRef }: MobileM
         <ul className="mt-6 space-y-1">
           {WHATSAPP_CONTACTS.map((contact) => (
             <li key={contact.phone}>
-              <a
+              <TrackedContactLink
                 href={`tel:+${contact.phone}`}
+                event="phone_clicked"
+                params={{ contact: contact.id, source: "mobile_menu" }}
                 className="flex min-h-[48px] items-center justify-between text-sm text-bone/85"
               >
                 <span>{contact.name}</span>
                 <span className="font-mono">{contact.phoneDisplay}</span>
-              </a>
+              </TrackedContactLink>
             </li>
           ))}
         </ul>

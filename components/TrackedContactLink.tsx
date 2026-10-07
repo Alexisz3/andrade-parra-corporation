@@ -21,6 +21,7 @@ export default function TrackedContactLink({
   className,
   children,
   external = false,
+  ariaLabel,
 }: {
   href: string;
   event: AnalyticsEvent;
@@ -28,11 +29,14 @@ export default function TrackedContactLink({
   className?: string;
   children: React.ReactNode;
   external?: boolean;
+  /** Para enlaces que solo contienen un icono. */
+  ariaLabel?: string;
 }) {
   return (
     <a
       href={href}
       className={className}
+      aria-label={ariaLabel}
       onClick={() => track(event, params)}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
     >
