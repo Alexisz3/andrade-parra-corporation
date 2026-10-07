@@ -14,15 +14,16 @@ llamadas y cotizaciones de propietarios en Houston, no solo visitas.
 | Títulos y descripciones | Bien orientados a búsqueda local ("Home Remodeling & Construction in Houston, TX"). |
 | Google Analytics 4 | Instalado (`G-D8E89G104T`) y midiendo clics de WhatsApp, teléfono, correo y cotizaciones. |
 | `www.ampargo.com` | Servía una **copia duplicada** del sitio con 200. **Corregido** (ver §5). |
-| Ficha de Google (Business Profile) | **No existe.** Al buscar el nombre de la empresa no aparece ninguna ficha ni directorio. |
+| Ficha de Google (Business Profile) | **Existe y está verificada** (se comprobó el 7 de octubre; la primera revisión, con otro buscador, no la encontró). La vieron 30 personas en septiembre. Le faltaban categorías, redes, chat y fotos (ver §2.1). |
+| Directorios | Hay menciones con datos viejos: teléfono (281) 417-9495 y C.P. 77071. Y aparece una **segunda ficha** de Google con el mismo teléfono ("Empresa de construcción"), posible duplicado. |
 | Reseñas | **Cero**, en Google y en el sitio. |
 | Publicidad | Ninguna activa. |
 
 **Conclusión:** el sitio no es el cuello de botella. Está bien construido e
 indexado. El tráfico es bajo porque el dominio es nuevo (publicado en
-septiembre de 2026), no tiene autoridad ni reseñas, y la empresa no aparece en
-el **mapa de Google**, que es donde la gente busca contratistas ("remodelación
-cerca de mí"). Un sitio nuevo tarda de 6 a 12 meses en posicionar solo por SEO
+septiembre de 2026), no tiene autoridad ni reseñas, y la ficha del **mapa de
+Google** —que es donde la gente busca contratistas ("remodelación cerca de
+mí")— estaba incompleta y sin una sola opinión. Un sitio nuevo tarda de 6 a 12 meses en posicionar solo por SEO
 para "kitchen remodeling houston"; los canales de abajo traen clientes en
 semanas.
 
@@ -48,23 +49,39 @@ acceso a sus cuentas.
 Es la ficha que aparece en Google Maps y en el bloque de 3 negocios del
 buscador. Para un contratista local es la mayor fuente de llamadas.
 
-1. Crear en <https://business.google.com> con el nombre exacto **Andrade Parra Corporation**.
-2. Tipo: **negocio de área de servicio** (va a la obra del cliente). **Ocultar la
-   dirección**: el sitio tampoco la publica, porque es un domicilio particular.
-3. Categoría principal: **General contractor**. Secundarias: *Remodeler*,
-   *Kitchen remodeler*, *Bathroom remodeler*, *Construction company*.
-4. Áreas de servicio: Houston y los municipios donde **realmente** trabajan.
-5. Teléfono principal, horario, y sitio web con este enlace (para medir lo que
-   viene de la ficha):
-   `https://ampargo.com/?utm_source=google&utm_medium=organic&utm_campaign=gbp`
-6. Subir 20 o más fotos reales (las del portafolio sirven) y la descripción de
-   cada servicio.
-7. Verificar. Hoy Google suele pedir un video corto mostrando herramientas,
-   vehículo o una obra.
-8. Publicar una foto o novedad por semana (proyecto terminado, antes/después).
+**Estado (7 oct 2026):** la ficha ya existía, verificada, como negocio de área
+de servicio con la dirección oculta, con descripción, horario lun–sáb
+8:00–17:00 y área "Houston". Se administra desde la cuenta de Google del
+desarrollador. Ese día se agregó:
 
-Cuando la ficha exista, pasar su URL al desarrollador para añadirla a `sameAs`
-en `components/StructuredData.tsx`. Así Google relaciona sitio y ficha.
+- Categorías secundarias: *Remodelador*, *Remodelador de cocinas*,
+  *Remodelador de baños* y *Empresa de construcción* (la principal sigue siendo
+  *Contratista general*).
+- Teléfonos adicionales de Mario (832) 652-4660 y Ramón (917) 860-2074.
+- Chat por WhatsApp: `https://wa.me/18327940720`.
+- Sitio web con seguimiento:
+  `https://ampargo.com/?utm_source=google&utm_medium=organic&utm_campaign=gbp`
+- Página de Facebook en redes sociales.
+
+Google revisa cada cambio antes de publicarlo (normalmente unos 10 minutos).
+
+**Pendiente:**
+
+1. **Fotos:** subir 20 o más fotos reales del portafolio, más un logo y una
+   portada. Las fotos recientes son de lo que más pesa en el mapa.
+2. **Servicios:** cargar la lista (cocinas, baños, remodelación, exteriores,
+   construcción a medida, reparaciones) con una descripción corta cada uno.
+3. **Áreas de servicio:** agregar los municipios donde **realmente** trabajan.
+4. **Publicaciones:** una foto o novedad por semana (proyecto terminado,
+   antes/después).
+5. **Ficha duplicada:** revisar la segunda ficha ("Empresa de construcción",
+   mismo teléfono). Si es de la empresa, pedir a Google que la una con esta o
+   que la marque como duplicada desde *Sugerir una edición → Cerrar o quitar →
+   Duplicado*.
+6. **Datos viejos en directorios:** corregir el teléfono (281) 417-9495 y el
+   C.P. 77071 donde aparezcan (Yellow Pages, Manta, Town Planner).
+7. Añadir la URL de la ficha a `sameAs` en `components/StructuredData.tsx`
+   (`https://www.google.com/maps?cid=13919611881726354040`).
 
 ### 2.2 Reseñas (prioridad n.º 2)
 
@@ -72,10 +89,14 @@ Una ficha sin reseñas casi no recibe clics. La empresa tiene años de clientes
 satisfechos: es el recurso más valioso y no está aprovechado.
 
 - **Meta: 10 reseñas en 30 días, 25 en 90 días.**
-- En la ficha, *Pedir reseñas* genera un enlace corto. Enviarlo por WhatsApp a
-  clientes anteriores con un mensaje personal:
+- Enlace directo para dejar reseña (sacado de la ficha el 7 oct 2026):
+  **<https://g.page/r/CXgim9VBZSzBEBM/review>**
+  Enviarlo por WhatsApp a clientes anteriores con un mensaje personal:
   > "Hola [nombre], le habla José de Andrade Parra. ¿Nos ayudaría con una
-  > reseña de la cocina que hicimos? Nos ayuda mucho: [enlace]"
+  > reseña de la cocina que hicimos? Nos ayuda mucho:
+  > https://g.page/r/CXgim9VBZSzBEBM/review"
+- La misma pantalla de la ficha (*Pedir una reseña*) tiene un código QR para
+  imprimir en tarjetas o en la factura.
 - Pedirla **siempre** al entregar cada obra nueva, el mismo día.
 - Responder todas las reseñas.
 - Con autorización escrita del cliente, las mejores pasan al sitio en
